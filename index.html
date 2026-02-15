@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kycek Studios — Made by Humans, on Earth</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Premium Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #999;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-cta {
+            display: inline-flex;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+        
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: #E63946;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #C1121F;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: black;
+        }
+        
+        /* Products Grid */
+        .products-section {
+            padding: 6rem 2rem;
+            background: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #0a0a0a;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #0a0a0a;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #E63946;
+            margin-bottom: 1rem;
+        }
+        
+        /* Bundle Offer */
+        .bundle-offer {
+            background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+        
+        .bundle-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .bundle-savings {
+            color: #E63946;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        /* Email Capture */
+        .email-capture {
+            background: #f8f8f8;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .email-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #0a0a0a;
+        }
+        
+        .email-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .email-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .email-input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .email-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="/assets/images/hero-video.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1 class="hero-title">KÝČEK STUDIOS</h1>
+            <p class="hero-subtitle">
+                Performance wear for those who move with purpose. Made by Humans, on Earth.
+            </p>
+            <div class="hero-cta">
+                <a href="/products/essential-tee-white.html" class="btn-primary">Shop Collection</a>
+                <a href="/pages/limited-edition.html" class="btn-secondary">Limited Edition</a>
+            </div>
+            <p style="color: #999; font-size: 0.875rem; letter-spacing: 0.1em; text-transform: uppercase;">
+                Est. Dominican Republic
+            </p>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="products-section">
+        <h2 class="section-title">The Collection</h2>
+        <div class="products-grid">
+            <a href="/products/essential-tee-white.html" class="product-card">
+                <img src="/assets/images/product-flatlay.png" alt="Essential Tee White" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Essential Tee — White</h3>
+                    <div class="product-price">$68</div>
+                    <p style="color: #666; font-size: 0.875rem;">Premium performance cotton with signature crow mark</p>
+                </div>
+            </a>
+            
+            <a href="/products/essential-tee-black.html" class="product-card">
+                <img src="/assets/images/all pro pic clothes (2).png" alt="Essential Tee Black" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Essential Tee — Black</h3>
+                    <div class="product-price">$68</div>
+                    <p style="color: #666; font-size: 0.875rem;">Premium performance cotton with signature crow mark</p>
+                </div>
+            </a>
+            
+            <a href="/products/training-short-white.html" class="product-card">
+                <img src="/assets/images/all pro pic clothes (3).png" alt="Training Short White" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Training Short — White</h3>
+                    <div class="product-price">$78</div>
+                    <p style="color: #666; font-size: 0.875rem;">Plant-based Sorona fiber with flexible fit</p>
+                </div>
+            </a>
+            
+            <a href="/products/training-short-black.html" class="product-card">
+                <img src="/assets/images/all pro pic clothes (4).png" alt="Training Short Black" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Training Short — Black</h3>
+                    <div class="product-price">$78</div>
+                    <p style="color: #666; font-size: 0.875rem;">Plant-based Sorona fiber with flexible fit</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Bundle Offer -->
+    <section class="bundle-offer">
+        <h2 class="bundle-title">Complete the Set</h2>
+        <p class="bundle-savings">Save 20% when you bundle</p>
+        <p style="margin-bottom: 2rem; color: #999; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Essential Tee + Training Short = $116.80 (originally $146)
+        </p>
+        <a href="/products/essential-tee-white.html" class="btn-primary" style="background: white; color: black;">
+            Shop Bundle & Save
+        </a>
+    </section>
+
+    <!-- Email Capture -->
+    <section class="email-capture">
+        <h2 class="email-title">Get 15% Off Your First Order</h2>
+        <p class="email-subtitle">
+            Join our community and receive exclusive access to limited editions, early drops, and special offers.
+        </p>
+        <form class="email-form">
+            <input type="email" class="email-input" placeholder="Your email address" required>
+            <button type="submit" class="btn-primary">Subscribe</button>
+        </form>
+        <p style="margin-top: 1rem; color: #999; font-size: 0.75rem;">
+            By subscribing, you agree to our Privacy Policy
+        </p>
+    </section>
+
+    <!-- Brand Story -->
+    <section style="padding: 6rem 2rem; background: white; text-align: center;">
+        <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: #0a0a0a;">
+            Made by Humans, on Earth
+        </h2>
+        <p style="max-width: 800px; margin: 0 auto 2rem; color: #666; line-height: 1.8;">
+            The crow moves with intention. It observes before it acts. It adapts without losing form. 
+            Always alert. Never rushed. Kýček Studios is shaped by contrast—heat and control, instinct and discipline.
+        </p>
+        <p style="max-width: 800px; margin: 0 auto; color: #666; line-height: 1.8;">
+            Born in the Dominican Republic, the brand is grounded in human craft and modern restraint, 
+            designed for those who understand that confidence doesn't need explanation.
+        </p>
+        <a href="/pages/about.html" class="btn-secondary" style="margin-top: 3rem; display: inline-block;">
+            Our Story
+        </a>
+    </section>
+
+    <script>
+        // Email form submission
+        document.querySelector('.email-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('.email-input').value;
+            alert('Thank you! 15% discount code has been sent to: ' + email);
+            this.reset();
+        });
+        
+        // Bundle button enhancement
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

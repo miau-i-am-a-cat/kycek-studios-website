@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Kycek Studios</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .error-container {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-code {
+            font-size: 8rem;
+            font-weight: 900;
+            color: var(--color-red);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--color-gray-600);
+        }
+        .home-link {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--color-black);
+            color: var(--color-white);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: all var(--transition-base);
+        }
+        .home-link:hover {
+            background: var(--color-red);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <h1 class="error-message">Page Not Found</h1>
+        <p style="margin-bottom: 2rem; color: var(--color-gray-500); max-width: 500px;">
+            The page you're looking for doesn't exist or has been moved.
+        </p>
+        <a href="/" class="home-link">Return to Homepage</a>
+    </div>
+</body>
+</html>

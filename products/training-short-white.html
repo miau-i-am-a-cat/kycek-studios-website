@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>training short white | Kycek Studios</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .product-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+        .product-image {
+            width: 100%;
+            border-radius: 0.5rem;
+        }
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #E63946;
+            margin-bottom: 2rem;
+        }
+        .btn-add-to-cart {
+            padding: 1rem 3rem;
+            background: #0a0a0a;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+        .bundle-notice {
+            background: #f8f8f8;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="product-container">
+        <div>
+            <img src="/assets/images/product-flatlay.png" alt="training short white" class="product-image">
+        </div>
+        <div>
+            <h1 class="product-title">training short white</h1>
+            <div class="product-price">$68</div>
+            <p>Premium performance wear. Made by Humans, on Earth.</p>
+            
+            <div style="margin: 2rem 0;">
+                <button class="btn-add-to-cart">Add to Cart</button>
+                <a href="/" class="btn-secondary">Continue Shopping</a>
+            </div>
+            
+            <div class="bundle-notice">
+                <strong>Bundle & Save 20%</strong>
+                <p>Add matching training and save 20% on the complete set.</p>
+                <a href="/" class="btn-primary" style="background: #E63946; color: white; padding: 0.5rem 1.5rem; display: inline-block; margin-top: 1rem;">
+                    View Bundle Offer
+                </a>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelector('.btn-add-to-cart').addEventListener('click', function() {
+            this.textContent = 'Added ✓';
+            this.style.background = '#E63946';
+            setTimeout(() => {
+                this.textContent = 'Add to Cart';
+                this.style.background = '';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

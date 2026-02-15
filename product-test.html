@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product | Kycek Studios [TEST]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="/config.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #fff; }
+        
+        .product-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+        
+        .product-images {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .product-image-main {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            background: #f5f5f5;
+        }
+        
+        .product-thumbnails {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .product-thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .product-thumbnail:hover,
+        .product-thumbnail.active {
+            border-color: #E63946;
+        }
+        
+        .product-details h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #E63946;
+            margin-bottom: 2rem;
+        }
+        
+        .product-description {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .sold-out-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: #666;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 0.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        .variants {
+            margin: 2rem 0;
+        }
+        
+        .variants h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .variant-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .variant-option {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .variant-option:hover {
+            border-color: #E63946;
+        }
+        
+        .variant-option.selected {
+            border-color: #E63946;
+            background: #E63946;
+            color: white;
+        }
+        
+        .variant-option.unavailable {
+            opacity: 0.4;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        
+        .btn-primary {
+            padding: 1.25rem 3rem;
+            background: #0a0a0a;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            width: 100%;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: #E63946;
+        }
+        
+        .btn-primary:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            color: #E63946;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .product-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="product-container">
+        <div id="product-content" style="grid-column: 1 / -1;">
+            <div class="loading">Loading product...</div>
+        </div>
+    </div>
+
+    <script>
+        let currentProduct = null;
+        let selectedVariant = null;
+        
+        async function loadProduct() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const handle = urlParams.get('handle');
+            
+            if (!handle) {
+                document.getElementById('product-content').innerHTML = 
+                    '<div class="loading">Product not found</div>';
+                return;
+            }
+            
+            try {
+                currentProduct = await getProductByHandle(handle);
+                renderProduct();
+            } catch (error) {
+                console.error('Failed to load product:', error);
+                document.getElementById('product-content').innerHTML = 
+                    '<div class="loading">Failed to load product. Please refresh.</div>';
+            }
+        }
+        
+        function renderProduct() {
+            if (!currentProduct) return;
+            
+            const price = parseFloat(currentProduct.priceRange.minVariantPrice.amount);
+            const images = currentProduct.images.edges.map(e => e.node.url);
+            const mainImage = images[0] || '';
+            const isAvailable = currentProduct.variants.edges.some(v => v.node.availableForSale);
+            
+            const html = `
+                <a href="/index-test.html" class="back-link">← Back to Collection</a>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
+                    <div class="product-images">
+                        <img src="${mainImage}" alt="${currentProduct.title}" class="product-image-main" id="main-image">
+                        ${images.length > 1 ? `
+                            <div class="product-thumbnails">
+                                ${images.map((img, i) => `
+                                    <img src="${img}" class="product-thumbnail ${i === 0 ? 'active' : ''}" 
+                                         onclick="changeMainImage('${img}', ${i})">
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="product-details">
+                        <h1>${currentProduct.title}</h1>
+                        <div class="product-price">$${price.toFixed(0)}</div>
+                        ${!isAvailable ? '<div class="sold-out-badge">Sold Out</div>' : ''}
+                        <div class="product-description">${currentProduct.description || 'Premium performance wear. Made by Humans, on Earth.'}</div>
+                        
+                        ${renderVariants()}
+                        
+                        <button class="btn-primary" ${!isAvailable ? 'disabled' : ''} onclick="addToCart()">
+                            ${isAvailable ? 'Add to Cart' : 'Sold Out'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('product-content').innerHTML = html;
+        }
+        
+        function renderVariants() {
+            if (!currentProduct.variants.edges.length) return '';
+            
+            // Group variants by option (size/color)
+            const variantsByOption = {};
+            currentProduct.variants.edges.forEach(({ node }) => {
+                node.selectedOptions.forEach(opt => {
+                    if (!variantsByOption[opt.name]) {
+                        variantsByOption[opt.name] = new Set();
+                    }
+                    variantsByOption[opt.name].add(opt.value);
+                });
+            });
+            
+            let html = '<div class="variants">';
+            Object.entries(variantsByOption).forEach(([name, values]) => {
+                html += `
+                    <h3>${name}</h3>
+                    <div class="variant-options">
+                        ${Array.from(values).map(value => {
+                            const variant = currentProduct.variants.edges.find(v => 
+                                v.node.selectedOptions.some(o => o.value === value)
+                            )?.node;
+                            const available = variant?.availableForSale;
+                            return `
+                                <div class="variant-option ${!available ? 'unavailable' : ''}" 
+                                     onclick="selectVariant('${value}')">
+                                    ${value}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        function changeMainImage(url, index) {
+            document.getElementById('main-image').src = url;
+            document.querySelectorAll('.product-thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+        
+        function selectVariant(value) {
+            const variant = currentProduct.variants.edges.find(v => 
+                v.node.selectedOptions.some(o => o.value === value)
+            )?.node;
+            
+            if (variant && variant.availableForSale) {
+                selectedVariant = variant;
+                document.querySelectorAll('.variant-option').forEach(opt => {
+                    opt.classList.toggle('selected', opt.textContent.trim() === value);
+                });
+            }
+        }
+        
+        function addToCart() {
+            if (!selectedVariant) {
+                alert('Please select a variant');
+                return;
+            }
+            alert(`Added ${currentProduct.title} to cart!`);
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadProduct);
+    </script>
+</body>
+</html>
