@@ -1056,9 +1056,6 @@
   </footer>
 
   <script>
-    // Global product state
-    let currentProduct = null;
-    
     // Cursor
     const cursor = document.getElementById('cursor');
     let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
@@ -1128,63 +1125,17 @@
     const wishlistBtn = document.getElementById('wishlistBtn');
     wishlistBtn.addEventListener('click', () => wishlistBtn.classList.toggle('active'));
     
-    // Add to cart - Shopify integration
-    const addToCartBtn = document.getElementById('addToCart');
-    
-    console.log('Add to cart button:', addToCartBtn);
-    
-    addToCartBtn.addEventListener('click', async () => {
-      console.log('Button clicked! Product:', currentProduct);
-      
-      if (!currentProduct) {
-        alert('Product not loaded');
-        return;
-      }
-      
-      const selectedSizeBtn = document.querySelector('.size-btn.active');
-      if (!selectedSizeBtn) {
-        alert('Please select a size');
-        return;
-      }
-      
-      const selectedSize = selectedSizeBtn.dataset.size;
-      const variant = currentProduct.variants.edges.find(v => 
-        v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === selectedSize)
-      )?.node;
-      
-      if (!variant) {
-        alert('Variant not found');
-        return;
-      }
-      
-      try {
-        console.log('Attempting to add variant:', variant.id);
-        addToCartBtn.textContent = 'Adding...';
-        addToCartBtn.disabled = true;
-        
-        const cart = await addToCart(variant.id, 1);
-        console.log('Cart response:', cart);
-        
-        addToCartBtn.textContent = 'Added ✓';
-        addToCartBtn.style.background = 'var(--red)';
-        addToCartBtn.style.color = 'var(--white)';
-        
-        setTimeout(() => {
-          addToCartBtn.textContent = 'Add to Cart';
-          addToCartBtn.style.background = '';
-          addToCartBtn.style.color = '';
-          addToCartBtn.disabled = false;
-          
-          if (confirm('Item added! Go to checkout?')) {
-            window.open(cart.checkoutUrl, '_blank');
-          }
-        }, 1500);
-      } catch (error) {
-        console.error('Add to cart error:', error);
-        alert('Error: ' + error.message);
-        addToCartBtn.textContent = 'Add to Cart';
-        addToCartBtn.disabled = false;
-      }
+    // Add to cart
+    const addToCart = document.getElementById('addToCart');
+    addToCart.addEventListener('click', () => {
+      addToCart.textContent = 'Added ✓';
+      addToCart.style.background = 'var(--red)';
+      addToCart.style.color = 'var(--white)';
+      setTimeout(() => {
+        addToCart.textContent = 'Add to Cart';
+        addToCart.style.background = '';
+        addToCart.style.color = '';
+      }, 2000);
     });
     
     // Keyboard navigation
@@ -1205,98 +1156,6 @@
         addBundle.style.color = '';
       }, 2000);
     });
-  </script>
-
-  <!-- Shopify Product Loader -->
-  <script>
-    const productHandle = new URLSearchParams(window.location.search).get('handle');
-    
-    if (productHandle) {
-      loadProductFromShopify(productHandle);
-    }
-    
-    async function loadProductFromShopify(handle) {
-      try {
-        const product = await getProductByHandle(handle);
-        currentProduct = product;
-        
-        // Update title
-        document.querySelector('.product-title').textContent = product.title;
-        document.title = `${product.title} | Kýček Studios`;
-        
-        // Update subtitle
-        const subtitle = product.description ? product.description.substring(0, 100) : 'Premium performance wear';
-        document.querySelector('.product-subtitle').textContent = subtitle;
-        
-        // Update price
-        const price = parseFloat(product.priceRange.minVariantPrice.amount);
-        document.querySelector('.product-price').innerHTML = `<span class="currency">$</span>${price.toFixed(0)}`;
-        
-        // Update gallery images
-        const images = product.images.edges.map(e => e.node.url);
-        const gallerySlides = document.getElementById('gallerySlides');
-        gallerySlides.innerHTML = '';
-        images.forEach(img => {
-          const slide = document.createElement('div');
-          slide.className = 'gallery-slide';
-          slide.innerHTML = `<img src="${img}" alt="${product.title}">`;
-          gallerySlides.appendChild(slide);
-        });
-        
-        // Update gallery navigation
-        const galleryNav = document.querySelector('.gallery-nav');
-        galleryNav.innerHTML = '';
-        images.forEach((_, i) => {
-          const dot = document.createElement('div');
-          dot.className = `gallery-dot ${i === 0 ? 'active' : ''}`;
-          dot.dataset.index = i;
-          dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
-          galleryNav.appendChild(dot);
-        });
-        
-        // Update total slides counter
-        totalSlides = images.length;
-        currentIndex = 0;
-        document.getElementById('totalSlides').textContent = String(totalSlides).padStart(2, '0');
-        document.getElementById('currentSlide').textContent = '01';
-        
-        // Update size options
-        const sizeOptions = document.querySelector('.size-options');
-        const sizes = new Set();
-        product.variants.edges.forEach(({ node }) => {
-          node.selectedOptions.forEach(opt => {
-            if (opt.name.toLowerCase() === 'size') sizes.add(opt.value);
-          });
-        });
-        
-        if (sizes.size > 0) {
-          sizeOptions.innerHTML = '';
-          Array.from(sizes).forEach((size, i) => {
-            const variant = product.variants.edges.find(v => 
-              v.node.selectedOptions.some(o => o.value === size)
-            )?.node;
-            const available = variant?.availableForSale;
-            
-            const btn = document.createElement('button');
-            btn.className = `size-btn ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}`;
-            btn.dataset.size = size;
-            btn.textContent = size;
-            if (!available) {
-              btn.disabled = true;
-            } else {
-              btn.addEventListener('click', function() {
-                document.querySelectorAll('.size-btn:not(.soldout)').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-              });
-            }
-            sizeOptions.appendChild(btn);
-          });
-        }
-        
-      } catch (error) {
-        console.error('Failed to load product:', error);
-      }
-    }
   </script>
 
 </body>
