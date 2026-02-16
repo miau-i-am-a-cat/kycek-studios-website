@@ -1056,6 +1056,9 @@
   </footer>
 
   <script>
+    // Global product state
+    let currentProduct = null;
+    
     // Cursor
     const cursor = document.getElementById('cursor');
     let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
@@ -1126,9 +1129,13 @@
     wishlistBtn.addEventListener('click', () => wishlistBtn.classList.toggle('active'));
     
     // Add to cart - Shopify integration
-    let currentProduct = null;
     const addToCartBtn = document.getElementById('addToCart');
+    
+    console.log('Add to cart button:', addToCartBtn);
+    
     addToCartBtn.addEventListener('click', async () => {
+      console.log('Button clicked! Product:', currentProduct);
+      
       if (!currentProduct) {
         alert('Product not loaded');
         return;
@@ -1151,10 +1158,12 @@
       }
       
       try {
+        console.log('Attempting to add variant:', variant.id);
         addToCartBtn.textContent = 'Adding...';
         addToCartBtn.disabled = true;
         
         const cart = await addToCart(variant.id, 1);
+        console.log('Cart response:', cart);
         
         addToCartBtn.textContent = 'Added ✓';
         addToCartBtn.style.background = 'var(--red)';
