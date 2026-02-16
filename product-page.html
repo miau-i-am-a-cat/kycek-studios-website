@@ -1281,39 +1281,42 @@
           addBundle.textContent = 'ADDING...';
           addBundle.disabled = true;
           
-          console.log('Current product:', currentProduct);
-          console.log('Looking for color:', currentColor);
+          // Get all products with the same color
+          const allProducts = await getProducts(50);
+          const colorProducts = allProducts.filter(p => p.productType === currentColor);
           
-          // Find tee variant - use partial title match
-          const teeProducts = await getProductsByTitle('T-Shirt');
-          console.log('Found tee products:', teeProducts);
-          const teeProduct = teeProducts.find(p => p.productType === currentColor);
-          console.log('Selected tee product:', teeProduct);
+          // Find t-shirt (look for shirt/tee/t-shirt in title)
+          const teeProduct = colorProducts.find(p => 
+            p.title.toLowerCase().includes('shirt') || 
+            p.title.toLowerCase().includes('tee') ||
+            p.title.toLowerCase().includes('t-shirt')
+          );
           
-          const teeVariant = teeProduct?.variants?.edges.find(v => 
+          // Find shorts (look for short in title)
+          const shortProduct = colorProducts.find(p => 
+            p.title.toLowerCase().includes('short')
+          );
+          
+          if (!teeProduct) {
+            throw new Error(`Could not find ${currentColor} t-shirt`);
+          }
+          if (!shortProduct) {
+            throw new Error(`Could not find ${currentColor} shorts`);
+          }
+          
+          const teeVariant = teeProduct.variants.edges.find(v => 
             v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === teeSize)
           )?.node;
           
-          // Find short variant
-          const shortProducts = await getProductsByTitle('Short');
-          console.log('Found short products:', shortProducts);
-          const shortProduct = shortProducts.find(p => p.productType === currentColor);
-          console.log('Selected short product:', shortProduct);
-          const shortVariant = shortProduct?.variants?.edges.find(v => 
+          const shortVariant = shortProduct.variants.edges.find(v => 
             v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === shortSize)
           )?.node;
           
-          if (!teeProduct) {
-            throw new Error(`Could not find "${currentColor}" Essential Tee`);
-          }
-          if (!shortProduct) {
-            throw new Error(`Could not find "${currentColor}" Training Short`);
-          }
           if (!teeVariant) {
-            throw new Error(`Size ${teeSize} not available for ${currentColor} Essential Tee`);
+            throw new Error(`Size ${teeSize} not available for ${currentColor} t-shirt`);
           }
           if (!shortVariant) {
-            throw new Error(`Size ${shortSize} not available for ${currentColor} Training Short`);
+            throw new Error(`Size ${shortSize} not available for ${currentColor} shorts`);
           }
           
           // Add both to cart
