@@ -6,8 +6,7 @@
   <title>Essential Tee — White | Kýček Studios</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="/config.js"></script>
+  <script src="/config.js"></script>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <style>
     :root {
@@ -1079,34 +1078,27 @@
     
     // Gallery
     const slides = document.getElementById('gallerySlides');
+    const dots = document.querySelectorAll('.gallery-dot');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const currentSlideEl = document.getElementById('currentSlide');
     let currentIndex = 0;
-    let totalSlides = 4; // Will be updated when product loads
+    const totalSlides = 4;
     
     function goToSlide(index) {
       if (index < 0) index = totalSlides - 1;
       if (index >= totalSlides) index = 0;
       currentIndex = index;
       slides.style.transform = `translateX(-${index * 100}%)`;
-      
-      // Update dots
-      const dots = document.querySelectorAll('.gallery-dot');
       dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
       currentSlideEl.textContent = String(index + 1).padStart(2, '0');
     }
     
-    // Initial gallery setup (will be re-initialized after product loads)
-    function initGallery() {
-      const dots = document.querySelectorAll('.gallery-dot');
-      dots.forEach(dot => {
-        dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
-      });
-    }
-    
     prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
     nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+    });
     
     // Color selector
     const colorSwatches = document.querySelectorAll('.color-swatch');
@@ -1167,151 +1159,3 @@
 
 </body>
 </html>
-
-  <!-- Shopify Integration -->
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const productHandle = urlParams.get('handle');
-    
-    if (productHandle) {
-      loadProductFromShopify();
-    }
-    
-    async function loadProductFromShopify() {
-      try {
-        const product = await getProductByHandle(productHandle);
-        
-        // Update product title
-        document.querySelector('.product-title').textContent = product.title;
-        
-        // Update product subtitle
-        const subtitle = product.description ? product.description.substring(0, 100) : 'Premium performance wear';
-        document.querySelector('.product-subtitle').textContent = subtitle;
-        
-        // Update price
-        const price = parseFloat(product.priceRange.minVariantPrice.amount);
-        document.querySelector('.product-price').innerHTML = `<span class="currency">$</span>${price.toFixed(0)}`;
-        
-        // Update images
-        const images = product.images.edges.map(e => e.node.url);
-        const gallerySlides = document.getElementById('gallerySlides');
-        gallerySlides.innerHTML = '';
-        images.forEach((img, i) => {
-          const slide = document.createElement('div');
-          slide.className = 'gallery-slide';
-          slide.innerHTML = `<img src="${img}" alt="${product.title}">`;
-          gallerySlides.appendChild(slide);
-        });
-        
-        // Update gallery navigation
-        const galleryNav = document.querySelector('.gallery-nav');
-        galleryNav.innerHTML = '';
-        images.forEach((_, i) => {
-          const dot = document.createElement('div');
-          dot.className = `gallery-dot ${i === 0 ? 'active' : ''}`;
-          dot.dataset.index = i;
-          dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
-          galleryNav.appendChild(dot);
-        });
-        
-        // Update total slides counter
-        totalSlides = images.length; // Update the global variable
-        currentIndex = 0; // Reset to first slide
-        document.getElementById('totalSlides').textContent = String(totalSlides).padStart(2, '0');
-        document.getElementById('currentSlide').textContent = '01';
-        
-        // Reset gallery position
-        document.getElementById('gallerySlides').style.transform = 'translateX(0)';
-        
-        // Update size options
-        const sizeOptions = document.querySelector('.size-options');
-        const sizes = new Set();
-        product.variants.edges.forEach(({ node }) => {
-          node.selectedOptions.forEach(opt => {
-            if (opt.name.toLowerCase() === 'size') sizes.add(opt.value);
-          });
-        });
-        
-        if (sizes.size > 0) {
-          sizeOptions.innerHTML = '';
-          Array.from(sizes).forEach((size, i) => {
-            const variant = product.variants.edges.find(v => 
-              v.node.selectedOptions.some(o => o.value === size)
-            )?.node;
-            const available = variant?.availableForSale;
-            
-            const btn = document.createElement('button');
-            btn.className = `size-btn ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}`;
-            btn.dataset.size = size;
-            btn.textContent = size;
-            if (!available) btn.disabled = true;
-            else btn.addEventListener('click', function() {
-              document.querySelectorAll('.size-btn:not(.soldout)').forEach(b => b.classList.remove('active'));
-              this.classList.add('active');
-            });
-            sizeOptions.appendChild(btn);
-          });
-        }
-        
-        // Update color options - using productType field
-        const colorOptions = document.querySelector('.color-options');
-        const currentColor = product.productType; // e.g., "White" or "Black"
-        
-        if (currentColor) {
-          // Search for other products with same title but different productType
-          try {
-            const relatedProducts = await getProductsByTitle(product.title);
-            
-            colorOptions.innerHTML = '';
-            
-            // Generate swatches for all color variants
-            relatedProducts.forEach(relatedProduct => {
-              const color = relatedProduct.productType;
-              if (!color) return; // Skip if no productType set
-              
-              const isCurrentColor = relatedProduct.handle === product.handle;
-              const isAvailable = relatedProduct.variants.edges.some(v => v.node.availableForSale);
-              
-              const swatch = document.createElement('button');
-              swatch.className = `color-swatch ${color.toLowerCase()} ${isCurrentColor ? 'active' : ''} ${!isAvailable ? 'soldout' : ''}`;
-              swatch.dataset.color = color;
-              swatch.dataset.handle = relatedProduct.handle;
-              
-              if (!isCurrentColor) {
-                // Other color - always navigable (even if sold out)
-                swatch.addEventListener('click', function() {
-                  window.location.href = `/product-page.html?handle=${relatedProduct.handle}`;
-                });
-              }
-              
-              colorOptions.appendChild(swatch);
-            });
-            
-            document.getElementById('colorValue').textContent = currentColor;
-          } catch (e) {
-            console.error('Failed to load related products:', e);
-            // Fallback: just show current color
-            colorOptions.innerHTML = '';
-            const swatch = document.createElement('button');
-            swatch.className = `color-swatch ${currentColor.toLowerCase()} active`;
-            swatch.dataset.color = currentColor;
-            colorOptions.appendChild(swatch);
-            document.getElementById('colorValue').textContent = currentColor;
-          }
-        }
-        
-        // Check availability
-        const isAvailable = product.variants.edges.some(v => v.node.availableForSale);
-        if (!isAvailable) {
-          document.getElementById('addToCart').textContent = 'Sold Out';
-          document.getElementById('addToCart').disabled = true;
-          document.getElementById('addToCart').style.opacity = '0.5';
-        }
-        
-        // Gallery is already updated above
-        
-      } catch (error) {
-        console.error('Failed to load product:', error);
-      }
-    }
-  </script>
