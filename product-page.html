@@ -2329,6 +2329,7 @@
               </div>
               <div class="cart-item-details">
                 <div class="cart-item-title">${product}</div>
+                ${variant ? `<div style="font-size: 12px; color: var(--gray); margin-top: 4px;">${variant}</div>` : ''}
                 <div class="cart-item-variant" style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
                   <button class="cart-qty-btn" onclick="updateQuantity('${node.id}', ${node.quantity - 1})" ${node.quantity <= 1 ? 'disabled' : ''}>−</button>
                   <span>${node.quantity}</span>
