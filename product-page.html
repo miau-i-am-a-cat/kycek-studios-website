@@ -1287,28 +1287,8 @@
       </a>
     </div>
     
-    <div class="related-grid">
-      <a href="#" class="related-card">
-        <div class="related-card-image">
-          <img src="assets/images/all pro pic clothes (2).png" alt="Essential Tee Black">
-        </div>
-        <div class="related-card-name">Essential Tee — Black</div>
-        <div class="related-card-price">$68</div>
-      </a>
-      <a href="#" class="related-card">
-        <div class="related-card-image">
-          <img src="assets/images/all pro pic clothes (3).png" alt="Training Short White">
-        </div>
-        <div class="related-card-name">Training Short — White</div>
-        <div class="related-card-price">$78</div>
-      </a>
-      <a href="#" class="related-card">
-        <div class="related-card-image">
-          <img src="assets/images/all pro pic clothes (4).png" alt="Training Short Black">
-        </div>
-        <div class="related-card-name">Training Short — Black</div>
-        <div class="related-card-price">$78</div>
-      </a>
+    <div class="related-grid" id="relatedProducts">
+      <!-- Products loaded dynamically from Shopify -->
     </div>
   </section>
 
@@ -1756,6 +1736,59 @@
         console.error('Failed to load product:', error);
       }
     }
+    
+    // Load related products for "Complete the Look" section
+    async function loadRelatedProducts() {
+      try {
+        console.log('Loading related products...');
+        const products = await getProducts(20);
+        
+        // Filter for shorts and limited edition
+        const relatedProducts = products.filter(product => {
+          const title = product.title.toLowerCase();
+          const productType = (product.productType || '').toLowerCase();
+          return title.includes('short') || productType.includes('limited') || title.includes('limited');
+        });
+        
+        console.log('Related products found:', relatedProducts);
+        
+        const relatedGrid = document.getElementById('relatedProducts');
+        if (relatedGrid && relatedProducts.length > 0) {
+          relatedGrid.innerHTML = '';
+          
+          relatedProducts.forEach(product => {
+            const price = parseFloat(product.priceRange.minVariantPrice.amount);
+            const imageUrl = product.images.edges[0]?.node?.url || '';
+            
+            const card = document.createElement('a');
+            card.href = `?handle=${product.handle}`;
+            card.className = 'related-card';
+            card.innerHTML = `
+              <div class="related-card-image">
+                <img src="${imageUrl}" alt="${product.title}">
+              </div>
+              <div class="related-card-name">${product.title}</div>
+              <div class="related-card-price">$${price.toFixed(0)}</div>
+            `;
+            
+            card.addEventListener('click', async (e) => {
+              e.preventDefault();
+              const newUrl = `?handle=${product.handle}`;
+              window.history.pushState({handle: product.handle}, '', newUrl);
+              await loadProductFromShopify(product.handle);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            relatedGrid.appendChild(card);
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load related products:', error);
+      }
+    }
+    
+    // Load related products on page load
+    loadRelatedProducts();
   </script>
 
   <!-- Cart Drawer -->
