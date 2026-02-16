@@ -1338,11 +1338,14 @@
           const prod1Image = prod1.images.edges[0]?.node.url || 'assets/images/product-flatlay.jpg';
           const prod1Price = parseFloat(prod1.priceRange.minVariantPrice.amount);
           
-          document.querySelector('.product-feature:nth-of-type(1) .product-image img').src = prod1Image;
-          document.querySelector('.product-feature:nth-of-type(1) .product-name').textContent = prod1.title;
-          document.querySelector('.product-feature:nth-of-type(1) .product-desc').textContent = prod1.description || 'Premium quality activewear designed for performance.';
-          document.querySelector('.product-feature:nth-of-type(1) .product-price').textContent = `$${prod1Price.toFixed(0)}`;
-          document.querySelector('.product-feature:nth-of-type(1) .product-link').href = `product-page.html?handle=${prod1.handle}`;
+          const productFeatures = document.querySelectorAll('.product-feature');
+          if (productFeatures[0]) {
+            productFeatures[0].querySelector('.product-image img').src = prod1Image;
+            productFeatures[0].querySelector('.product-name').textContent = prod1.title;
+            productFeatures[0].querySelector('.product-desc').textContent = prod1.description || 'Premium quality activewear designed for performance.';
+            productFeatures[0].querySelector('.product-price').textContent = `$${prod1Price.toFixed(0)}`;
+            productFeatures[0].querySelector('.product-link').href = `product-page.html?handle=${prod1.handle}`;
+          }
         }
         
         // Product 2 (Training Short) - Second product
@@ -1351,11 +1354,14 @@
           const prod2Image = prod2.images.edges[0]?.node.url || 'assets/images/all pro pic clothes (3).png';
           const prod2Price = parseFloat(prod2.priceRange.minVariantPrice.amount);
           
-          document.querySelector('.product-feature.reverse .product-image img').src = prod2Image;
-          document.querySelector('.product-feature.reverse .product-name').textContent = prod2.title;
-          document.querySelector('.product-feature.reverse .product-desc').textContent = prod2.description || 'Lightweight performance wear for training and movement.';
-          document.querySelector('.product-feature.reverse .product-price').textContent = `$${prod2Price.toFixed(0)}`;
-          document.querySelector('.product-feature.reverse .product-link').href = `product-page.html?handle=${prod2.handle}`;
+          const productFeatures = document.querySelectorAll('.product-feature');
+          if (productFeatures[1]) {
+            productFeatures[1].querySelector('.product-image img').src = prod2Image;
+            productFeatures[1].querySelector('.product-name').textContent = prod2.title;
+            productFeatures[1].querySelector('.product-desc').textContent = prod2.description || 'Lightweight performance wear for training and movement.';
+            productFeatures[1].querySelector('.product-price').textContent = `$${prod2Price.toFixed(0)}`;
+            productFeatures[1].querySelector('.product-link').href = `product-page.html?handle=${prod2.handle}`;
+          }
         }
         
         // Limited Edition - Third product
@@ -1376,19 +1382,13 @@
       }
     }
     
-    // Load products when page loads
-    console.log('Checking for getProducts function:', typeof getProducts);
+    // Load products on page load (script at end of body, DOM is ready)
+    console.log('Starting product load...');
+    console.log('getProducts available?', typeof getProducts);
     
-    if (typeof getProducts === 'function') {
-      console.log('Loading home products...');
-      loadHomeProducts().then(() => {
-        console.log('Products loaded successfully');
-      }).catch(err => {
-        console.error('Failed to load products:', err);
-      });
-    } else {
-      console.error('getProducts function not found - config.js may not be loaded');
-    }
+    loadHomeProducts().catch(err => {
+      console.error('Failed to load home products:', err);
+    });
   </script>
 
   <!-- Limited Edition Email Form -->
