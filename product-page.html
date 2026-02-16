@@ -821,6 +821,90 @@
       color: var(--gray);
     }
     
+    /* ==================== EMAIL SIGNUP ==================== */
+    .email-signup {
+      padding: 120px 80px;
+      background: var(--dark);
+      border-top: 1px solid var(--dark-border);
+    }
+    
+    .email-signup-content {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .email-signup h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      margin-bottom: 16px;
+    }
+    
+    .email-signup p {
+      font-size: 16px;
+      color: var(--gray);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    
+    .email-form {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .email-form input {
+      flex: 1;
+      padding: 16px 24px;
+      background: var(--black);
+      border: 1px solid var(--dark-border);
+      color: var(--white);
+      font-size: 15px;
+      font-family: inherit;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+    
+    .email-form input:focus {
+      outline: none;
+      border-color: var(--white);
+    }
+    
+    .email-form input::placeholder {
+      color: var(--gray);
+    }
+    
+    .email-form button {
+      padding: 16px 40px;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: none;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    
+    .email-form button:hover {
+      background: var(--light-gray);
+    }
+    
+    .email-message {
+      font-size: 14px;
+      min-height: 20px;
+    }
+    
+    .email-message.success {
+      color: var(--success-green);
+    }
+    
+    .email-message.error {
+      color: var(--red);
+    }
+    
     /* ==================== FOOTER ==================== */
     .footer {
       padding: 80px;
@@ -957,6 +1041,10 @@
         flex: 0 0 75%;
         scroll-snap-align: center;
       }
+      .email-signup { padding: 60px 20px; }
+      .email-signup h2 { font-size: 32px; }
+      .email-form { flex-direction: column; }
+      .email-form button { width: 100%; }
       .footer { grid-template-columns: 1fr; gap: 30px; text-align: center; padding: 40px 20px; }
       .footer-left { align-items: center; }
       .footer-section { align-items: center; }
@@ -1397,6 +1485,26 @@
   </section>
 
   <!-- ==================== FOOTER ==================== -->
+  <!-- ==================== EMAIL SIGNUP ==================== -->
+  <section class="email-signup">
+    <div class="email-signup-content">
+      <h2 data-en="Get 10% Off" data-es="Obtén 10% de Descuento">Get 10% Off</h2>
+      <p data-en="Join our community for exclusive access and 10% off your first order." data-es="Únete a nuestra comunidad para acceso exclusivo y 10% de descuento en tu primer pedido.">Join our community for exclusive access and 10% off your first order.</p>
+      <form class="email-form" id="emailSignupForm">
+        <input 
+          type="email" 
+          id="emailInput" 
+          placeholder="Enter your email" 
+          data-en-placeholder="Enter your email"
+          data-es-placeholder="Ingresa tu correo electrónico"
+          required
+        >
+        <button type="submit" data-en="Subscribe" data-es="Suscribirse">Subscribe</button>
+      </form>
+      <div class="email-message" id="emailMessage"></div>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="footer-left">
       <img src="assets/images/logo-inverted.png" alt="Kýček Studios" class="footer-logo">
@@ -2668,6 +2776,84 @@
     };
   </script>
 
+  <!-- Email Signup -->
+  <script>
+    const emailForm = document.getElementById('emailSignupForm');
+    const emailInput = document.getElementById('emailInput');
+    const emailMessage = document.getElementById('emailMessage');
+    
+    // Update placeholder on language change
+    function updateEmailPlaceholder() {
+      const lang = localStorage.getItem('kycek_language') || 'en';
+      const placeholder = lang === 'es' ? 
+        emailInput.dataset.esPlaceholder : 
+        emailInput.dataset.enPlaceholder;
+      emailInput.placeholder = placeholder;
+    }
+    
+    updateEmailPlaceholder();
+    
+    emailForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = emailInput.value.trim();
+      
+      if (!email) {
+        showMessage('Please enter your email', 'error');
+        return;
+      }
+      
+      // Show loading state
+      const submitBtn = emailForm.querySelector('button');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = '...';
+      submitBtn.disabled = true;
+      
+      try {
+        // TODO: Replace 'YOUR_LIST_ID' with your actual Klaviyo List ID
+        const response = await fetch('https://a.klaviyo.com/api/v2/list/YOUR_LIST_ID/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            profiles: [{
+              email: email,
+              // Optional: add custom properties
+              $source: 'Website Signup',
+              discount_code: 'WELCOME10'
+            }]
+          })
+        });
+        
+        if (response.ok) {
+          showMessage('Success! Check your email for your 10% discount code.', 'success');
+          emailInput.value = '';
+        } else {
+          throw new Error('Subscription failed');
+        }
+      } catch (error) {
+        console.error('Email signup error:', error);
+        showMessage('Something went wrong. Please try again.', 'error');
+      } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+    
+    function showMessage(text, type) {
+      emailMessage.textContent = text;
+      emailMessage.className = `email-message ${type}`;
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          emailMessage.textContent = '';
+          emailMessage.className = 'email-message';
+        }, 5000);
+      }
+    }
+  </script>
+
   <!-- Language Translation System -->
   <script>
     const translations = {
@@ -2815,6 +3001,11 @@
         if (subtitleEl && subtitleEl.dataset.originalEn) {
           subtitleEl.textContent = subtitleEl.dataset.originalEn;
         }
+      }
+      
+      // Update email form placeholder
+      if (typeof updateEmailPlaceholder === 'function') {
+        updateEmailPlaceholder();
       }
     }
     
