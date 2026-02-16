@@ -540,10 +540,9 @@
     .shipping-info {
       margin-top: 30px;
       margin-bottom: 30px;
-      padding: 24px;
-      background: var(--dark);
-      border: 1px solid var(--dark-border);
-      border-radius: 4px;
+      padding: 0;
+      background: transparent;
+      border: none;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
@@ -1027,7 +1026,7 @@
       .gallery-arrows { display: none; }
       .product-info { padding: 40px 20px; }
       .product-title { font-size: 28px; }
-      .shipping-info { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+      .shipping-info { grid-template-columns: 1fr 1fr; gap: 12px; padding: 0; }
       .bundle-offer { padding: 16px; margin-top: 30px; }
       .bundle-content { gap: 12px; flex-wrap: wrap; }
       .bundle-text { width: 100%; order: 1; }
@@ -1425,7 +1424,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
-          <span data-en="Free shipping over $100" data-es="Envío gratis en pedidos superiores a $100">Free shipping over $100</span>
+          <span data-en="Free shipping over $90" data-es="Envío gratis en pedidos superiores a $90">Free shipping over $90</span>
         </div>
         <div class="shipping-item">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
@@ -1754,31 +1753,50 @@
       }
     });
     
-    // Touch swipe support
+    // Touch swipe support - Enhanced
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
+    let isSwiping = false;
     
     slides.addEventListener('touchstart', e => {
       touchStartX = e.changedTouches[0].clientX;
       touchStartY = e.changedTouches[0].clientY;
+      touchEndX = touchStartX;
+      touchEndY = touchStartY;
+      isSwiping = false;
+    }, { passive: true });
+    
+    slides.addEventListener('touchmove', e => {
+      if (!isSwiping) {
+        touchEndX = e.changedTouches[0].clientX;
+        touchEndY = e.changedTouches[0].clientY;
+        
+        const diffX = Math.abs(touchStartX - touchEndX);
+        const diffY = Math.abs(touchStartY - touchEndY);
+        
+        // Detect if it's a horizontal swipe
+        if (diffX > diffY && diffX > 10) {
+          isSwiping = true;
+        }
+      } else {
+        touchEndX = e.changedTouches[0].clientX;
+      }
     }, { passive: true });
     
     slides.addEventListener('touchend', e => {
-      touchEndX = e.changedTouches[0].clientX;
-      touchEndY = e.changedTouches[0].clientY;
-      handleSwipe();
+      if (isSwiping) {
+        handleSwipe();
+      }
+      isSwiping = false;
     }, { passive: true });
     
     function handleSwipe() {
       const diffX = touchStartX - touchEndX;
-      const diffY = touchStartY - touchEndY;
-      const swipeThreshold = 50;
+      const swipeThreshold = 30; // Lower threshold for better responsiveness
       
-      // Only swipe if horizontal movement is dominant
       if (Math.abs(diffX) < swipeThreshold) return;
-      if (Math.abs(diffY) > Math.abs(diffX)) return; // Vertical scroll takes priority
       
       if (diffX > 0) {
         // Swipe left - next
