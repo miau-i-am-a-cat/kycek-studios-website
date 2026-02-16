@@ -232,7 +232,25 @@
     .product-subtitle {
       font-size: 15px;
       color: var(--light-gray);
-      margin-bottom: 40px;
+      margin-bottom: 20px;
+    }
+    
+    .product-reviews {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .product-reviews .stars {
+      color: var(--primary-gold);
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+    
+    .product-reviews .review-count {
+      font-size: 13px;
+      color: var(--gray);
     }
     
     .product-price {
@@ -520,26 +538,31 @@
     
     /* Shipping info */
     .shipping-info {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--dark-border);
-      display: flex;
-      gap: 30px;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      padding: 24px;
+      background: var(--dark);
+      border: 1px solid var(--dark-border);
+      border-radius: 4px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
     }
     
     .shipping-item {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-size: 12px;
       color: var(--light-gray);
       font-weight: 500;
     }
     
     .shipping-item svg {
-      width: 18px;
-      height: 18px;
-      stroke: var(--light-gray);
+      width: 20px;
+      height: 20px;
+      stroke: var(--white);
+      opacity: 0.8;
     }
     
     /* ==================== DETAILS SECTION ==================== */
@@ -1004,6 +1027,7 @@
       .gallery-arrows { display: none; }
       .product-info { padding: 40px 20px; }
       .product-title { font-size: 28px; }
+      .shipping-info { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
       .bundle-offer { padding: 16px; margin-top: 30px; }
       .bundle-content { gap: 12px; flex-wrap: wrap; }
       .bundle-text { width: 100%; order: 1; }
@@ -1280,16 +1304,16 @@
     <div class="gallery">
       <div class="gallery-slides" id="gallerySlides">
         <div class="gallery-slide">
-          <img src="assets/images/product-flatlay.png" alt="Essential Tee - Flat">
+          <img src="assets/images/product-flatlay.jpg" alt="Essential Tee - Flat">
         </div>
         <div class="gallery-slide">
-          <img src="assets/images/model-back.png" alt="Essential Tee - Model Back">
+          <img src="assets/images/model-back.jpg" alt="Essential Tee - Model Back">
         </div>
         <div class="gallery-slide">
-          <img src="assets/images/lifestyle-beach.png" alt="Essential Tee - Beach">
+          <img src="assets/images/lifestyle-beach.jpg" alt="Essential Tee - Beach">
         </div>
         <div class="gallery-slide">
-          <img src="assets/images/lifestyle-studio-movement.png" alt="Essential Tee - Studio">
+          <img src="assets/images/lifestyle-studio-movement.jpg" alt="Essential Tee - Studio">
         </div>
       </div>
       
@@ -1314,6 +1338,11 @@
       <span class="product-badge">ORIGINS</span>
       <h1 class="product-title">Essential Tee</h1>
       <p class="product-subtitle">Performance cotton with signature crow mark</p>
+      
+      <div class="product-reviews">
+        <div class="stars">★★★★★</div>
+        <span class="review-count" data-en="4.8 (148 reviews)" data-es="4.8 (148 reseñas)">4.8 (148 reviews)</span>
+      </div>
       
       <div class="product-price">
         <span class="currency">$</span>68
@@ -1430,7 +1459,7 @@
     </div>
     
     <div class="details-image">
-      <img src="assets/images/model-back.png" alt="Detail shot">
+      <img src="assets/images/model-back.jpg" alt="Detail shot">
       <span class="overlay-text">Signature crow placement</span>
     </div>
   </section>
@@ -1452,7 +1481,7 @@
         </div>
       </div>
       <div class="lifestyle-item">
-        <img src="assets/images/lifestyle-studio-movement.png" alt="Studio Movement">
+        <img src="assets/images/lifestyle-studio-movement.jpg" alt="Studio Movement">
         <div class="overlay"></div>
         <div class="caption">
           <div>
