@@ -1756,31 +1756,31 @@
     
     // Touch swipe support
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchEndX = 0;
-    let isSwiping = false;
+    let touchEndY = 0;
     
     slides.addEventListener('touchstart', e => {
-      touchStartX = e.changedTouches[0].screenX;
-      isSwiping = false;
-    }, { passive: true });
-    
-    slides.addEventListener('touchmove', e => {
-      isSwiping = true;
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
     }, { passive: true });
     
     slides.addEventListener('touchend', e => {
-      if (!isSwiping) return;
-      touchEndX = e.changedTouches[0].screenX;
+      touchEndX = e.changedTouches[0].clientX;
+      touchEndY = e.changedTouches[0].clientY;
       handleSwipe();
-      isSwiping = false;
     }, { passive: true });
     
     function handleSwipe() {
+      const diffX = touchStartX - touchEndX;
+      const diffY = touchStartY - touchEndY;
       const swipeThreshold = 50;
-      const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) < swipeThreshold) return;
       
-      if (diff > 0) {
+      // Only swipe if horizontal movement is dominant
+      if (Math.abs(diffX) < swipeThreshold) return;
+      if (Math.abs(diffY) > Math.abs(diffX)) return; // Vertical scroll takes priority
+      
+      if (diffX > 0) {
         // Swipe left - next
         goToSlide(currentIndex + 1);
       } else {
