@@ -7,7 +7,6 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="/config.js"></script>
   
   <style>
     :root {
@@ -386,6 +385,68 @@
       background: var(--white);
       color: var(--black);
       opacity: 1;
+    }
+    
+    .bundle-offer.expanded {
+      padding: 30px 20px;
+    }
+    
+    .bundle-offer.expanded .bundle-content {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .bundle-offer.expanded .btn-bundle {
+      display: none;
+    }
+    
+    .bundle-sizes {
+      margin-top: 20px;
+      width: 100%;
+    }
+    
+    .bundle-size-row {
+      margin-bottom: 12px;
+    }
+    
+    .bundle-size-row label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--light-gray);
+    }
+    
+    .bundle-size-select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--black);
+      border: 1px solid var(--gray);
+      color: var(--white);
+      font-family: inherit;
+      font-size: 14px;
+      cursor: none;
+    }
+    
+    .btn-bundle-confirm {
+      width: 100%;
+      padding: 14px;
+      background: var(--white);
+      border: none;
+      color: var(--black);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 8px;
+      cursor: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .btn-bundle-confirm:hover {
+      opacity: 0.9;
     }
 
     /* Add to Cart */
@@ -794,130 +855,6 @@
       .footer { flex-direction: column; gap: 30px; text-align: center; padding: 40px 20px; }
       .footer-left { flex-direction: column; gap: 20px; }
     }
-    /* Bundle Modal */
-    .bundle-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      padding: 20px;
-    }
-    
-    .bundle-modal.active {
-      display: flex !important;
-    }
-    
-    .bundle-modal-content {
-      background: var(--dark);
-      border: 1px solid var(--gray);
-      max-width: 500px;
-      width: 100%;
-      padding: 40px;
-      position: relative;
-    }
-    
-    .bundle-modal-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: var(--white);
-      font-size: 24px;
-      cursor: none;
-      padding: 0;
-      line-height: 1;
-    }
-    
-    .bundle-modal-title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    
-    .bundle-modal-savings {
-      color: var(--red);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 32px;
-    }
-    
-    .bundle-item {
-      margin-bottom: 24px;
-    }
-    
-    .bundle-item-name {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .bundle-item-price {
-      color: var(--light-gray);
-      font-size: 13px;
-    }
-    
-    .bundle-size-select {
-      width: 100%;
-      padding: 12px 16px;
-      background: var(--black);
-      border: 1px solid var(--gray);
-      color: var(--white);
-      font-family: inherit;
-      font-size: 14px;
-      cursor: none;
-    }
-    
-    .bundle-modal-total {
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid var(--gray);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    
-    .bundle-modal-total-label {
-      font-size: 14px;
-      font-weight: 600;
-    }
-    
-    .bundle-modal-total-amount {
-      font-size: 24px;
-      font-weight: 700;
-    }
-    
-    .bundle-modal-original {
-      text-decoration: line-through;
-      color: var(--gray);
-      font-size: 16px;
-      margin-right: 12px;
-    }
-    
-    .btn-add-bundle {
-      width: 100%;
-      padding: 16px;
-      background: var(--white);
-      color: var(--black);
-      border: none;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      cursor: none;
-    }
   </style>
 </head>
 <body>
@@ -1023,6 +960,31 @@
             <span class="bundle-price">$116.80</span>
           </div>
           <button class="btn-bundle" id="addBundle">Add</button>
+          
+          <!-- Size selectors (hidden by default) -->
+          <div class="bundle-sizes" id="bundleSizes" style="display: none;">
+            <div class="bundle-size-row">
+              <label>Tee Size</label>
+              <select class="bundle-size-select" id="bundleTeeSize">
+                <option value="">Select</option>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+            </div>
+            <div class="bundle-size-row">
+              <label>Short Size</label>
+              <select class="bundle-size-select" id="bundleShortSize">
+                <option value="">Select</option>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+            </div>
+            <button class="btn-bundle-confirm" id="confirmBundle">Add to Cart</button>
+          </div>
         </div>
       </div>
 
@@ -1262,6 +1224,37 @@
       }, 2000);
     });
     
+    // Bundle expand/collapse
+    const bundleOffer = document.getElementById('bundleOffer');
+    const addBundle = document.getElementById('addBundle');
+    const bundleSizes = document.getElementById('bundleSizes');
+    const confirmBundle = document.getElementById('confirmBundle');
+    
+    addBundle.addEventListener('click', () => {
+      bundleOffer.classList.add('expanded');
+      bundleSizes.style.display = 'block';
+    });
+    
+    confirmBundle.addEventListener('click', () => {
+      const teeSize = document.getElementById('bundleTeeSize').value;
+      const shortSize = document.getElementById('bundleShortSize').value;
+      
+      if (!teeSize || !shortSize) {
+        alert('Please select both sizes');
+        return;
+      }
+      
+      confirmBundle.textContent = 'Added ✓';
+      confirmBundle.style.opacity = '0.7';
+      
+      setTimeout(() => {
+        bundleOffer.classList.remove('expanded');
+        bundleSizes.style.display = 'none';
+        confirmBundle.textContent = 'Add to Cart';
+        confirmBundle.style.opacity = '';
+      }, 2000);
+    });
+    
     // Keyboard navigation
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft') goToSlide(currentIndex - 1);
@@ -1280,78 +1273,7 @@
         addBundle.style.color = '';
       }, 2000);
     });
-    
-    // Bundle modal
-    const bundleModal = document.getElementById('bundleModal');
-    const addBundle = document.getElementById('addBundle');
-    const closeBundleModal = document.getElementById('closeBundleModal');
-    
-    if (addBundle && bundleModal) {
-      addBundle.addEventListener('click', () => {
-        bundleModal.classList.add('active');
-      });
-    }
-    
-    if (closeBundleModal && bundleModal) {
-      closeBundleModal.addEventListener('click', () => {
-        bundleModal.classList.remove('active');
-      });
-      
-      // Close on background click
-      bundleModal.addEventListener('click', (e) => {
-        if (e.target === bundleModal) {
-          bundleModal.classList.remove('active');
-        }
-      });
-    }
   </script>
-
-  <!-- Bundle Modal -->
-  <div class="bundle-modal" id="bundleModal">
-    <div class="bundle-modal-content">
-      <button class="bundle-modal-close" id="closeBundleModal">×</button>
-      <h3 class="bundle-modal-title">Complete the Set</h3>
-      <div class="bundle-modal-savings">Save 20% on Bundle</div>
-      
-      <div class="bundle-item">
-        <div class="bundle-item-name">
-          Essential Tee
-          <span class="bundle-item-price">$68</span>
-        </div>
-        <select class="bundle-size-select" id="bundleTeeSize">
-          <option value="">Select Size</option>
-          <option value="S">S</option>
-          <option value="M" selected>M</option>
-          <option value="L">L</option>
-          <option value="XL">XL</option>
-        </select>
-      </div>
-      
-      <div class="bundle-item">
-        <div class="bundle-item-name">
-          Training Short
-          <span class="bundle-item-price">$78</span>
-        </div>
-        <select class="bundle-size-select" id="bundleShortSize">
-          <option value="">Select Size</option>
-          <option value="S">S</option>
-          <option value="M" selected>M</option>
-          <option value="L">L</option>
-          <option value="XL">XL</option>
-        </select>
-      </div>
-      
-      <div class="bundle-modal-total">
-        <div class="bundle-modal-total-label">Bundle Total</div>
-        <div class="bundle-modal-total-amount">
-          <span class="bundle-modal-original">$146</span>
-          $117
-        </div>
-      </div>
-      
-      <button class="btn-add-bundle" id="addBundleToCart">Add Bundle to Cart</button>
-    </div>
-  </div>
 
 </body>
 </html>
