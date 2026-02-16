@@ -99,9 +99,11 @@
     }
     
     .gallery-slide img {
-      max-width: 100%;
-      max-height: 80vh;
-      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: center;
     }
     
     .gallery-nav {
@@ -276,7 +278,8 @@
     .color-swatch:hover { transform: scale(1.1); }
     .color-swatch.active::after { border-color: var(--white); }
     .color-swatch.white { background: var(--white); }
-    .color-swatch.black { background: #1a1a1a; border: 1px solid #333; }
+    .color-swatch.black { background: #1a1a1a; border: 2px solid rgba(255, 255, 255, 0.3); }
+    .color-swatch.black.active { border-color: transparent; }
     
     .size-options {
       display: flex;
@@ -907,7 +910,7 @@
     </div>
     
     <div class="product-info">
-      <span class="product-badge">Signature</span>
+      <span class="product-badge">ORIGINS</span>
       <h1 class="product-title">Essential Tee</h1>
       <p class="product-subtitle">Performance cotton with signature crow mark</p>
       
