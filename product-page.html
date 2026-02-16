@@ -823,82 +823,90 @@
     
     /* ==================== EMAIL SIGNUP ==================== */
     .email-signup {
-      padding: 120px 80px;
-      background: var(--dark);
+      padding: 80px;
       border-top: 1px solid var(--dark-border);
+      background: var(--black);
     }
     
     .email-signup-content {
-      max-width: 600px;
+      max-width: 1400px;
       margin: 0 auto;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 60px;
     }
     
     .email-signup h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 42px;
-      margin-bottom: 16px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      margin: 0;
+      white-space: nowrap;
     }
     
     .email-signup p {
-      font-size: 16px;
-      color: var(--gray);
-      margin-bottom: 32px;
-      line-height: 1.6;
+      display: none;
     }
     
     .email-form {
+      flex: 1;
       display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 0;
+      margin: 0;
+      border-bottom: 1px solid var(--dark-border);
     }
     
     .email-form input {
       flex: 1;
-      padding: 16px 24px;
-      background: var(--black);
-      border: 1px solid var(--dark-border);
+      padding: 12px 0;
+      background: transparent;
+      border: none;
       color: var(--white);
-      font-size: 15px;
+      font-size: 14px;
       font-family: inherit;
-      border-radius: 4px;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
     }
     
     .email-form input:focus {
       outline: none;
-      border-color: var(--white);
     }
     
     .email-form input::placeholder {
       color: var(--gray);
+      opacity: 0.5;
     }
     
     .email-form button {
-      padding: 16px 40px;
-      background: var(--white);
-      color: var(--black);
+      padding: 12px 0;
+      background: transparent;
+      color: var(--white);
       border: none;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       cursor: none;
-      border-radius: 4px;
       transition: all 0.2s;
+      opacity: 0.5;
     }
     
     .email-form button:hover {
-      background: var(--light-gray);
+      opacity: 1;
     }
     
     .email-message {
-      font-size: 14px;
-      min-height: 20px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      position: absolute;
+      margin-top: 8px;
     }
     
     .email-message.success {
-      color: var(--success-green);
+      color: var(--white);
     }
     
     .email-message.error {
@@ -1042,9 +1050,8 @@
         scroll-snap-align: center;
       }
       .email-signup { padding: 60px 20px; }
-      .email-signup h2 { font-size: 32px; }
-      .email-form { flex-direction: column; }
-      .email-form button { width: 100%; }
+      .email-signup-content { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .email-form { width: 100%; }
       .footer { grid-template-columns: 1fr; gap: 30px; text-align: center; padding: 40px 20px; }
       .footer-left { align-items: center; }
       .footer-section { align-items: center; }
@@ -1488,21 +1495,20 @@
   <!-- ==================== EMAIL SIGNUP ==================== -->
   <section class="email-signup">
     <div class="email-signup-content">
-      <h2 data-en="Get 10% Off" data-es="Obtén 10% de Descuento">Get 10% Off</h2>
-      <p data-en="Join our community for exclusive access and 10% off your first order." data-es="Únete a nuestra comunidad para acceso exclusivo y 10% de descuento en tu primer pedido.">Join our community for exclusive access and 10% off your first order.</p>
+      <h2 data-en="10% Off · First Order" data-es="10% Descuento · Primer Pedido">10% Off · First Order</h2>
       <form class="email-form" id="emailSignupForm">
         <input 
           type="email" 
           id="emailInput" 
-          placeholder="Enter your email" 
-          data-en-placeholder="Enter your email"
-          data-es-placeholder="Ingresa tu correo electrónico"
+          placeholder="Your email" 
+          data-en-placeholder="Your email"
+          data-es-placeholder="Tu correo"
           required
         >
-        <button type="submit" data-en="Subscribe" data-es="Suscribirse">Subscribe</button>
+        <button type="submit" data-en="→" data-es="→">→</button>
       </form>
-      <div class="email-message" id="emailMessage"></div>
     </div>
+    <div class="email-message" id="emailMessage"></div>
   </section>
 
   <footer class="footer">
