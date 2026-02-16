@@ -27,6 +27,8 @@
       display: flex;
       height: 100%;
       transition: transform 0.3s ease-out;
+      touch-action: pan-y;
+      pointer-events: auto;
     }
     
     .gallery-slide {
@@ -139,6 +141,12 @@
       // Move
       slides.style.transform = `translateX(-${currentIndex * 100}%)`;
       
+      // Force Safari to recognize the element is still interactive
+      slides.style.pointerEvents = 'none';
+      setTimeout(() => {
+        slides.style.pointerEvents = 'auto';
+      }, 0);
+      
       // Update dots
       document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
         dot.classList.toggle('active', i === currentIndex);
@@ -166,16 +174,20 @@
       }
     };
     
-    // Touch swipe
-    slides.addEventListener('touchstart', (e) => {
+    // Touch swipe - use gallery parent to avoid event loss
+    const gallery = document.querySelector('.gallery');
+    
+    gallery.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
       status.textContent = 'Touch started...';
-    });
+      console.log('touchstart fired', currentIndex);
+    }, { passive: true });
     
-    slides.addEventListener('touchend', (e) => {
+    gallery.addEventListener('touchend', (e) => {
       const touchEndX = e.changedTouches[0].clientX;
       const diff = touchStartX - touchEndX;
       
+      console.log('touchend fired', diff);
       status.textContent = `Swipe distance: ${Math.round(diff)}px`;
       
       if (Math.abs(diff) > 50) {
@@ -192,7 +204,7 @@
           status.textContent = `Slide ${currentIndex + 1} of ${totalSlides}`;
         }, 500);
       }
-    });
+    }, { passive: true });
     
     // Initial
     updateSlide();
