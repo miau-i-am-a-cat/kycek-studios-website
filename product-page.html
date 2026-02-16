@@ -1160,7 +1160,7 @@
     const nextBtn = document.getElementById('nextBtn');
     const currentSlideEl = document.getElementById('currentSlide');
     let currentIndex = 0;
-    const totalSlides = 4;
+    let totalSlides = 4;
     
     function goToSlide(index) {
       if (index < 0) index = totalSlides - 1;
@@ -1200,6 +1200,53 @@
     // Wishlist
     const wishlistBtn = document.getElementById('wishlistBtn');
     wishlistBtn.addEventListener('click', () => wishlistBtn.classList.toggle('active'));
+    
+    // Add to Cart button
+    const addToCartBtn = document.getElementById('addToCart');
+    addToCartBtn.addEventListener('click', async () => {
+      if (!currentProduct) {
+        alert('Product not loaded');
+        return;
+      }
+      
+      const selectedSizeBtn = document.querySelector('.size-btn.active');
+      if (!selectedSizeBtn) {
+        alert('Please select a size');
+        return;
+      }
+      
+      const selectedSize = selectedSizeBtn.dataset.size;
+      const variant = currentProduct.variants.edges.find(v => 
+        v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === selectedSize)
+      )?.node;
+      
+      if (!variant) {
+        alert('Variant not found');
+        return;
+      }
+      
+      try {
+        addToCartBtn.textContent = 'Adding...';
+        addToCartBtn.disabled = true;
+        
+        const cart = await addToCart(variant.id, 1);
+        
+        addToCartBtn.textContent = 'Added ✓';
+        
+        setTimeout(() => {
+          if (confirm('Item added! Go to checkout?')) {
+            window.open(cart.checkoutUrl, '_blank');
+          }
+          addToCartBtn.textContent = 'Add to Cart';
+          addToCartBtn.disabled = false;
+        }, 1500);
+      } catch (error) {
+        console.error('Add to cart error:', error);
+        alert('Error: ' + error.message);
+        addToCartBtn.textContent = 'Add to Cart';
+        addToCartBtn.disabled = false;
+      }
+    });
     
     // Bundle expansion
     const bundleOffer = document.getElementById('bundleOffer');
@@ -1248,8 +1295,17 @@
             v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === shortSize)
           )?.node;
           
-          if (!teeVariant || !shortVariant) {
-            throw new Error('Could not find product variants');
+          if (!teeProduct) {
+            throw new Error(`Could not find "${currentColor}" Essential Tee`);
+          }
+          if (!shortProduct) {
+            throw new Error(`Could not find "${currentColor}" Training Short`);
+          }
+          if (!teeVariant) {
+            throw new Error(`Size ${teeSize} not available for ${currentColor} Essential Tee`);
+          }
+          if (!shortVariant) {
+            throw new Error(`Size ${shortSize} not available for ${currentColor} Training Short`);
           }
           
           // Add both to cart
@@ -1407,6 +1463,43 @@
             }
             sizeOptions.appendChild(btn);
           });
+        }
+        
+        // Update color options
+        const colorOptions = document.querySelector('.color-options');
+        const currentColor = product.productType;
+        
+        if (currentColor && colorOptions) {
+          try {
+            const relatedProducts = await getProductsByTitle(product.title);
+            colorOptions.innerHTML = '';
+            
+            relatedProducts.forEach(relatedProduct => {
+              const color = relatedProduct.productType;
+              if (!color) return;
+              
+              const isCurrentColor = relatedProduct.handle === product.handle;
+              const isAvailable = relatedProduct.variants?.edges?.some(v => v.node?.availableForSale);
+              
+              const swatch = document.createElement('button');
+              swatch.className = `color-swatch ${color.toLowerCase()} ${isCurrentColor ? 'active' : ''} ${!isAvailable ? 'soldout' : ''}`;
+              swatch.dataset.color = color;
+              swatch.dataset.handle = relatedProduct.handle;
+              swatch.title = color;
+              
+              if (!isCurrentColor && isAvailable) {
+                swatch.addEventListener('click', async function() {
+                  const newUrl = `?handle=${relatedProduct.handle}`;
+                  window.history.pushState({handle: relatedProduct.handle}, '', newUrl);
+                  await loadProductFromShopify(relatedProduct.handle);
+                });
+              }
+              
+              colorOptions.appendChild(swatch);
+            });
+          } catch (error) {
+            console.error('Failed to load color variants:', error);
+          }
         }
         
       } catch (error) {
