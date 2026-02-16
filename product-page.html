@@ -81,6 +81,7 @@
       position: relative;
       background: var(--dark);
       overflow: hidden;
+      max-height: 85vh;
     }
     
     .gallery-slides {
@@ -1662,12 +1663,15 @@
     });
     
     async function openCart() {
+      console.log('Opening cart...');
       cartDrawer.classList.add('active');
       await refreshCart();
     }
     
     async function refreshCart() {
       const cartId = localStorage.getItem('shopify_cart_id');
+      console.log('Cart ID:', cartId);
+      
       if (!cartId) {
         cartBody.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
         cartFooter.style.display = 'none';
@@ -1721,10 +1725,20 @@
           }
         }`;
         
+        console.log('Fetching cart data...');
         const data = await shopifyFetch(query);
+        console.log('Cart data received:', data);
         const cart = data.cart;
         
-        if (!cart || cart.lines.edges.length === 0) {
+        if (!cart) {
+          console.log('Cart not found');
+          cartBody.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+          cartFooter.style.display = 'none';
+          return;
+        }
+        
+        if (cart.lines.edges.length === 0) {
+          console.log('Cart is empty');
           cartBody.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
           cartFooter.style.display = 'none';
           return;
