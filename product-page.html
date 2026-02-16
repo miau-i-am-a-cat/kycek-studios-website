@@ -115,6 +115,7 @@
       height: 100%;
       transition: transform 0.4s ease-out;
       will-change: transform;
+      touch-action: pan-y pinch-zoom;
     }
     
     .gallery-slide {
@@ -1764,18 +1765,30 @@
       }
     });
     
-    // Touch swipe - super simple
+    // Touch swipe - bulletproof
     let touchStart = 0;
     let touchEnd = 0;
+    let swiping = false;
     
     slides.addEventListener('touchstart', e => {
       touchStart = e.changedTouches[0].clientX;
-    }, { passive: true });
+      touchEnd = touchStart;
+      swiping = false;
+    });
+    
+    slides.addEventListener('touchmove', e => {
+      touchEnd = e.changedTouches[0].clientX;
+      const diff = Math.abs(touchStart - touchEnd);
+      if (diff > 10) {
+        swiping = true;
+        e.preventDefault(); // Prevent scroll
+      }
+    });
     
     slides.addEventListener('touchend', e => {
-      touchEnd = e.changedTouches[0].clientX;
-      const diff = touchStart - touchEnd;
+      if (!swiping) return;
       
+      const diff = touchStart - touchEnd;
       if (Math.abs(diff) > 50) {
         if (diff > 0) {
           goToSlide(currentSlide + 1);
@@ -1783,7 +1796,8 @@
           goToSlide(currentSlide - 1);
         }
       }
-    }, { passive: true });
+      swiping = false;
+    });
     
     // Keyboard navigation
     document.addEventListener('keydown', e => {
