@@ -1284,35 +1284,24 @@
           addBundle.textContent = 'ADDING...';
           addBundle.disabled = true;
           
-          // Get all products with the same color
-          const allProducts = await getProducts(50);
-          console.log('All products:', allProducts.map(p => ({title: p.title, type: p.productType})));
-          console.log('Current color:', currentColor);
+          // Map: White -> tshirt + shorts handles, Black -> tshirt + shorts handles
+          const bundleMap = {
+            'White': { tshirt: 'activewear-example-product-3', shorts: 'activewear-example-product-4' },
+            'Black': { tshirt: 'origins-performance-t-shirt', shorts: 'origins-performance-shorts-copy' }
+          };
           
-          const colorProducts = allProducts.filter(p => p.productType === currentColor);
-          console.log('Products matching color:', colorProducts.map(p => p.title));
-          
-          // Find t-shirt (look for shirt/tee/t-shirt in title)
-          const teeProduct = colorProducts.find(p => 
-            p.title.toLowerCase().includes('shirt') || 
-            p.title.toLowerCase().includes('tee') ||
-            p.title.toLowerCase().includes('t-shirt')
-          );
-          console.log('Found tee product:', teeProduct?.title);
-          
-          // Find shorts (look for short in title)
-          const shortProduct = colorProducts.find(p => 
-            p.title.toLowerCase().includes('short')
-          );
-          console.log('Found short product:', shortProduct?.title);
-          
-          if (!teeProduct) {
-            throw new Error(`Could not find ${currentColor} t-shirt. Found ${colorProducts.length} products with color ${currentColor}`);
-          }
-          if (!shortProduct) {
-            throw new Error(`Could not find ${currentColor} shorts. Found ${colorProducts.length} products with color ${currentColor}`);
+          const handles = bundleMap[currentColor];
+          if (!handles) {
+            throw new Error(`No bundle available for color: ${currentColor}`);
           }
           
+          // Fetch both products
+          const [teeProduct, shortProduct] = await Promise.all([
+            getProductByHandle(handles.tshirt),
+            getProductByHandle(handles.shorts)
+          ]);
+          
+          // Find variants for selected sizes
           const teeVariant = teeProduct.variants.edges.find(v => 
             v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === teeSize)
           )?.node;
@@ -1322,10 +1311,10 @@
           )?.node;
           
           if (!teeVariant) {
-            throw new Error(`Size ${teeSize} not available for ${currentColor} t-shirt`);
+            throw new Error(`Size ${teeSize} not available`);
           }
           if (!shortVariant) {
-            throw new Error(`Size ${shortSize} not available for ${currentColor} shorts`);
+            throw new Error(`Size ${shortSize} not available`);
           }
           
           // Add both to cart
