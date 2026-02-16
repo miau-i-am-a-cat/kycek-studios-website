@@ -339,27 +339,34 @@
       gap: 16px;
     }
     
+    .bundle-text {
+      flex: 1;
+    }
+    
     .bundle-text strong {
-      display: block;
       font-size: 14px;
       font-weight: 600;
-      margin-bottom: 4px;
+      white-space: nowrap;
     }
     
     .bundle-text span {
       font-size: 12px;
       color: var(--light-gray);
+      display: block;
+      margin-top: 2px;
     }
     
     .bundle-pricing {
-      text-align: right;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      white-space: nowrap;
     }
     
     .bundle-original {
       font-size: 13px;
       color: var(--gray);
       text-decoration: line-through;
-      margin-right: 10px;
     }
     
     .bundle-price {
@@ -835,6 +842,15 @@
       .gallery-arrows { display: none; }
       .product-info { padding: 40px 20px; }
       .product-title { font-size: 28px; }
+      .bundle-offer { padding: 16px; margin-top: 30px; }
+      .bundle-content { gap: 12px; flex-wrap: wrap; }
+      .bundle-text { width: 100%; order: 1; }
+      .bundle-text strong { font-size: 13px; }
+      .bundle-text span { font-size: 11px; }
+      .bundle-pricing { order: 2; }
+      .bundle-price { font-size: 18px; }
+      .bundle-original { font-size: 12px; }
+      .btn-bundle { order: 3; padding: 8px 16px; font-size: 11px; }
       .details { padding: 60px 20px; gap: 40px; }
       .lifestyle-hero { height: 70vh; }
       .lifestyle-hero .caption { flex-direction: column; align-items: flex-start; gap: 20px; }
