@@ -1016,7 +1016,7 @@
     <nav class="nav">
       <a href="home.html">Home</a>
       <a href="#">Shop</a>
-      <a href="#">Cart (0)</a>
+      <a href="#" id="headerCartBtn">Cart (<span id="cartCount">0</span>)</a>
     </nav>
   </header>
 
@@ -1700,10 +1700,19 @@
     const cartBody = document.getElementById('cartBody');
     const cartFooter = document.getElementById('cartFooter');
     const cartCheckoutBtn = document.getElementById('cartCheckoutBtn');
+    const headerCartBtn = document.getElementById('headerCartBtn');
+    const cartCount = document.getElementById('cartCount');
     
     closeCart.addEventListener('click', () => {
       cartDrawer.classList.remove('active');
     });
+    
+    if (headerCartBtn) {
+      headerCartBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openCart();
+      });
+    }
     
     async function openCart() {
       console.log('Opening cart...');
@@ -1753,6 +1762,7 @@
       if (!cartId) {
         cartBody.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
         cartFooter.style.display = 'none';
+        if (cartCount) cartCount.textContent = '0';
         return;
       }
       
@@ -1816,6 +1826,7 @@
           console.log('Cart not found');
           cartBody.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
           cartFooter.style.display = 'none';
+          if (cartCount) cartCount.textContent = '0';
           return;
         }
         
@@ -1823,6 +1834,7 @@
           console.log('Cart is empty');
           cartBody.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
           cartFooter.style.display = 'none';
+          if (cartCount) cartCount.textContent = '0';
           return;
         }
         
@@ -1852,19 +1864,33 @@
         
         cartBody.innerHTML = itemsHTML;
         
+        // Update cart count
+        const totalItems = cart.lines.edges.reduce((sum, {node}) => sum + node.quantity, 0);
+        if (cartCount) {
+          cartCount.textContent = totalItems;
+        }
+        
         // Display totals
         const subtotal = parseFloat(cart.cost.subtotalAmount.amount);
         const total = parseFloat(cart.cost.totalAmount.amount);
         const discount = subtotal - total;
         
+        console.log('Discount data:', {
+          subtotal,
+          total,
+          discount,
+          discountAllocations: cart.discountAllocations,
+          discountCodes: cart.discountCodes
+        });
+        
         document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
         document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
         
-        if (discount > 0) {
+        if (discount > 0 || (cart.discountCodes && cart.discountCodes.length > 0)) {
           const discountCode = cart.discountCodes?.find(d => d.applicable)?.code || 'Discount';
           document.getElementById('cartDiscount').style.display = 'flex';
           document.getElementById('cartDiscountLabel').textContent = discountCode;
-          document.getElementById('cartDiscountAmount').textContent = `-$${discount.toFixed(2)}`;
+          document.getElementById('cartDiscountAmount').textContent = discount > 0 ? `-$${discount.toFixed(2)}` : 'Applied at checkout';
         } else {
           document.getElementById('cartDiscount').style.display = 'none';
         }
