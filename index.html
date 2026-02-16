@@ -471,15 +471,15 @@
     
     /* ===== PRODUCTS ===== */
     .products {
-      padding: 150px 0;
+      padding: 80px 0 60px;
     }
     
     .products-header {
       padding: 0 80px;
-      margin-bottom: 80px;
+      margin-bottom: 60px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      gap: 60px;
       align-items: end;
     }
     
@@ -500,16 +500,23 @@
     
     .product-feature {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 90vh;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 60px;
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      padding: 0 80px;
     }
     
     .product-feature.reverse {
-      direction: rtl;
+      grid-template-columns: 1fr 1.1fr;
     }
     
-    .product-feature.reverse > * {
-      direction: ltr;
+    .product-feature.reverse .product-image {
+      order: 2;
+    }
+    
+    .product-feature.reverse .product-content {
+      order: 1;
     }
     
     .product-image {
@@ -517,7 +524,6 @@
       overflow: hidden;
       background: var(--dark);
       aspect-ratio: 4 / 5;
-      max-height: 600px;
     }
     
     .product-image img {
@@ -533,12 +539,12 @@
     
     .product-image .number {
       position: absolute;
-      top: 40px;
-      left: 40px;
-      font-size: 120px;
+      top: 30px;
+      left: 30px;
+      font-size: 100px;
       font-weight: 900;
       color: var(--white);
-      opacity: 0.1;
+      opacity: 0.08;
       line-height: 1;
     }
     
@@ -546,7 +552,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 80px;
+      padding: 40px 0;
       position: relative;
     }
     
@@ -609,10 +615,10 @@
     
     /* ===== PHILOSOPHY ===== */
     .philosophy {
-      padding: 200px 80px;
+      padding: 100px 80px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 120px;
+      gap: 80px;
       align-items: center;
       background: var(--dark);
     }
@@ -882,16 +888,24 @@
       .header-actions { gap: 12px; }
       .nav { gap: 20px; }
       .hero-subtitle, .hero-scroll { display: none; }
-      .manifesto { padding: 80px 20px; }
-      .limited-edition { padding: 60px 20px; }
-      .limited-container { grid-template-columns: 1fr; gap: 30px; }
-      .limited-image { max-height: 350px; }
-      .limited-image .number { font-size: 60px; top: 20px; left: 20px; }
-      .product-content { padding: 40px 20px; }
+      .manifesto { padding: 60px 20px; }
+      .limited-edition { min-height: 80vh; max-height: 800px; }
+      .limited-content { padding: 20px; }
+      .limited-content .product-name { font-size: 40px; }
+      .limited-content .product-price { font-size: 32px; }
+      .limited-email-form { flex-direction: column; gap: 12px; }
+      .products { padding: 60px 0 40px; }
+      .products-header { padding: 0 20px; margin-bottom: 40px; grid-template-columns: 1fr; gap: 20px; }
+      .product-feature { grid-template-columns: 1fr !important; gap: 30px; padding: 0 20px; margin-bottom: 60px; }
+      .product-feature.reverse .product-image { order: 0; }
+      .product-feature.reverse .product-content { order: 1; }
+      .product-content { padding: 0; }
+      .product-image { max-height: 500px; }
+      .philosophy { padding: 60px 20px; grid-template-columns: 1fr; gap: 40px; }
       .email-signup { padding: 60px 20px; }
       .email-signup-content { flex-direction: column; align-items: flex-start; gap: 20px; }
       .email-form { width: 100%; }
-      .footer { padding: 80px 20px 40px; gap: 40px; }
+      .footer { padding: 60px 20px 40px; gap: 40px; }
       .footer-links { flex-direction: column; gap: 16px; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
     }
