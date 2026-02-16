@@ -80,6 +80,7 @@ async function getProductByHandle(handle) {
       id
       title
       handle
+      productType
       description
       priceRange {
         minVariantPrice {
@@ -112,15 +113,35 @@ async function getProductByHandle(handle) {
           }
         }
       }
-      metafields(identifiers: [
-        {namespace: "custom", key: "related_colors"}
-      ]) {
-        key
-        value
-      }
     }
   }`;
   
   const data = await shopifyFetch(query);
   return data.productByHandle;
+}
+
+// Search products by title to find color variants
+async function getProductsByTitle(title) {
+  const query = `{
+    products(first: 10, query: "title:'${title}'") {
+      edges {
+        node {
+          id
+          title
+          handle
+          productType
+          variants(first: 1) {
+            edges {
+              node {
+                availableForSale
+              }
+            }
+          }
+        }
+      }
+    }
+  }`;
+  
+  const data = await shopifyFetch(query);
+  return data.products.edges.map(edge => edge.node);
 }

@@ -1241,77 +1241,56 @@
           });
         }
         
-        // Update color options - using related_colors metafield
+        // Update color options - using productType field
         const colorOptions = document.querySelector('.color-options');
-        const relatedColorsMetafield = product.metafields?.find(m => m.key === 'related_colors');
+        const currentColor = product.productType; // e.g., "White" or "Black"
         
-        if (relatedColorsMetafield) {
+        if (currentColor) {
+          // Search for other products with same title but different productType
           try {
-            const relatedColors = JSON.parse(relatedColorsMetafield.value);
-            
-            // Detect current color from product title or handle
-            let currentColor = 'White'; // default
-            const titleLower = product.title.toLowerCase();
-            const handleLower = product.handle.toLowerCase();
-            
-            if (titleLower.includes('black') || handleLower.includes('black')) {
-              currentColor = 'Black';
-            } else if (titleLower.includes('white') || handleLower.includes('white')) {
-              currentColor = 'White';
-            } else if (titleLower.includes('grey') || titleLower.includes('gray') || handleLower.includes('grey') || handleLower.includes('gray')) {
-              currentColor = 'Grey';
-            } else if (titleLower.includes('blue') || handleLower.includes('blue')) {
-              currentColor = 'Blue';
-            }
+            const relatedProducts = await getProductsByTitle(product.title);
             
             colorOptions.innerHTML = '';
             
-            // Add current color swatch (active)
-            const currentSwatch = document.createElement('button');
-            currentSwatch.className = `color-swatch ${currentColor.toLowerCase()} active`;
-            currentSwatch.dataset.color = currentColor;
-            colorOptions.appendChild(currentSwatch);
-            
-            // Add related color swatches
-            Object.entries(relatedColors).forEach(([colorName, handle]) => {
+            // Generate swatches for all color variants
+            relatedProducts.forEach(relatedProduct => {
+              const color = relatedProduct.productType;
+              if (!color) return; // Skip if no productType set
+              
+              const isCurrentColor = relatedProduct.handle === product.handle;
+              const isAvailable = relatedProduct.variants.edges.some(v => v.node.availableForSale);
+              
               const swatch = document.createElement('button');
-              swatch.className = `color-swatch ${colorName.toLowerCase()}`;
-              swatch.dataset.color = colorName;
-              swatch.dataset.handle = handle;
-              swatch.addEventListener('click', function() {
-                window.location.href = `/product-page.html?handle=${handle}`;
-              });
+              swatch.className = `color-swatch ${color.toLowerCase()} ${isCurrentColor ? 'active' : ''} ${!isAvailable ? 'soldout' : ''}`;
+              swatch.dataset.color = color;
+              swatch.dataset.handle = relatedProduct.handle;
+              
+              if (isCurrentColor) {
+                // Current color - just show, don't navigate
+                swatch.disabled = false;
+              } else if (isAvailable) {
+                // Other color - navigate on click
+                swatch.addEventListener('click', function() {
+                  window.location.href = `/product-page.html?handle=${relatedProduct.handle}`;
+                });
+              } else {
+                // Sold out - disable
+                swatch.disabled = true;
+              }
+              
               colorOptions.appendChild(swatch);
             });
             
             document.getElementById('colorValue').textContent = currentColor;
           } catch (e) {
-            console.error('Failed to parse related_colors metafield:', e);
-          }
-        } else {
-          // Fallback: use variants if no metafield
-          const colors = new Set();
-          product.variants.edges.forEach(({ node }) => {
-            node.selectedOptions.forEach(opt => {
-              if (opt.name.toLowerCase() === 'color') colors.add(opt.value);
-            });
-          });
-          
-          if (colors.size > 0) {
+            console.error('Failed to load related products:', e);
+            // Fallback: just show current color
             colorOptions.innerHTML = '';
-            Array.from(colors).forEach((color, i) => {
-              const variant = product.variants.edges.find(v => 
-                v.node.selectedOptions.some(o => o.value === color)
-              )?.node;
-              const available = variant?.availableForSale;
-              
-              const swatch = document.createElement('button');
-              swatch.className = `color-swatch ${color.toLowerCase()} ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}`;
-              swatch.dataset.color = color;
-              if (!available) swatch.disabled = true;
-              colorOptions.appendChild(swatch);
-            });
-            document.getElementById('colorValue').textContent = Array.from(colors)[0];
+            const swatch = document.createElement('button');
+            swatch.className = `color-swatch ${currentColor.toLowerCase()} active`;
+            swatch.dataset.color = currentColor;
+            colorOptions.appendChild(swatch);
+            document.getElementById('colorValue').textContent = currentColor;
           }
         }
         
