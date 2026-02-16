@@ -108,6 +108,8 @@
       overflow: hidden;
       max-height: 75vh;
       height: 100%;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     
     .gallery-slides {
@@ -1305,17 +1307,8 @@
   <section class="hero">
     <div class="gallery">
       <div class="gallery-slides" id="gallerySlides">
-        <div class="gallery-slide">
-          <img src="assets/images/product-flatlay.jpg" alt="Essential Tee - Flat">
-        </div>
-        <div class="gallery-slide">
-          <img src="assets/images/model-back.jpg" alt="Essential Tee - Model Back">
-        </div>
-        <div class="gallery-slide">
-          <img src="assets/images/lifestyle-beach.jpg" alt="Essential Tee - Beach">
-        </div>
-        <div class="gallery-slide">
-          <img src="assets/images/lifestyle-studio-movement.jpg" alt="Essential Tee - Studio">
+        <div class="gallery-slide" style="display: flex; align-items: center; justify-content: center; color: #666;">
+          Loading...
         </div>
       </div>
       
@@ -1330,9 +1323,6 @@
       
       <div class="gallery-nav" id="galleryNav">
         <div class="gallery-dot active" data-index="0"></div>
-        <div class="gallery-dot" data-index="1"></div>
-        <div class="gallery-dot" data-index="2"></div>
-        <div class="gallery-dot" data-index="3"></div>
       </div>
     </div>
     
@@ -1756,24 +1746,36 @@
       }
     });
     
-    // Touch swipe support
+    // Touch swipe support - Safari specific
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
+    let touching = false;
     
-    slides.addEventListener('touchstart', e => {
+    function handleTouchStart(e) {
       const touch = e.touches[0] || e.changedTouches[0];
       touchStartX = touch.clientX;
       touchStartY = touch.clientY;
-    }, { passive: true });
+      touching = true;
+    }
     
-    slides.addEventListener('touchend', e => {
+    function handleTouchEnd(e) {
+      if (!touching) return;
       const touch = e.changedTouches[0];
       touchEndX = touch.clientX;
       touchEndY = touch.clientY;
       handleSwipe();
-    }, { passive: true });
+      touching = false;
+    }
+    
+    function handleTouchCancel(e) {
+      touching = false;
+    }
+    
+    slides.addEventListener('touchstart', handleTouchStart, { passive: true });
+    slides.addEventListener('touchend', handleTouchEnd, { passive: true });
+    slides.addEventListener('touchcancel', handleTouchCancel, { passive: true });
     
     function handleSwipe() {
       const diffX = touchStartX - touchEndX;
@@ -1926,7 +1928,7 @@
         touchStartY = 0;
         touchEndX = 0;
         touchEndY = 0;
-        isHorizontalSwipe = false;
+        touching = false;
         
         // Force reset transform
         slides.style.transform = 'translateX(0%)';
