@@ -122,16 +122,17 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: var(--white);
-      mix-blend-mode: difference;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: invert(1) grayscale(1);
       cursor: none;
-      transition: all 0.3s ease;
-      opacity: 0.6;
+      transition: transform 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
     
     .gallery-dot.active {
-      opacity: 1;
       transform: scale(1.3);
+      background: rgba(0, 0, 0, 0.8);
+      border-color: rgba(255, 255, 255, 0.6);
     }
     
     .gallery-arrows {
@@ -1530,23 +1531,33 @@
     // Touch swipe support
     let touchStartX = 0;
     let touchEndX = 0;
+    let isSwiping = false;
     
     slides.addEventListener('touchstart', e => {
       touchStartX = e.changedTouches[0].screenX;
-    });
+      isSwiping = false;
+    }, { passive: true });
+    
+    slides.addEventListener('touchmove', e => {
+      isSwiping = true;
+    }, { passive: true });
     
     slides.addEventListener('touchend', e => {
+      if (!isSwiping) return;
       touchEndX = e.changedTouches[0].screenX;
       handleSwipe();
-    });
+      isSwiping = false;
+    }, { passive: true });
     
     function handleSwipe() {
       const swipeThreshold = 50;
-      if (touchEndX < touchStartX - swipeThreshold) {
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) < swipeThreshold) return;
+      
+      if (diff > 0) {
         // Swipe left - next
         goToSlide(currentIndex + 1);
-      }
-      if (touchEndX > touchStartX + swipeThreshold) {
+      } else {
         // Swipe right - previous
         goToSlide(currentIndex - 1);
       }
