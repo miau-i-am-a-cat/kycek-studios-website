@@ -1311,16 +1311,61 @@
     wishlistBtn.addEventListener('click', () => wishlistBtn.classList.toggle('active'));
     
     // Add to cart
-    const addToCart = document.getElementById('addToCart');
-    addToCart.addEventListener('click', () => {
-      addToCart.textContent = 'Added ✓';
-      addToCart.style.background = 'var(--red)';
-      addToCart.style.color = 'var(--white)';
-      setTimeout(() => {
-        addToCart.textContent = 'Add to Cart';
-        addToCart.style.background = '';
-        addToCart.style.color = '';
-      }, 2000);
+    let currentProduct = null; // Will be set when product loads
+    const addToCartBtn = document.getElementById('addToCart');
+    addToCartBtn.addEventListener('click', async () => {
+      if (!currentProduct) {
+        alert('Product not loaded yet');
+        return;
+      }
+      
+      // Get selected size
+      const selectedSizeBtn = document.querySelector('.size-btn.active');
+      if (!selectedSizeBtn) {
+        alert('Please select a size');
+        return;
+      }
+      
+      const selectedSize = selectedSizeBtn.dataset.size;
+      
+      // Find variant ID for selected size
+      const variant = currentProduct.variants.edges.find(v => 
+        v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === selectedSize)
+      )?.node;
+      
+      if (!variant) {
+        alert('Variant not found');
+        return;
+      }
+      
+      // Add to Shopify cart
+      try {
+        addToCartBtn.textContent = 'Adding...';
+        addToCartBtn.disabled = true;
+        
+        const cart = await addToCart(variant.id, 1);
+        
+        addToCartBtn.textContent = 'Added ✓';
+        addToCartBtn.style.background = 'var(--red)';
+        addToCartBtn.style.color = 'var(--white)';
+        
+        setTimeout(() => {
+          addToCartBtn.textContent = 'Add to Cart';
+          addToCartBtn.style.background = '';
+          addToCartBtn.style.color = '';
+          addToCartBtn.disabled = false;
+          
+          // Open cart checkout
+          if (confirm('Item added! Go to checkout?')) {
+            window.open(cart.checkoutUrl, '_blank');
+          }
+        }, 1500);
+      } catch (error) {
+        console.error('Add to cart error:', error);
+        alert('Failed to add to cart: ' + error.message);
+        addToCartBtn.textContent = 'Add to Cart';
+        addToCartBtn.disabled = false;
+      }
     });
     
     // Keyboard navigation
@@ -1391,6 +1436,7 @@
     async function loadProductFromShopify(handle) {
       try {
         const product = await getProductByHandle(handle);
+        currentProduct = product; // Store for Add to Cart
         
         // Update product title
         document.querySelector('.product-title').textContent = product.title;

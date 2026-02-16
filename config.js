@@ -145,3 +145,72 @@ async function getProductsByTitle(title) {
   const data = await shopifyFetch(query);
   return data.products.edges.map(edge => edge.node);
 }
+
+// Cart Management
+async function createCart() {
+  const query = `
+    mutation {
+      cartCreate {
+        cart {
+          id
+          checkoutUrl
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+  
+  const data = await shopifyFetch(query);
+  return data.cartCreate.cart;
+}
+
+async function addToCart(variantId, quantity = 1) {
+  // Get or create cart ID
+  let cartId = localStorage.getItem('shopify_cart_id');
+  
+  if (!cartId) {
+    const cart = await createCart();
+    cartId = cart.id;
+    localStorage.setItem('shopify_cart_id', cartId);
+  }
+  
+  const query = `
+    mutation {
+      cartLinesAdd(
+        cartId: "${cartId}"
+        lines: [{
+          merchandiseId: "${variantId}"
+          quantity: ${quantity}
+        }]
+      ) {
+        cart {
+          id
+          checkoutUrl
+          lines(first: 10) {
+            edges {
+              node {
+                id
+                quantity
+              }
+            }
+          }
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+  
+  const data = await shopifyFetch(query);
+  
+  if (data.cartLinesAdd.userErrors.length > 0) {
+    throw new Error(data.cartLinesAdd.userErrors[0].message);
+  }
+  
+  return data.cartLinesAdd.cart;
+}
