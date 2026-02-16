@@ -938,6 +938,29 @@
       margin-top: 8px;
     }
     
+    .cart-qty-btn {
+      width: 24px;
+      height: 24px;
+      background: var(--black);
+      border: 1px solid var(--gray);
+      color: var(--white);
+      font-size: 14px;
+      cursor: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .cart-qty-btn:hover:not(:disabled) {
+      border-color: var(--white);
+    }
+    
+    .cart-qty-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
     .cart-item-remove {
       background: none;
       border: none;
@@ -1379,6 +1402,7 @@
         const cart = await addToCart(variant.id, 1);
         
         addToCartBtn.textContent = 'Added ✓';
+        updateCartCount(); // Update count immediately
         
         setTimeout(async () => {
           addToCartBtn.textContent = 'Add to Cart';
@@ -1460,6 +1484,7 @@
           }
           
           addBundle.textContent = 'ADDED ✓';
+          updateCartCount(); // Update count immediately
           
           setTimeout(async () => {
             // Reset
@@ -1554,6 +1579,15 @@
                   shortSizeSelect.appendChild(option);
                 }
               });
+              
+              // Calculate and display bundle pricing
+              const teePrice = parseFloat(teeProduct.priceRange.minVariantPrice.amount);
+              const shortPrice = parseFloat(shortProduct.priceRange.minVariantPrice.amount);
+              const originalTotal = teePrice + shortPrice;
+              const discountedTotal = originalTotal * 0.75; // 25% off
+              
+              document.querySelector('.bundle-original').textContent = `$${originalTotal.toFixed(0)}`;
+              document.querySelector('.bundle-price').textContent = `$${discountedTotal.toFixed(2)}`;
             }).catch(err => {
               console.error('Failed to load bundle products:', err);
             });
@@ -1755,6 +1789,71 @@
       }
     }
     
+    async function updateCartCount() {
+      const cartId = localStorage.getItem('shopify_cart_id');
+      if (!cartId || !cartCount) return;
+      
+      try {
+        const query = `{
+          cart(id: "${cartId}") {
+            lines(first: 50) {
+              edges {
+                node {
+                  quantity
+                }
+              }
+            }
+          }
+        }`;
+        
+        const data = await shopifyFetch(query);
+        if (data.cart && data.cart.lines) {
+          const totalItems = data.cart.lines.edges.reduce((sum, {node}) => sum + node.quantity, 0);
+          cartCount.textContent = totalItems;
+        }
+      } catch (error) {
+        console.error('Error updating cart count:', error);
+      }
+    }
+    
+    window.updateQuantity = async function(lineId, newQuantity) {
+      const cartId = localStorage.getItem('shopify_cart_id');
+      if (!cartId || newQuantity < 1) return;
+      
+      try {
+        const query = `
+          mutation {
+            cartLinesUpdate(
+              cartId: "${cartId}"
+              lines: [{
+                id: "${lineId}"
+                quantity: ${newQuantity}
+              }]
+            ) {
+              cart {
+                id
+              }
+              userErrors {
+                field
+                message
+              }
+            }
+          }
+        `;
+        
+        const data = await shopifyFetch(query);
+        
+        if (data.cartLinesUpdate.userErrors.length > 0) {
+          throw new Error(data.cartLinesUpdate.userErrors[0].message);
+        }
+        
+        await refreshCart();
+      } catch (error) {
+        console.error('Update quantity error:', error);
+        alert('Error updating quantity: ' + error.message);
+      }
+    }
+    
     async function refreshCart() {
       const cartId = localStorage.getItem('shopify_cart_id');
       console.log('Cart ID:', cartId);
@@ -1853,8 +1952,11 @@
               </div>
               <div class="cart-item-details">
                 <div class="cart-item-title">${product}</div>
-                ${variant ? `<div class="cart-item-variant">${variant}</div>` : ''}
-                <div class="cart-item-variant">Qty: ${node.quantity}</div>
+                <div class="cart-item-variant" style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                  <button class="cart-qty-btn" onclick="updateQuantity('${node.id}', ${node.quantity - 1})" ${node.quantity <= 1 ? 'disabled' : ''}>−</button>
+                  <span>${node.quantity}</span>
+                  <button class="cart-qty-btn" onclick="updateQuantity('${node.id}', ${node.quantity + 1})">+</button>
+                </div>
                 <div class="cart-item-price">$${(price * node.quantity).toFixed(2)}</div>
                 <button class="cart-item-remove" onclick="removeFromCart('${node.id}')">Remove</button>
               </div>
