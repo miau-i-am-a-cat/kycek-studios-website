@@ -851,6 +851,148 @@
       .footer { flex-direction: column; gap: 30px; text-align: center; padding: 40px 20px; }
       .footer-left { flex-direction: column; gap: 20px; }
     }
+    
+    /* Cart Drawer */
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 450px;
+      height: 100%;
+      background: var(--dark);
+      border-left: 1px solid var(--dark-border);
+      z-index: 10000;
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .cart-drawer.active { right: 0; }
+    
+    .cart-drawer-header {
+      padding: 30px;
+      border-bottom: 1px solid var(--dark-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .cart-drawer-title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    
+    .cart-drawer-close {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 24px;
+      cursor: none;
+      padding: 0;
+    }
+    
+    .cart-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px;
+    }
+    
+    .cart-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray);
+    }
+    
+    .cart-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--dark-border);
+    }
+    
+    .cart-item:last-child { border-bottom: none; }
+    
+    .cart-item-image {
+      width: 80px;
+      height: 100px;
+      background: var(--black);
+      flex-shrink: 0;
+    }
+    
+    .cart-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .cart-item-details { flex: 1; }
+    
+    .cart-item-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .cart-item-variant {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 4px;
+    }
+    
+    .cart-item-price {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    
+    .cart-drawer-footer {
+      padding: 30px;
+      border-top: 1px solid var(--dark-border);
+    }
+    
+    .cart-discount {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: var(--red);
+    }
+    
+    .cart-subtotal {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+    
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: 700;
+      padding-top: 12px;
+      border-top: 1px solid var(--dark-border);
+    }
+    
+    .cart-checkout-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: none;
+    }
+    
+    @media (max-width: 768px) {
+      .cart-drawer { width: 100%; right: -100%; }
+    }
   </style>
 </head>
 <body>
@@ -1236,13 +1378,11 @@
         
         addToCartBtn.textContent = 'Added ✓';
         
-        setTimeout(() => {
-          if (confirm('Item added! Go to checkout?')) {
-            window.open(cart.checkoutUrl, '_blank');
-          }
+        setTimeout(async () => {
           addToCartBtn.textContent = 'Add to Cart';
           addToCartBtn.disabled = false;
-        }, 1500);
+          await openCart();
+        }, 800);
       } catch (error) {
         console.error('Add to cart error:', error);
         alert('Error: ' + error.message);
@@ -1319,10 +1459,7 @@
           
           addBundle.textContent = 'ADDED ✓';
           
-          setTimeout(() => {
-            if (confirm('Bundle added! Go to checkout?')) {
-              window.open(data.cartLinesAdd.cart.checkoutUrl, '_blank');
-            }
+          setTimeout(async () => {
             // Reset
             bundleExpanded = false;
             bundleSizes.style.display = 'none';
@@ -1331,7 +1468,8 @@
             addBundle.disabled = false;
             bundleTeeSize.value = '';
             bundleShortSize.value = '';
-          }, 1500);
+            await openCart();
+          }, 800);
         } catch (error) {
           console.error('Bundle add error:', error);
           alert('Error adding bundle: ' + error.message);
@@ -1528,6 +1666,168 @@
       }
     }
   </script>
+
+  <!-- Cart Management -->
+  <script>
+    const cartDrawer = document.getElementById('cartDrawer');
+    const closeCart = document.getElementById('closeCart');
+    const cartBody = document.getElementById('cartBody');
+    const cartFooter = document.getElementById('cartFooter');
+    const cartCheckoutBtn = document.getElementById('cartCheckoutBtn');
+    
+    closeCart.addEventListener('click', () => {
+      cartDrawer.classList.remove('active');
+    });
+    
+    async function openCart() {
+      cartDrawer.classList.add('active');
+      await refreshCart();
+    }
+    
+    async function refreshCart() {
+      const cartId = localStorage.getItem('shopify_cart_id');
+      if (!cartId) {
+        cartBody.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+        cartFooter.style.display = 'none';
+        return;
+      }
+      
+      try {
+        const query = `{
+          cart(id: "${cartId}") {
+            id
+            checkoutUrl
+            lines(first: 50) {
+              edges {
+                node {
+                  id
+                  quantity
+                  merchandise {
+                    ... on ProductVariant {
+                      id
+                      title
+                      image {
+                        url
+                      }
+                      priceV2 {
+                        amount
+                        currencyCode
+                      }
+                      product {
+                        title
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            cost {
+              subtotalAmount {
+                amount
+                currencyCode
+              }
+              totalAmount {
+                amount
+                currencyCode
+              }
+            }
+            discountAllocations {
+              discountedAmount {
+                amount
+              }
+            }
+          }
+        }`;
+        
+        const data = await shopifyFetch(query);
+        const cart = data.cart;
+        
+        if (!cart || cart.lines.edges.length === 0) {
+          cartBody.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+          cartFooter.style.display = 'none';
+          return;
+        }
+        
+        // Display cart items
+        let itemsHTML = '';
+        cart.lines.edges.forEach(({node}) => {
+          const product = node.merchandise.product.title;
+          const variant = node.merchandise.title !== 'Default Title' ? node.merchandise.title : '';
+          const price = parseFloat(node.merchandise.priceV2.amount);
+          const image = node.merchandise.image?.url || '';
+          
+          itemsHTML += `
+            <div class="cart-item">
+              <div class="cart-item-image">
+                ${image ? `<img src="${image}" alt="${product}">` : ''}
+              </div>
+              <div class="cart-item-details">
+                <div class="cart-item-title">${product}</div>
+                ${variant ? `<div class="cart-item-variant">${variant}</div>` : ''}
+                <div class="cart-item-variant">Qty: ${node.quantity}</div>
+                <div class="cart-item-price">$${(price * node.quantity).toFixed(2)}</div>
+              </div>
+            </div>
+          `;
+        });
+        
+        cartBody.innerHTML = itemsHTML;
+        
+        // Display totals
+        const subtotal = parseFloat(cart.cost.subtotalAmount.amount);
+        const total = parseFloat(cart.cost.totalAmount.amount);
+        const discount = subtotal - total;
+        
+        document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+        
+        if (discount > 0) {
+          document.getElementById('cartDiscount').style.display = 'flex';
+          document.getElementById('cartDiscountAmount').textContent = `-$${discount.toFixed(2)}`;
+        } else {
+          document.getElementById('cartDiscount').style.display = 'none';
+        }
+        
+        cartFooter.style.display = 'block';
+        
+        // Set checkout URL
+        cartCheckoutBtn.onclick = () => {
+          window.open(cart.checkoutUrl, '_blank');
+        };
+        
+      } catch (error) {
+        console.error('Failed to load cart:', error);
+        cartBody.innerHTML = '<div class="cart-empty">Error loading cart</div>';
+        cartFooter.style.display = 'none';
+      }
+    }
+  </script>
+
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">CART</div>
+      <button class="cart-drawer-close" id="closeCart">×</button>
+    </div>
+    <div class="cart-drawer-body" id="cartBody">
+      <div class="cart-empty">Your cart is empty</div>
+    </div>
+    <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">$0.00</span>
+      </div>
+      <div class="cart-discount" id="cartDiscount" style="display: none;">
+        <span id="cartDiscountLabel">Discount</span>
+        <span id="cartDiscountAmount">-$0.00</span>
+      </div>
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="cart-checkout-btn" id="cartCheckoutBtn">Checkout</button>
+    </div>
+  </div>
 
 </body>
 </html>
