@@ -1650,6 +1650,32 @@
     }
   </script>
 
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">CART</div>
+      <button class="cart-drawer-close" id="closeCart">×</button>
+    </div>
+    <div class="cart-drawer-body" id="cartBody">
+      <div class="cart-empty">Your cart is empty</div>
+    </div>
+    <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">$0.00</span>
+      </div>
+      <div class="cart-discount" id="cartDiscount" style="display: none;">
+        <span id="cartDiscountLabel">Discount</span>
+        <span id="cartDiscountAmount">-$0.00</span>
+      </div>
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="cart-checkout-btn" id="cartCheckoutBtn">Checkout</button>
+    </div>
+  </div>
+
   <!-- Cart Management -->
   <script>
     const cartDrawer = document.getElementById('cartDrawer');
@@ -1798,32 +1824,6 @@
       }
     }
   </script>
-
-  <!-- Cart Drawer -->
-  <div class="cart-drawer" id="cartDrawer">
-    <div class="cart-drawer-header">
-      <div class="cart-drawer-title">CART</div>
-      <button class="cart-drawer-close" id="closeCart">×</button>
-    </div>
-    <div class="cart-drawer-body" id="cartBody">
-      <div class="cart-empty">Your cart is empty</div>
-    </div>
-    <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
-      <div class="cart-subtotal">
-        <span>Subtotal</span>
-        <span id="cartSubtotal">$0.00</span>
-      </div>
-      <div class="cart-discount" id="cartDiscount" style="display: none;">
-        <span id="cartDiscountLabel">Discount</span>
-        <span id="cartDiscountAmount">-$0.00</span>
-      </div>
-      <div class="cart-total">
-        <span>Total</span>
-        <span id="cartTotal">$0.00</span>
-      </div>
-      <button class="cart-checkout-btn" id="cartCheckoutBtn">Checkout</button>
-    </div>
-  </div>
 
 </body>
 </html>
