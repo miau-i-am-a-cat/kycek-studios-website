@@ -1337,13 +1337,19 @@
     let currentProduct = null;
     const productHandle = new URLSearchParams(window.location.search).get('handle');
     
+    console.log('Product handle:', productHandle);
+    console.log('config.js loaded?', typeof shopifyFetch);
+    
     if (productHandle) {
+      console.log('Loading product...');
       loadProductFromShopify(productHandle);
     }
     
     async function loadProductFromShopify(handle) {
       try {
+        console.log('Fetching product:', handle);
         const product = await getProductByHandle(handle);
+        console.log('Product loaded:', product);
         currentProduct = product;
         
         // Update page with product data
