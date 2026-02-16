@@ -1281,16 +1281,24 @@
           addBundle.textContent = 'ADDING...';
           addBundle.disabled = true;
           
-          // Find tee variant
-          const teeProducts = await getProductsByTitle('Essential Tee');
+          console.log('Current product:', currentProduct);
+          console.log('Looking for color:', currentColor);
+          
+          // Find tee variant - use partial title match
+          const teeProducts = await getProductsByTitle('T-Shirt');
+          console.log('Found tee products:', teeProducts);
           const teeProduct = teeProducts.find(p => p.productType === currentColor);
+          console.log('Selected tee product:', teeProduct);
+          
           const teeVariant = teeProduct?.variants?.edges.find(v => 
             v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === teeSize)
           )?.node;
           
           // Find short variant
-          const shortProducts = await getProductsByTitle('Training Short');
+          const shortProducts = await getProductsByTitle('Short');
+          console.log('Found short products:', shortProducts);
           const shortProduct = shortProducts.find(p => p.productType === currentColor);
+          console.log('Selected short product:', shortProduct);
           const shortVariant = shortProduct?.variants?.edges.find(v => 
             v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === shortSize)
           )?.node;
