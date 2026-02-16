@@ -838,13 +838,17 @@
     }
     
     .email-signup h2 {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.25em;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--light-gray);
+      color: var(--white);
       margin: 0;
       white-space: nowrap;
+    }
+    
+    .email-signup h2 .red {
+      color: var(--red);
     }
     
     .email-signup p {
@@ -880,21 +884,18 @@
     }
     
     .email-form button {
-      padding: 12px 0;
+      padding: 12px 20px;
       background: transparent;
       color: var(--white);
       border: none;
-      font-size: 11px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
+      font-size: 16px;
+      font-weight: 400;
       cursor: none;
       transition: all 0.2s;
-      opacity: 0.5;
     }
     
     .email-form button:hover {
-      opacity: 1;
+      color: var(--red);
     }
     
     .email-message {
@@ -930,6 +931,7 @@
     
     .footer-logo {
       height: 24px;
+      width: auto;
       opacity: 0.6;
     }
     
@@ -1495,7 +1497,7 @@
   <!-- ==================== EMAIL SIGNUP ==================== -->
   <section class="email-signup">
     <div class="email-signup-content">
-      <h2 data-en="10% Off · First Order" data-es="10% Descuento · Primer Pedido">10% Off · First Order</h2>
+      <h2><span class="red" data-en="10% Off" data-es="10% Descuento">10% Off</span> <span data-en="· First Order" data-es="· Primer Pedido">· First Order</span></h2>
       <form class="email-form" id="emailSignupForm">
         <input 
           type="email" 
