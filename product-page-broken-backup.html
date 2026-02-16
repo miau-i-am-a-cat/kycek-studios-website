@@ -468,6 +468,138 @@
     
     .details-content h2 {
       font-size: 11px;
+    }
+    
+    /* Bundle Modal */
+    .bundle-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+    
+    .bundle-modal.active {
+      display: flex !important;
+    }
+    
+    .bundle-modal-content {
+      background: var(--dark);
+      border: 1px solid var(--gray);
+      max-width: 500px;
+      width: 100%;
+      padding: 40px;
+      position: relative;
+    }
+    
+    .bundle-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 24px;
+      cursor: none;
+      padding: 0;
+      line-height: 1;
+    }
+    
+    .bundle-modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .bundle-modal-savings {
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    
+    .bundle-item {
+      margin-bottom: 24px;
+    }
+    
+    .bundle-item-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .bundle-item-price {
+      color: var(--light-gray);
+      font-size: 13px;
+    }
+    
+    .bundle-size-select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--black);
+      border: 1px solid var(--gray);
+      color: var(--white);
+      font-family: inherit;
+      font-size: 14px;
+      cursor: none;
+    }
+    
+    .bundle-modal-total {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    
+    .bundle-modal-total-label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .bundle-modal-total-amount {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .bundle-modal-original {
+      text-decoration: line-through;
+      color: var(--gray);
+      font-size: 16px;
+      margin-right: 12px;
+    }
+    
+    .btn-add-bundle {
+      width: 100%;
+      padding: 16px;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-add-bundle:hover {
+      background: var(--red);
+      color: var(--white);
+    }
       font-weight: 600;
       letter-spacing: 0.25em;
       text-transform: uppercase;
@@ -1079,27 +1211,34 @@
     
     // Gallery
     const slides = document.getElementById('gallerySlides');
-    const dots = document.querySelectorAll('.gallery-dot');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const currentSlideEl = document.getElementById('currentSlide');
     let currentIndex = 0;
-    const totalSlides = 4;
+    let totalSlides = 4; // Will be updated when product loads
     
     function goToSlide(index) {
       if (index < 0) index = totalSlides - 1;
       if (index >= totalSlides) index = 0;
       currentIndex = index;
       slides.style.transform = `translateX(-${index * 100}%)`;
+      
+      // Update dots
+      const dots = document.querySelectorAll('.gallery-dot');
       dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
       currentSlideEl.textContent = String(index + 1).padStart(2, '0');
     }
     
+    // Initial gallery setup (will be re-initialized after product loads)
+    function initGallery() {
+      const dots = document.querySelectorAll('.gallery-dot');
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+      });
+    }
+    
     prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
     nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
-    dots.forEach(dot => {
-      dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
-    });
     
     // Color selector
     const colorSwatches = document.querySelectorAll('.color-swatch');
@@ -1125,15 +1264,16 @@
     const wishlistBtn = document.getElementById('wishlistBtn');
     wishlistBtn.addEventListener('click', () => wishlistBtn.classList.toggle('active'));
     
-    // Add to cart - Shopify integration
-    let currentProduct = null;
+    // Add to cart
+    let currentProduct = null; // Will be set when product loads
     const addToCartBtn = document.getElementById('addToCart');
     addToCartBtn.addEventListener('click', async () => {
       if (!currentProduct) {
-        alert('Product not loaded');
+        alert('Product not loaded yet');
         return;
       }
       
+      // Get selected size
       const selectedSizeBtn = document.querySelector('.size-btn.active');
       if (!selectedSizeBtn) {
         alert('Please select a size');
@@ -1141,6 +1281,8 @@
       }
       
       const selectedSize = selectedSizeBtn.dataset.size;
+      
+      // Find variant ID for selected size
       const variant = currentProduct.variants.edges.find(v => 
         v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === selectedSize)
       )?.node;
@@ -1150,6 +1292,7 @@
         return;
       }
       
+      // Add to Shopify cart
       try {
         addToCartBtn.textContent = 'Adding...';
         addToCartBtn.disabled = true;
@@ -1166,13 +1309,14 @@
           addToCartBtn.style.color = '';
           addToCartBtn.disabled = false;
           
+          // Open cart checkout
           if (confirm('Item added! Go to checkout?')) {
             window.open(cart.checkoutUrl, '_blank');
           }
         }, 1500);
       } catch (error) {
         console.error('Add to cart error:', error);
-        alert('Error: ' + error.message);
+        alert('Failed to add to cart: ' + error.message);
         addToCartBtn.textContent = 'Add to Cart';
         addToCartBtn.disabled = false;
       }
@@ -1184,38 +1328,142 @@
       if (e.key === 'ArrowRight') goToSlide(currentIndex + 1);
     });
     
-    // Bundle add to cart
+    // Bundle modal
+    const bundleModal = document.getElementById('bundleModal');
     const addBundle = document.getElementById('addBundle');
-    addBundle.addEventListener('click', () => {
-      addBundle.textContent = 'Added ✓';
-      addBundle.style.background = 'var(--white)';
-      addBundle.style.color = 'var(--black)';
+    const closeBundleModal = document.getElementById('closeBundleModal');
+    const addBundleToCart = document.getElementById('addBundleToCart');
+    
+    console.log('bundleModal element:', bundleModal);
+    
+    if (!addBundle) {
+      console.error('Add bundle button not found!');
+    } else {
+      console.log('Bundle button found, attaching listener');
+      addBundle.addEventListener('click', (e) => {
+        console.log('Bundle Add button clicked!');
+        e.preventDefault();
+        
+        if (!bundleModal) {
+          console.error('bundleModal element not found!');
+          return;
+        }
+        
+        console.log('Adding active class to modal');
+        bundleModal.classList.add('active');
+        console.log('Modal classes after:', bundleModal.className);
+      });
+    }
+    
+    if (closeBundleModal) {
+      closeBundleModal.addEventListener('click', () => {
+        bundleModal.classList.remove('active');
+      });
+    }
+    
+    // Close modal on background click
+    if (bundleModal) {
+      bundleModal.addEventListener('click', (e) => {
+        if (e.target === bundleModal) {
+          bundleModal.classList.remove('active');
+        }
+      });
+    }
+    
+    // Add bundle to cart
+    addBundleToCart.addEventListener('click', async () => {
+      const teeSize = document.getElementById('bundleTeeSize').value;
+      const shortSize = document.getElementById('bundleShortSize').value;
+      
+      if (!teeSize || !shortSize) {
+        alert('Please select sizes for both items');
+        return;
+      }
+      
+      // Find variant IDs for selected sizes
+      // For now, show success message (we'll add Shopify cart integration)
+      addBundleToCart.textContent = 'Adding...';
+      addBundleToCart.disabled = true;
+      
+      // Simulate API call
       setTimeout(() => {
-        addBundle.textContent = 'Add';
-        addBundle.style.background = '';
-        addBundle.style.color = '';
-      }, 2000);
+        addBundleToCart.textContent = 'Added to Cart ✓';
+        setTimeout(() => {
+          bundleModal.classList.remove('active');
+          addBundleToCart.textContent = 'Add Bundle to Cart';
+          addBundleToCart.disabled = false;
+        }, 1500);
+      }, 500);
     });
   </script>
 
-  <!-- Shopify Product Loader -->
+  <!-- Bundle Modal -->
+  <div class="bundle-modal" id="bundleModal">
+    <div class="bundle-modal-content">
+      <button class="bundle-modal-close" id="closeBundleModal">×</button>
+      <h3 class="bundle-modal-title">Complete the Set</h3>
+      <div class="bundle-modal-savings">Save 20% on Bundle</div>
+      
+      <div class="bundle-item">
+        <div class="bundle-item-name">
+          Essential Tee
+          <span class="bundle-item-price">$68</span>
+        </div>
+        <select class="bundle-size-select" id="bundleTeeSize">
+          <option value="">Select Size</option>
+          <option value="S">S</option>
+          <option value="M" selected>M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+        </select>
+      </div>
+      
+      <div class="bundle-item">
+        <div class="bundle-item-name">
+          Training Short
+          <span class="bundle-item-price">$78</span>
+        </div>
+        <select class="bundle-size-select" id="bundleShortSize">
+          <option value="">Select Size</option>
+          <option value="S">S</option>
+          <option value="M" selected>M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+        </select>
+      </div>
+      
+      <div class="bundle-modal-total">
+        <div class="bundle-modal-total-label">Bundle Total</div>
+        <div class="bundle-modal-total-amount">
+          <span class="bundle-modal-original">$146</span>
+          $117
+        </div>
+      </div>
+      
+      <button class="btn-add-bundle" id="addBundleToCart">Add Bundle to Cart</button>
+    </div>
+  </div>
+
+</body>
+</html>
+
+  <!-- Shopify Integration -->
   <script>
-    const productHandle = new URLSearchParams(window.location.search).get('handle');
+    let currentProductHandle = new URLSearchParams(window.location.search).get('handle');
     
-    if (productHandle) {
-      loadProductFromShopify(productHandle);
+    if (currentProductHandle) {
+      loadProductFromShopify(currentProductHandle);
     }
     
     async function loadProductFromShopify(handle) {
       try {
         const product = await getProductByHandle(handle);
-        currentProduct = product;
+        currentProduct = product; // Store for Add to Cart
         
-        // Update title
+        // Update product title
         document.querySelector('.product-title').textContent = product.title;
-        document.title = `${product.title} | Kýček Studios`;
         
-        // Update subtitle
+        // Update product subtitle
         const subtitle = product.description ? product.description.substring(0, 100) : 'Premium performance wear';
         document.querySelector('.product-subtitle').textContent = subtitle;
         
@@ -1223,11 +1471,11 @@
         const price = parseFloat(product.priceRange.minVariantPrice.amount);
         document.querySelector('.product-price').innerHTML = `<span class="currency">$</span>${price.toFixed(0)}`;
         
-        // Update gallery images
+        // Update images
         const images = product.images.edges.map(e => e.node.url);
         const gallerySlides = document.getElementById('gallerySlides');
         gallerySlides.innerHTML = '';
-        images.forEach(img => {
+        images.forEach((img, i) => {
           const slide = document.createElement('div');
           slide.className = 'gallery-slide';
           slide.innerHTML = `<img src="${img}" alt="${product.title}">`;
@@ -1246,10 +1494,16 @@
         });
         
         // Update total slides counter
-        totalSlides = images.length;
-        currentIndex = 0;
+        totalSlides = images.length; // Update the global variable
+        currentIndex = 0; // Reset to first slide
         document.getElementById('totalSlides').textContent = String(totalSlides).padStart(2, '0');
         document.getElementById('currentSlide').textContent = '01';
+        
+        // Reset gallery position
+        const gallerySlidesEl = document.getElementById('gallerySlides');
+        if (gallerySlidesEl) {
+          gallerySlidesEl.style.transform = 'translateX(0)';
+        }
         
         // Update size options
         const sizeOptions = document.querySelector('.size-options');
@@ -1272,17 +1526,77 @@
             btn.className = `size-btn ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}`;
             btn.dataset.size = size;
             btn.textContent = size;
-            if (!available) {
-              btn.disabled = true;
-            } else {
-              btn.addEventListener('click', function() {
-                document.querySelectorAll('.size-btn:not(.soldout)').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-              });
-            }
+            if (!available) btn.disabled = true;
+            else btn.addEventListener('click', function() {
+              document.querySelectorAll('.size-btn:not(.soldout)').forEach(b => b.classList.remove('active'));
+              this.classList.add('active');
+            });
             sizeOptions.appendChild(btn);
           });
         }
+        
+        // Update color options - using productType field
+        const colorOptions = document.querySelector('.color-options');
+        const currentColor = product.productType; // e.g., "White" or "Black"
+        
+        if (currentColor) {
+          // Search for other products with same title but different productType
+          try {
+            const relatedProducts = await getProductsByTitle(product.title);
+            
+            colorOptions.innerHTML = '';
+            
+            // Generate swatches for all color variants
+            relatedProducts.forEach(relatedProduct => {
+              const color = relatedProduct.productType;
+              if (!color) return; // Skip if no productType set
+              
+              const isCurrentColor = relatedProduct.handle === product.handle;
+              const isAvailable = relatedProduct.variants.edges.some(v => v.node.availableForSale);
+              
+              const swatch = document.createElement('button');
+              swatch.className = `color-swatch ${color.toLowerCase()} ${isCurrentColor ? 'active' : ''} ${!isAvailable ? 'soldout' : ''}`;
+              swatch.dataset.color = color;
+              swatch.dataset.handle = relatedProduct.handle;
+              
+              if (!isCurrentColor) {
+                // Other color - load new product without page reload
+                swatch.addEventListener('click', async function() {
+                  // Update URL without reload
+                  const newUrl = `/product-page.html?handle=${relatedProduct.handle}`;
+                  window.history.pushState({handle: relatedProduct.handle}, '', newUrl);
+                  
+                  // Load new product data
+                  currentProductHandle = relatedProduct.handle;
+                  await loadProductFromShopify(relatedProduct.handle);
+                });
+              }
+              
+              colorOptions.appendChild(swatch);
+            });
+            
+            document.getElementById('colorValue').textContent = currentColor;
+          } catch (e) {
+            console.error('Failed to load related products:', e);
+            // Fallback: just show current color
+            colorOptions.innerHTML = '';
+            const swatch = document.createElement('button');
+            swatch.className = `color-swatch ${currentColor.toLowerCase()} active`;
+            swatch.dataset.color = currentColor;
+            colorOptions.appendChild(swatch);
+            document.getElementById('colorValue').textContent = currentColor;
+          }
+        }
+        
+        // Check availability
+        const isAvailable = product.variants.edges.some(v => v.node.availableForSale);
+        if (!isAvailable) {
+          document.getElementById('addToCart').textContent = 'Sold Out';
+          document.getElementById('addToCart').disabled = true;
+          document.getElementById('addToCart').style.opacity = '0.5';
+        }
+        
+        // Gallery is already updated above
         
       } catch (error) {
         console.error('Failed to load product:', error);
@@ -1290,5 +1604,15 @@
     }
   </script>
 
-</body>
-</html>
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', async function(event) {
+      if (event.state && event.state.handle) {
+        currentProductHandle = event.state.handle;
+        await loadProductFromShopify(event.state.handle);
+      }
+    });
+    
+    // Set initial state
+    if (currentProductHandle) {
+      window.history.replaceState({handle: currentProductHandle}, '', window.location.href);
+    }
