@@ -112,6 +112,12 @@ async function getProductByHandle(handle) {
           }
         }
       }
+      metafields(identifiers: [
+        {namespace: "custom", key: "related_colors"}
+      ]) {
+        key
+        value
+      }
     }
   }`;
   

@@ -1241,35 +1241,78 @@
           });
         }
         
-        // Update color options
+        // Update color options - using related_colors metafield
         const colorOptions = document.querySelector('.color-options');
-        const colors = new Set();
-        product.variants.edges.forEach(({ node }) => {
-          node.selectedOptions.forEach(opt => {
-            if (opt.name.toLowerCase() === 'color') colors.add(opt.value);
-          });
-        });
+        const relatedColorsMetafield = product.metafields?.find(m => m.key === 'related_colors');
         
-        if (colors.size > 0) {
-          colorOptions.innerHTML = '';
-          Array.from(colors).forEach((color, i) => {
-            const variant = product.variants.edges.find(v => 
-              v.node.selectedOptions.some(o => o.value === color)
-            )?.node;
-            const available = variant?.availableForSale;
+        if (relatedColorsMetafield) {
+          try {
+            const relatedColors = JSON.parse(relatedColorsMetafield.value);
             
-            const swatch = document.createElement('button');
-            swatch.className = `color-swatch ${color.toLowerCase()} ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}`;
-            swatch.dataset.color = color;
-            if (!available) swatch.disabled = true;
-            else swatch.addEventListener('click', function() {
-              document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-              this.classList.add('active');
-              document.getElementById('colorValue').textContent = color;
+            // Detect current color from product title or handle
+            let currentColor = 'White'; // default
+            const titleLower = product.title.toLowerCase();
+            const handleLower = product.handle.toLowerCase();
+            
+            if (titleLower.includes('black') || handleLower.includes('black')) {
+              currentColor = 'Black';
+            } else if (titleLower.includes('white') || handleLower.includes('white')) {
+              currentColor = 'White';
+            } else if (titleLower.includes('grey') || titleLower.includes('gray') || handleLower.includes('grey') || handleLower.includes('gray')) {
+              currentColor = 'Grey';
+            } else if (titleLower.includes('blue') || handleLower.includes('blue')) {
+              currentColor = 'Blue';
+            }
+            
+            colorOptions.innerHTML = '';
+            
+            // Add current color swatch (active)
+            const currentSwatch = document.createElement('button');
+            currentSwatch.className = `color-swatch ${currentColor.toLowerCase()} active`;
+            currentSwatch.dataset.color = currentColor;
+            colorOptions.appendChild(currentSwatch);
+            
+            // Add related color swatches
+            Object.entries(relatedColors).forEach(([colorName, handle]) => {
+              const swatch = document.createElement('button');
+              swatch.className = `color-swatch ${colorName.toLowerCase()}`;
+              swatch.dataset.color = colorName;
+              swatch.dataset.handle = handle;
+              swatch.addEventListener('click', function() {
+                window.location.href = `/product-page.html?handle=${handle}`;
+              });
+              colorOptions.appendChild(swatch);
             });
-            colorOptions.appendChild(swatch);
+            
+            document.getElementById('colorValue').textContent = currentColor;
+          } catch (e) {
+            console.error('Failed to parse related_colors metafield:', e);
+          }
+        } else {
+          // Fallback: use variants if no metafield
+          const colors = new Set();
+          product.variants.edges.forEach(({ node }) => {
+            node.selectedOptions.forEach(opt => {
+              if (opt.name.toLowerCase() === 'color') colors.add(opt.value);
+            });
           });
-          document.getElementById('colorValue').textContent = Array.from(colors)[0];
+          
+          if (colors.size > 0) {
+            colorOptions.innerHTML = '';
+            Array.from(colors).forEach((color, i) => {
+              const variant = product.variants.edges.find(v => 
+                v.node.selectedOptions.some(o => o.value === color)
+              )?.node;
+              const available = variant?.availableForSale;
+              
+              const swatch = document.createElement('button');
+              swatch.className = `color-swatch ${color.toLowerCase()} ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}`;
+              swatch.dataset.color = color;
+              if (!available) swatch.disabled = true;
+              colorOptions.appendChild(swatch);
+            });
+            document.getElementById('colorValue').textContent = Array.from(colors)[0];
+          }
         }
         
         // Check availability
