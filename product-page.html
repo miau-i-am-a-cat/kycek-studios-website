@@ -825,15 +825,15 @@
     .footer {
       padding: 80px;
       border-top: 1px solid var(--dark-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
     }
     
     .footer-left {
       display: flex;
-      align-items: center;
-      gap: 40px;
+      flex-direction: column;
+      gap: 16px;
     }
     
     .footer-logo {
@@ -846,10 +846,53 @@
       color: var(--gray);
     }
     
-    .footer-right {
+    .footer-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .footer-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    
+    .footer-section a {
+      font-size: 12px;
+      color: var(--gray);
+      transition: color 0.2s;
+    }
+    
+    .footer-section a:hover {
+      color: var(--white);
+    }
+    
+    .footer-bottom {
+      grid-column: 1 / -1;
+      padding-top: 40px;
+      border-top: 1px solid var(--dark-border);
       font-size: 11px;
       color: var(--gray);
-      letter-spacing: 0.1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .footer-legal {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .footer-legal a {
+      color: var(--gray);
+      transition: color 0.2s;
+    }
+    
+    .footer-legal a:hover {
+      color: var(--white);
     }
     
     /* ==================== RESPONSIVE ==================== */
@@ -914,8 +957,11 @@
         flex: 0 0 75%;
         scroll-snap-align: center;
       }
-      .footer { flex-direction: column; gap: 30px; text-align: center; padding: 40px 20px; }
-      .footer-left { flex-direction: column; gap: 20px; }
+      .footer { grid-template-columns: 1fr; gap: 30px; text-align: center; padding: 40px 20px; }
+      .footer-left { align-items: center; }
+      .footer-section { align-items: center; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .footer-legal { flex-direction: column; gap: 8px; }
     }
     
     /* Cart Drawer */
@@ -1356,8 +1402,26 @@
       <img src="assets/images/logo-inverted.png" alt="Kýček Studios" class="footer-logo">
       <span class="footer-tagline" data-en="Made by Humans, on Earth" data-es="Hecho por Humanos, en la Tierra">Made by Humans, on Earth</span>
     </div>
-    <div class="footer-right">
-      <span data-en="© 2026 Kýček Studios · Dominican Republic" data-es="© 2026 Kýček Studios · República Dominicana">© 2026 Kýček Studios · Dominican Republic</span>
+    
+    <div class="footer-section">
+      <div class="footer-section-title" data-en="Shop" data-es="Tienda">Shop</div>
+      <a href="/" data-en="Home" data-es="Inicio">Home</a>
+      <a href="#" data-en="Shop" data-es="Tienda">Shop</a>
+    </div>
+    
+    <div class="footer-section">
+      <div class="footer-section-title" data-en="Follow" data-es="Síguenos">Follow</div>
+      <a href="https://www.instagram.com/kycek.co/" target="_blank">Instagram</a>
+    </div>
+    
+    <div class="footer-section">
+      <div class="footer-section-title" data-en="Legal" data-es="Legal">Legal</div>
+      <a href="#" data-en="Terms" data-es="Términos">Terms</a>
+      <a href="#" data-en="Accessibility" data-es="Accesibilidad">Accessibility</a>
+    </div>
+    
+    <div class="footer-bottom">
+      <span data-en="© 2026 Kýček Studios. All rights reserved. Dominican Republic" data-es="© 2026 Kýček Studios. Todos los derechos reservados. República Dominicana">© 2026 Kýček Studios. All rights reserved. Dominican Republic</span>
     </div>
   </footer>
 
