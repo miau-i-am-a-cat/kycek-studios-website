@@ -269,57 +269,106 @@
     }
     
     /* ===== STAMP SECTION ===== */
-    .stamps {
-      padding: 150px 0;
+    /* ===== LIMITED EDITION ===== */
+    .limited-edition {
+      padding: 80px 80px;
+      background: var(--dark);
+    }
+    
+    .limited-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    
+    .limited-image {
+      position: relative;
       overflow: hidden;
+      background: var(--black);
+      aspect-ratio: 4 / 5;
+      max-height: 400px;
     }
     
-    .stamps-header {
-      padding: 0 80px;
-      margin-bottom: 60px;
+    .limited-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .limited-container:hover .limited-image img {
+      transform: scale(1.05);
+    }
+    
+    .limited-image .number {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      font-size: 80px;
+      font-weight: 900;
+      color: var(--white);
+      opacity: 0.1;
+      line-height: 1;
+    }
+    
+    .limited-content {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 600px;
     }
     
-    .stamps-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.25em;
+    .limited-content .product-label {
+      background: var(--red);
+      color: var(--white);
+      padding: 8px 16px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--gray);
+      width: fit-content;
     }
     
-    .stamps-subtitle {
-      font-size: 13px;
+    .limited-content .product-name {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    
+    .limited-content .product-desc {
+      font-size: 15px;
+      line-height: 1.6;
       color: var(--light-gray);
     }
     
-    .stamps-track {
-      display: flex;
-      gap: 40px;
-      padding: 0 80px;
-      animation: stampScroll 20s linear infinite;
+    .limited-content .product-price {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 8px;
     }
     
-    @keyframes stampScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    .limited-content .product-link {
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: gap 0.3s ease;
     }
     
-    .stamp {
-      flex-shrink: 0;
-      width: 280px;
-      transition: transform 0.4s ease;
+    .limited-content .product-link svg {
+      width: 18px;
+      height: 18px;
     }
     
-    .stamp:hover {
-      transform: scale(1.05) rotate(-2deg);
-    }
-    
-    .stamp img {
-      width: 100%;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+    .limited-content .product-link:hover {
+      gap: 14px;
     }
     
     /* ===== VIDEO INTERLUDE ===== */
@@ -411,6 +460,8 @@
       position: relative;
       overflow: hidden;
       background: var(--dark);
+      aspect-ratio: 4 / 5;
+      max-height: 600px;
     }
     
     .product-image img {
@@ -771,9 +822,10 @@
       .nav { gap: 20px; }
       .hero-subtitle, .hero-scroll { display: none; }
       .manifesto { padding: 80px 20px; }
-      .stamps-header { padding: 0 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
-      .stamps-track { padding: 0 20px; gap: 20px; }
-      .stamp { width: 200px; }
+      .limited-edition { padding: 60px 20px; }
+      .limited-container { grid-template-columns: 1fr; gap: 30px; }
+      .limited-image { max-height: 350px; }
+      .limited-image .number { font-size: 60px; top: 20px; left: 20px; }
       .product-content { padding: 40px 20px; }
       .email-signup { padding: 60px 20px; }
       .email-signup-content { flex-direction: column; align-items: flex-start; gap: 20px; }
@@ -856,23 +908,27 @@
     </div>
   </section>
 
-  <!-- Stamps -->
-  <section class="stamps">
-    <div class="stamps-header">
-      <div>
-        <div class="stamps-title">Philatelic Identity</div>
+  <!-- Limited Edition Product -->
+  <section class="limited-edition" id="limitedEdition">
+    <div class="limited-container">
+      <div class="limited-image">
+        <span class="number">03</span>
+        <img src="assets/images/product-flatlay.jpg" alt="Limited Edition">
       </div>
-      <div class="stamps-subtitle">Collectible graphics series</div>
-    </div>
-    <div class="stamps-track">
-      <div class="stamp"><img src="assets/images/stamp-crow.png" alt="Crow"></div>
-      <div class="stamp"><img src="assets/images/stamp-horse.png" alt="Horse"></div>
-      <div class="stamp"><img src="assets/images/stamp-crow.png" alt="Crow"></div>
-      <div class="stamp"><img src="assets/images/stamp-horse.png" alt="Horse"></div>
-      <div class="stamp"><img src="assets/images/stamp-crow.png" alt="Crow"></div>
-      <div class="stamp"><img src="assets/images/stamp-horse.png" alt="Horse"></div>
-      <div class="stamp"><img src="assets/images/stamp-crow.png" alt="Crow"></div>
-      <div class="stamp"><img src="assets/images/stamp-horse.png" alt="Horse"></div>
+      <div class="limited-content">
+        <span class="product-label">Limited Edition</span>
+        <h3 class="product-name" id="limited-name">Loading...</h3>
+        <p class="product-desc" id="limited-desc">
+          Loading product details...
+        </p>
+        <div class="product-price" id="limited-price">$--</div>
+        <a href="#" class="product-link" id="limited-link">
+          View Product
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -900,7 +956,7 @@
         <img src="assets/images/product-flatlay.jpg" alt="Essential Tee">
       </div>
       <div class="product-content">
-        <span class="product-label">Signature</span>
+        <span class="product-label">Origins</span>
         <h3 class="product-name">Essential Tee</h3>
         <p class="product-desc">
           Premium Pima cotton with 4-way stretch. The crow mark sits between the shoulder blades—visible only to those behind you.
@@ -921,7 +977,7 @@
         <img src="assets/images/all pro pic clothes (3).png" alt="Training Short">
       </div>
       <div class="product-content">
-        <span class="product-label">Performance</span>
+        <span class="product-label">Origins</span>
         <h3 class="product-name">Training Short</h3>
         <p class="product-desc">
           Lightweight woven fabric with hidden zip pockets. Moves with you, never against. The mark on the left thigh—subtle, intentional.
@@ -1047,15 +1103,6 @@
       if (scrolled < window.innerHeight) {
         heroTitle.style.transform = `translateX(${scrolled * 0.3}px)`;
       }
-    });
-    
-    // Pause stamp animation on hover
-    const stampsTrack = document.querySelector('.stamps-track');
-    stampsTrack.addEventListener('mouseenter', () => {
-      stampsTrack.style.animationPlayState = 'paused';
-    });
-    stampsTrack.addEventListener('mouseleave', () => {
-      stampsTrack.style.animationPlayState = 'running';
     });
     
     // Cart count update
@@ -1220,6 +1267,68 @@
     
     if (currentLang === 'es') {
       translatePage('es');
+    }
+  </script>
+
+  <!-- Product Loader -->
+  <script>
+    async function loadHomeProducts() {
+      try {
+        // Fetch all products
+        const products = await getProducts(10);
+        
+        if (!products || products.length === 0) {
+          console.error('No products found');
+          return;
+        }
+        
+        // Product 1 (Essential Tee) - First product
+        if (products[0]) {
+          const prod1 = products[0];
+          const prod1Image = prod1.images.edges[0]?.node.url || 'assets/images/product-flatlay.jpg';
+          const prod1Price = parseFloat(prod1.priceRange.minVariantPrice.amount);
+          
+          document.querySelector('.product-feature:nth-of-type(1) .product-image img').src = prod1Image;
+          document.querySelector('.product-feature:nth-of-type(1) .product-name').textContent = prod1.title;
+          document.querySelector('.product-feature:nth-of-type(1) .product-desc').textContent = prod1.description || 'Premium quality activewear designed for performance.';
+          document.querySelector('.product-feature:nth-of-type(1) .product-price').textContent = `$${prod1Price.toFixed(0)}`;
+          document.querySelector('.product-feature:nth-of-type(1) .product-link').href = `product-page.html?handle=${prod1.handle}`;
+        }
+        
+        // Product 2 (Training Short) - Second product
+        if (products[1]) {
+          const prod2 = products[1];
+          const prod2Image = prod2.images.edges[0]?.node.url || 'assets/images/all pro pic clothes (3).png';
+          const prod2Price = parseFloat(prod2.priceRange.minVariantPrice.amount);
+          
+          document.querySelector('.product-feature.reverse .product-image img').src = prod2Image;
+          document.querySelector('.product-feature.reverse .product-name').textContent = prod2.title;
+          document.querySelector('.product-feature.reverse .product-desc').textContent = prod2.description || 'Lightweight performance wear for training and movement.';
+          document.querySelector('.product-feature.reverse .product-price').textContent = `$${prod2Price.toFixed(0)}`;
+          document.querySelector('.product-feature.reverse .product-link').href = `product-page.html?handle=${prod2.handle}`;
+        }
+        
+        // Limited Edition - Third product
+        if (products[2]) {
+          const prod3 = products[2];
+          const prod3Image = prod3.images.edges[0]?.node.url || 'assets/images/product-flatlay.jpg';
+          const prod3Price = parseFloat(prod3.priceRange.minVariantPrice.amount);
+          
+          document.querySelector('#limitedEdition .limited-image img').src = prod3Image;
+          document.querySelector('#limited-name').textContent = prod3.title;
+          document.querySelector('#limited-desc').textContent = prod3.description || 'Exclusive limited edition piece. Available while supplies last.';
+          document.querySelector('#limited-price').textContent = `$${prod3Price.toFixed(0)}`;
+          document.querySelector('#limited-link').href = `product-page.html?handle=${prod3.handle}`;
+        }
+        
+      } catch (error) {
+        console.error('Error loading products:', error);
+      }
+    }
+    
+    // Load products when page loads
+    if (typeof getProducts === 'function') {
+      loadHomeProducts();
     }
   </script>
 
