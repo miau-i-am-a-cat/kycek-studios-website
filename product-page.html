@@ -1170,16 +1170,15 @@
 
   <!-- Shopify Integration -->
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const productHandle = urlParams.get('handle');
+    let currentProductHandle = new URLSearchParams(window.location.search).get('handle');
     
-    if (productHandle) {
-      loadProductFromShopify();
+    if (currentProductHandle) {
+      loadProductFromShopify(currentProductHandle);
     }
     
-    async function loadProductFromShopify() {
+    async function loadProductFromShopify(handle) {
       try {
-        const product = await getProductByHandle(productHandle);
+        const product = await getProductByHandle(handle);
         
         // Update product title
         document.querySelector('.product-title').textContent = product.title;
@@ -1221,7 +1220,10 @@
         document.getElementById('currentSlide').textContent = '01';
         
         // Reset gallery position
-        document.getElementById('gallerySlides').style.transform = 'translateX(0)';
+        const gallerySlidesEl = document.getElementById('gallerySlides');
+        if (gallerySlidesEl) {
+          gallerySlidesEl.style.transform = 'translateX(0)';
+        }
         
         // Update size options
         const sizeOptions = document.querySelector('.size-options');
@@ -1278,9 +1280,15 @@
               swatch.dataset.handle = relatedProduct.handle;
               
               if (!isCurrentColor) {
-                // Other color - always navigable (even if sold out)
-                swatch.addEventListener('click', function() {
-                  window.location.href = `/product-page.html?handle=${relatedProduct.handle}`;
+                // Other color - load new product without page reload
+                swatch.addEventListener('click', async function() {
+                  // Update URL without reload
+                  const newUrl = `/product-page.html?handle=${relatedProduct.handle}`;
+                  window.history.pushState({handle: relatedProduct.handle}, '', newUrl);
+                  
+                  // Load new product data
+                  currentProductHandle = relatedProduct.handle;
+                  await loadProductFromShopify(relatedProduct.handle);
                 });
               }
               
@@ -1315,3 +1323,16 @@
       }
     }
   </script>
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', async function(event) {
+      if (event.state && event.state.handle) {
+        currentProductHandle = event.state.handle;
+        await loadProductFromShopify(event.state.handle);
+      }
+    });
+    
+    // Set initial state
+    if (currentProductHandle) {
+      window.history.replaceState({handle: currentProductHandle}, '', window.location.href);
+    }
