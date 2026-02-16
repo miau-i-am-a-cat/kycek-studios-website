@@ -71,6 +71,7 @@
     /* ==================== HERO SECTION ==================== */
     .hero {
       min-height: 100vh;
+      max-height: 75vh;
       display: grid;
       grid-template-columns: 1.2fr 1fr;
       padding-top: 80px;
@@ -81,7 +82,8 @@
       position: relative;
       background: var(--dark);
       overflow: hidden;
-      max-height: 85vh;
+      max-height: 75vh;
+      height: 100%;
     }
     
     .gallery-slides {
@@ -173,10 +175,11 @@
     
     /* Product Info */
     .product-info {
-      padding: 120px 80px 80px 60px;
+      padding: 80px 80px 60px 60px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      overflow-y: auto;
     }
     
     .product-badge {
@@ -811,8 +814,8 @@
     
     /* ==================== RESPONSIVE ==================== */
     @media (max-width: 1024px) {
-      .hero { grid-template-columns: 1fr; }
-      .gallery { min-height: 70vh; }
+      .hero { grid-template-columns: 1fr; max-height: none; }
+      .gallery { min-height: 60vh; max-height: 60vh; }
       .product-info { padding: 60px 40px; }
       .details { grid-template-columns: 1fr; padding: 80px 40px; }
       .details-image { order: -1; height: 50vh; }
