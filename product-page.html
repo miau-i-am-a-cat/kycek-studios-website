@@ -915,60 +915,53 @@
     
     /* ==================== FOOTER ==================== */
     .footer {
-      padding: 80px;
+      padding: 120px 80px 60px;
       border-top: 1px solid var(--dark-border);
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
       gap: 60px;
     }
     
-    .footer-left {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    
     .footer-logo {
-      height: 24px;
-      width: auto;
-      opacity: 0.6;
+      height: 32px;
+      opacity: 0.7;
+      object-fit: contain;
     }
     
     .footer-tagline {
-      font-size: 12px;
-      color: var(--gray);
-    }
-    
-    .footer-section {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .footer-section-title {
       font-size: 11px;
-      font-weight: 600;
+      color: var(--gray);
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 8px;
+      margin-top: -40px;
     }
     
-    .footer-section a {
+    .footer-links {
+      display: flex;
+      gap: 40px;
       font-size: 12px;
+      letter-spacing: 0.1em;
+    }
+    
+    .footer-links a {
       color: var(--gray);
       transition: color 0.2s;
     }
     
-    .footer-section a:hover {
+    .footer-links a:hover {
       color: var(--white);
     }
     
     .footer-bottom {
-      grid-column: 1 / -1;
-      padding-top: 40px;
-      border-top: 1px solid var(--dark-border);
-      font-size: 11px;
+      font-size: 10px;
       color: var(--gray);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding-top: 60px;
+      border-top: 1px solid var(--dark-border);
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -982,6 +975,7 @@
     .footer-legal a {
       color: var(--gray);
       transition: color 0.2s;
+      text-decoration: none;
     }
     
     .footer-legal a:hover {
@@ -1053,11 +1047,9 @@
       .email-signup { padding: 60px 20px; }
       .email-signup-content { flex-direction: column; align-items: flex-start; gap: 20px; }
       .email-form { width: 100%; }
-      .footer { grid-template-columns: 1fr; gap: 30px; text-align: center; padding: 40px 20px; }
-      .footer-left { align-items: center; }
-      .footer-section { align-items: center; }
-      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-      .footer-legal { flex-direction: column; gap: 8px; }
+      .footer { padding: 80px 20px 40px; gap: 40px; }
+      .footer-links { flex-direction: column; gap: 16px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
     }
     
     /* Cart Drawer */
@@ -1513,30 +1505,20 @@
   </section>
 
   <footer class="footer">
-    <div class="footer-left">
-      <img src="assets/images/logo-inverted.png" alt="Kýček Studios" class="footer-logo">
-      <span class="footer-tagline" data-en="Made by Humans, on Earth" data-es="Hecho por Humanos, en la Tierra">Made by Humans, on Earth</span>
-    </div>
+    <img src="assets/images/logo-inverted.png" alt="Kýček Studios" class="footer-logo">
+    <span class="footer-tagline" data-en="Made by Humans, on Earth" data-es="Hecho por Humanos, en la Tierra">Made by Humans, on Earth</span>
     
-    <div class="footer-section">
-      <div class="footer-section-title" data-en="Shop" data-es="Tienda">Shop</div>
+    <div class="footer-links">
       <a href="/" data-en="Home" data-es="Inicio">Home</a>
       <a href="#" data-en="Shop" data-es="Tienda">Shop</a>
-    </div>
-    
-    <div class="footer-section">
-      <div class="footer-section-title" data-en="Follow" data-es="Síguenos">Follow</div>
       <a href="https://www.instagram.com/kycek.co/" target="_blank">Instagram</a>
-    </div>
-    
-    <div class="footer-section">
-      <div class="footer-section-title" data-en="Legal" data-es="Legal">Legal</div>
       <a href="#" data-en="Terms" data-es="Términos">Terms</a>
       <a href="#" data-en="Accessibility" data-es="Accesibilidad">Accessibility</a>
     </div>
     
     <div class="footer-bottom">
-      <span data-en="© 2026 Kýček Studios. All rights reserved. Dominican Republic" data-es="© 2026 Kýček Studios. Todos los derechos reservados. República Dominicana">© 2026 Kýček Studios. All rights reserved. Dominican Republic</span>
+      <span data-en="© 2026 Kýček Studios. All rights reserved." data-es="© 2026 Kýček Studios. Todos los derechos reservados.">© 2026 Kýček Studios. All rights reserved.</span>
+      <span data-en="Dominican Republic" data-es="República Dominicana">Dominican Republic</span>
     </div>
   </footer>
 
