@@ -631,23 +631,26 @@
       object-fit: cover;
     }
     
-    .lifestyle-hero .overlay {
+    .lifestyle-hero .overlay,
+    .lifestyle-item .overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 50%);
     }
     
-    .lifestyle-hero .caption {
+    .lifestyle-hero .caption,
+    .lifestyle-item .caption {
       position: absolute;
-      bottom: 80px;
-      left: 80px;
-      right: 80px;
+      bottom: 40px;
+      left: 40px;
+      right: 40px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
     }
     
-    .lifestyle-hero .caption-title {
+    .lifestyle-hero .caption-title,
+    .lifestyle-item .caption-title {
       font-size: 11px;
       letter-spacing: 0.25em;
       text-transform: uppercase;
@@ -655,10 +658,11 @@
       margin-bottom: 10px;
     }
     
-    .lifestyle-hero .caption-text {
-      font-size: clamp(24px, 3vw, 36px);
+    .lifestyle-hero .caption-text,
+    .lifestyle-item .caption-text {
+      font-size: clamp(18px, 2vw, 24px);
       font-weight: 600;
-      max-width: 500px;
+      max-width: 400px;
       line-height: 1.3;
     }
     
@@ -854,7 +858,8 @@
       .product-info { padding: 60px 40px; }
       .details { grid-template-columns: 1fr; padding: 80px 40px; }
       .details-image { order: -1; height: 50vh; }
-      .lifestyle-hero .caption { left: 40px; right: 40px; bottom: 40px; }
+      .lifestyle-hero .caption,
+      .lifestyle-item .caption { left: 30px; right: 30px; bottom: 30px; }
       .specs-grid { grid-template-columns: repeat(2, 1fr); }
       .related-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -878,7 +883,8 @@
       .btn-bundle { order: 3; padding: 8px 16px; font-size: 11px; }
       .details { padding: 60px 20px; gap: 40px; }
       .lifestyle-hero { height: 70vh; }
-      .lifestyle-hero .caption { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .lifestyle-hero .caption,
+      .lifestyle-item .caption { flex-direction: column; align-items: flex-start; gap: 20px; }
       .lifestyle-grid { grid-template-columns: 1fr; }
       .specs { padding: 60px 20px; }
       .specs-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -1270,28 +1276,32 @@
 
   <!-- ==================== LIFESTYLE ==================== -->
   <section class="lifestyle">
-    <div class="lifestyle-hero">
-      <img src="assets/images/lifestyle-nature-ritual.png" alt="Nature Ritual">
-      <div class="overlay"></div>
-      <div class="caption">
-        <div>
-          <div class="caption-title">In Context</div>
-          <div class="caption-text">The crow sees what others miss. So do you.</div>
-        </div>
-        <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray);">
-          Nature Ritual
-        </div>
-      </div>
-    </div>
-    
     <div class="lifestyle-grid">
       <div class="lifestyle-item">
         <img src="assets/images/lifestyle-urban-dawn.png" alt="Urban Dawn">
-        <span class="label">Urban Dawn</span>
+        <div class="overlay"></div>
+        <div class="caption">
+          <div>
+            <div class="caption-title">In Context</div>
+            <div class="caption-text">The crow sees what others miss. So do you.</div>
+          </div>
+          <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray);">
+            Urban Dawn
+          </div>
+        </div>
       </div>
       <div class="lifestyle-item">
         <img src="assets/images/lifestyle-studio-movement.png" alt="Studio Movement">
-        <span class="label">Studio Movement</span>
+        <div class="overlay"></div>
+        <div class="caption">
+          <div>
+            <div class="caption-title">In Context</div>
+            <div class="caption-text">The crow sees what others miss. So do you.</div>
+          </div>
+          <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray);">
+            Studio Movement
+          </div>
+        </div>
       </div>
     </div>
   </section>
