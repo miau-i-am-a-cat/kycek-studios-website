@@ -1380,6 +1380,8 @@
     const closeBundleModal = document.getElementById('closeBundleModal');
     const addBundleToCart = document.getElementById('addBundleToCart');
     
+    console.log('bundleModal element:', bundleModal);
+    
     if (!addBundle) {
       console.error('Add bundle button not found!');
     } else {
@@ -1387,7 +1389,15 @@
       addBundle.addEventListener('click', (e) => {
         console.log('Bundle Add button clicked!');
         e.preventDefault();
+        
+        if (!bundleModal) {
+          console.error('bundleModal element not found!');
+          return;
+        }
+        
+        console.log('Adding active class to modal');
         bundleModal.classList.add('active');
+        console.log('Modal classes after:', bundleModal.className);
       });
     }
     
