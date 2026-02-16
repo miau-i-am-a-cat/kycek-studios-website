@@ -1756,37 +1756,22 @@
       }
     });
     
-    // Touch swipe support - Safari compatible
+    // Touch swipe support
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
-    let isHorizontalSwipe = false;
     
     slides.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      isHorizontalSwipe = false;
-    }, { passive: true });
-    
-    slides.addEventListener('touchmove', e => {
-      if (!isHorizontalSwipe) {
-        touchEndX = e.touches[0].clientX;
-        touchEndY = e.touches[0].clientY;
-        const diffX = Math.abs(touchStartX - touchEndX);
-        const diffY = Math.abs(touchStartY - touchEndY);
-        // Detect if it's horizontal
-        if (diffX > 10 && diffX > diffY) {
-          isHorizontalSwipe = true;
-        }
-      }
+      const touch = e.touches[0] || e.changedTouches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
     }, { passive: true });
     
     slides.addEventListener('touchend', e => {
-      if (!isHorizontalSwipe) return;
-      
-      touchEndX = e.changedTouches[0].clientX;
-      touchEndY = e.changedTouches[0].clientY;
+      const touch = e.changedTouches[0];
+      touchEndX = touch.clientX;
+      touchEndY = touch.clientY;
       handleSwipe();
     }, { passive: true });
     
@@ -1797,16 +1782,15 @@
       
       // Only swipe if horizontal movement is dominant
       if (Math.abs(diffX) < swipeThreshold) return;
-      if (Math.abs(diffY) > Math.abs(diffX)) return;
+      if (Math.abs(diffY) > Math.abs(diffX)) return; // Vertical scroll takes priority
       
       if (diffX > 0) {
+        // Swipe left - next
         goToSlide(currentIndex + 1);
       } else {
+        // Swipe right - previous
         goToSlide(currentIndex - 1);
       }
-      
-      // Reset
-      isHorizontalSwipe = false;
     }
     
     // Keyboard navigation
@@ -1936,6 +1920,17 @@
         
         totalSlides = images.length;
         currentIndex = 0;
+        
+        // Reset touch state for Safari
+        touchStartX = 0;
+        touchStartY = 0;
+        touchEndX = 0;
+        touchEndY = 0;
+        isHorizontalSwipe = false;
+        
+        // Force reset transform
+        slides.style.transform = 'translateX(0%)';
+        
         
         // Update sizes
         const sizeOptions = document.querySelector('.size-options');
