@@ -1526,6 +1526,9 @@
       loadProductFromShopify(productHandle);
     }
     
+    // Update cart count on page load
+    updateCartCount();
+    
     async function loadProductFromShopify(handle) {
       try {
         console.log('Fetching product:', handle);
@@ -1875,6 +1878,14 @@
                 node {
                   id
                   quantity
+                  cost {
+                    totalAmount {
+                      amount
+                    }
+                    compareAtAmountPerQuantity {
+                      amount
+                    }
+                  }
                   merchandise {
                     ... on ProductVariant {
                       id
@@ -1942,8 +1953,23 @@
         cart.lines.edges.forEach(({node}) => {
           const product = node.merchandise.product.title;
           const variant = node.merchandise.title !== 'Default Title' ? node.merchandise.title : '';
-          const price = parseFloat(node.merchandise.priceV2.amount);
+          const unitPrice = parseFloat(node.merchandise.priceV2.amount);
+          const totalCost = parseFloat(node.cost.totalAmount.amount);
           const image = node.merchandise.image?.url || '';
+          
+          // Check if there's a discount
+          const expectedTotal = unitPrice * node.quantity;
+          const hasDiscount = totalCost < expectedTotal;
+          
+          let priceHTML = '';
+          if (hasDiscount) {
+            priceHTML = `
+              <div style="text-decoration: line-through; color: var(--gray); font-size: 12px;">$${expectedTotal.toFixed(2)}</div>
+              <div style="color: var(--red); font-weight: 600;">$${totalCost.toFixed(2)}</div>
+            `;
+          } else {
+            priceHTML = `<div>$${totalCost.toFixed(2)}</div>`;
+          }
           
           itemsHTML += `
             <div class="cart-item" data-line-id="${node.id}">
@@ -1957,7 +1983,7 @@
                   <span>${node.quantity}</span>
                   <button class="cart-qty-btn" onclick="updateQuantity('${node.id}', ${node.quantity + 1})">+</button>
                 </div>
-                <div class="cart-item-price">$${(price * node.quantity).toFixed(2)}</div>
+                <div class="cart-item-price">${priceHTML}</div>
                 <button class="cart-item-remove" onclick="removeFromCart('${node.id}')">Remove</button>
               </div>
             </div>
