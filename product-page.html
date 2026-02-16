@@ -1268,70 +1268,18 @@
         bundleOffer.classList.add('expanded');
         addBundle.textContent = 'ADD';
       } else {
-        // Add to cart
-        const teeSize = bundleTeeSize.value;
-        const shortSize = bundleShortSize.value;
+        // Add to cart - variant IDs are already in the dropdown values
+        const teeVariantId = bundleTeeSize.value;
+        const shortVariantId = bundleShortSize.value;
         
-        if (!teeSize || !shortSize) {
+        if (!teeVariantId || !shortVariantId) {
           alert('Please select both sizes');
           return;
         }
         
-        // Get current product to determine color
-        const currentColor = currentProduct?.productType || 'White';
-        
         try {
           addBundle.textContent = 'ADDING...';
           addBundle.disabled = true;
-          
-          // Map: White -> tshirt + shorts handles, Black -> tshirt + shorts handles
-          const bundleMap = {
-            'White': { tshirt: 'activewear-example-product-3', shorts: 'activewear-example-product-4' },
-            'Black': { tshirt: 'origins-performance-t-shirt', shorts: 'origins-performance-shorts-copy' }
-          };
-          
-          const handles = bundleMap[currentColor];
-          if (!handles) {
-            throw new Error(`No bundle available for color: ${currentColor}`);
-          }
-          
-          // Fetch both products
-          const [teeProduct, shortProduct] = await Promise.all([
-            getProductByHandle(handles.tshirt),
-            getProductByHandle(handles.shorts)
-          ]);
-          
-          console.log('Tee product loaded:', teeProduct.title);
-          console.log('Short product loaded:', shortProduct.title);
-          console.log('Selected tee size:', teeSize);
-          console.log('Selected short size:', shortSize);
-          console.log('Tee variants:', teeProduct.variants.edges.map(v => ({
-            size: v.node.selectedOptions.find(o => o.name.toLowerCase() === 'size')?.value,
-            id: v.node.id
-          })));
-          console.log('Short variants:', shortProduct.variants.edges.map(v => ({
-            size: v.node.selectedOptions.find(o => o.name.toLowerCase() === 'size')?.value,
-            id: v.node.id
-          })));
-          
-          // Find variants for selected sizes
-          const teeVariant = teeProduct.variants.edges.find(v => 
-            v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === teeSize)
-          )?.node;
-          
-          const shortVariant = shortProduct.variants.edges.find(v => 
-            v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === shortSize)
-          )?.node;
-          
-          if (!teeVariant) {
-            throw new Error(`Size ${teeSize} not available`);
-          }
-          if (!shortVariant) {
-            throw new Error(`Size ${shortSize} not available`);
-          }
-          
-          console.log('Tee variant:', {id: teeVariant.id, product: teeProduct.title, size: teeSize});
-          console.log('Short variant:', {id: shortVariant.id, product: shortProduct.title, size: shortSize});
           
           // Add both to cart
           let cartId = localStorage.getItem('shopify_cart_id');
@@ -1347,8 +1295,8 @@
               cartLinesAdd(
                 cartId: "${cartId}"
                 lines: [
-                  { merchandiseId: "${teeVariant.id}", quantity: 1 }
-                  { merchandiseId: "${shortVariant.id}", quantity: 1 }
+                  { merchandiseId: "${teeVariantId}", quantity: 1 }
+                  { merchandiseId: "${shortVariantId}", quantity: 1 }
                 ]
               ) {
                 cart {
@@ -1424,10 +1372,52 @@
         document.querySelector('.product-title').textContent = product.title;
         document.title = `${product.title} | Kýček Studios`;
         
-        // Update bundle color label
+        // Update bundle color label and load bundle products
         const bundleColorLabel = document.getElementById('bundleColorLabel');
         if (bundleColorLabel && product.productType) {
           bundleColorLabel.textContent = product.productType;
+          
+          // Load bundle products for this color
+          const bundleMap = {
+            'White': { tshirt: 'activewear-example-product-3', shorts: 'activewear-example-product-4' },
+            'Black': { tshirt: 'origins-performance-t-shirt', shorts: 'origins-performance-shorts-copy' }
+          };
+          
+          const handles = bundleMap[product.productType];
+          if (handles) {
+            Promise.all([
+              getProductByHandle(handles.tshirt),
+              getProductByHandle(handles.shorts)
+            ]).then(([teeProduct, shortProduct]) => {
+              // Populate tee size dropdown
+              const teeSizeSelect = document.getElementById('bundleTeeSize');
+              teeSizeSelect.innerHTML = '<option value="">Select</option>';
+              teeProduct.variants.edges.forEach(({node}) => {
+                const sizeOption = node.selectedOptions.find(o => o.name.toLowerCase() === 'size');
+                if (sizeOption && node.availableForSale) {
+                  const option = document.createElement('option');
+                  option.value = node.id; // Store variant ID
+                  option.textContent = sizeOption.value;
+                  teeSizeSelect.appendChild(option);
+                }
+              });
+              
+              // Populate shorts size dropdown
+              const shortSizeSelect = document.getElementById('bundleShortSize');
+              shortSizeSelect.innerHTML = '<option value="">Select</option>';
+              shortProduct.variants.edges.forEach(({node}) => {
+                const sizeOption = node.selectedOptions.find(o => o.name.toLowerCase() === 'size');
+                if (sizeOption && node.availableForSale) {
+                  const option = document.createElement('option');
+                  option.value = node.id; // Store variant ID
+                  option.textContent = sizeOption.value;
+                  shortSizeSelect.appendChild(option);
+                }
+              });
+            }).catch(err => {
+              console.error('Failed to load bundle products:', err);
+            });
+          }
         }
         
         const subtitle = product.description ? product.description.substring(0, 100) : 'Premium performance wear';
