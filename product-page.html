@@ -1151,17 +1151,51 @@
       if (e.key === 'ArrowRight') goToSlide(currentIndex + 1);
     });
     
-    // Bundle add to cart
+    // Bundle modal
+    const bundleModal = document.getElementById('bundleModal');
     const addBundle = document.getElementById('addBundle');
+    const closeBundleModal = document.getElementById('closeBundleModal');
+    const addBundleToCart = document.getElementById('addBundleToCart');
+    
     addBundle.addEventListener('click', () => {
-      addBundle.textContent = 'Added ✓';
-      addBundle.style.background = 'var(--white)';
-      addBundle.style.color = 'var(--black)';
+      bundleModal.classList.add('active');
+    });
+    
+    closeBundleModal.addEventListener('click', () => {
+      bundleModal.classList.remove('active');
+    });
+    
+    // Close modal on background click
+    bundleModal.addEventListener('click', (e) => {
+      if (e.target === bundleModal) {
+        bundleModal.classList.remove('active');
+      }
+    });
+    
+    // Add bundle to cart
+    addBundleToCart.addEventListener('click', async () => {
+      const teeSize = document.getElementById('bundleTeeSize').value;
+      const shortSize = document.getElementById('bundleShortSize').value;
+      
+      if (!teeSize || !shortSize) {
+        alert('Please select sizes for both items');
+        return;
+      }
+      
+      // Find variant IDs for selected sizes
+      // For now, show success message (we'll add Shopify cart integration)
+      addBundleToCart.textContent = 'Adding...';
+      addBundleToCart.disabled = true;
+      
+      // Simulate API call
       setTimeout(() => {
-        addBundle.textContent = 'Add';
-        addBundle.style.background = '';
-        addBundle.style.color = '';
-      }, 2000);
+        addBundleToCart.textContent = 'Added to Cart ✓';
+        setTimeout(() => {
+          bundleModal.classList.remove('active');
+          addBundleToCart.textContent = 'Add Bundle to Cart';
+          addBundleToCart.disabled = false;
+        }, 1500);
+      }, 500);
     });
   </script>
 
