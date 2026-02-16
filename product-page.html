@@ -1764,57 +1764,26 @@
       }
     });
     
-    // Touch swipe support - Enhanced
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
-    let isSwiping = false;
+    // Touch swipe - super simple
+    let touchStart = 0;
+    let touchEnd = 0;
     
     slides.addEventListener('touchstart', e => {
-      touchStartX = e.changedTouches[0].clientX;
-      touchStartY = e.changedTouches[0].clientY;
-      touchEndX = touchStartX;
-      touchEndY = touchStartY;
-      isSwiping = false;
-    }, { passive: true });
-    
-    slides.addEventListener('touchmove', e => {
-      if (!isSwiping) {
-        touchEndX = e.changedTouches[0].clientX;
-        touchEndY = e.changedTouches[0].clientY;
-        
-        const diffX = Math.abs(touchStartX - touchEndX);
-        const diffY = Math.abs(touchStartY - touchEndY);
-        
-        // Detect if it's a horizontal swipe
-        if (diffX > diffY && diffX > 10) {
-          isSwiping = true;
-        }
-      } else {
-        touchEndX = e.changedTouches[0].clientX;
-      }
+      touchStart = e.changedTouches[0].clientX;
     }, { passive: true });
     
     slides.addEventListener('touchend', e => {
-      if (isSwiping) {
-        handleSwipe();
+      touchEnd = e.changedTouches[0].clientX;
+      const diff = touchStart - touchEnd;
+      
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          goToSlide(currentSlide + 1);
+        } else {
+          goToSlide(currentSlide - 1);
+        }
       }
-      isSwiping = false;
     }, { passive: true });
-    
-    function handleSwipe() {
-      const diffX = touchStartX - touchEndX;
-      const swipeThreshold = 30;
-      
-      if (Math.abs(diffX) < swipeThreshold) return;
-      
-      if (diffX > 0) {
-        goToSlide(currentSlide + 1);
-      } else {
-        goToSlide(currentSlide - 1);
-      }
-    }
     
     // Keyboard navigation
     document.addEventListener('keydown', e => {
