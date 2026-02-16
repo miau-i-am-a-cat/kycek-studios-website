@@ -1197,19 +1197,6 @@
       if (e.key === 'ArrowLeft') goToSlide(currentIndex - 1);
       if (e.key === 'ArrowRight') goToSlide(currentIndex + 1);
     });
-    
-    // Bundle add to cart
-    const addBundle = document.getElementById('addBundle');
-    addBundle.addEventListener('click', () => {
-      addBundle.textContent = 'Added ✓';
-      addBundle.style.background = 'var(--white)';
-      addBundle.style.color = 'var(--black)';
-      setTimeout(() => {
-        addBundle.textContent = 'Add';
-        addBundle.style.background = '';
-        addBundle.style.color = '';
-      }, 2000);
-    });
   </script>
 
 </body>
