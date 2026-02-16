@@ -1296,29 +1296,6 @@
     </div>
   </section>
 
-  <!-- ==================== SPECS ==================== -->
-  <section class="specs">
-    <h2>Specifications</h2>
-    <div class="specs-grid">
-      <div class="spec-item">
-        <div class="value">180g</div>
-        <div class="label">Weight</div>
-      </div>
-      <div class="spec-item">
-        <div class="value">100%</div>
-        <div class="label">Pima Cotton</div>
-      </div>
-      <div class="spec-item">
-        <div class="value">4-Way</div>
-        <div class="label">Stretch</div>
-      </div>
-      <div class="spec-item">
-        <div class="value">DR</div>
-        <div class="label">Origin</div>
-      </div>
-    </div>
-  </section>
-
   <!-- ==================== RELATED ==================== -->
   <section class="related">
     <div class="related-header">
@@ -1613,6 +1590,11 @@
         const product = await getProductByHandle(handle);
         console.log('Product loaded:', product);
         currentProduct = product;
+        
+        // Update wishlist button state (if function is defined)
+        if (typeof updateWishlistButton === 'function') {
+          updateWishlistButton();
+        }
         
         // Update page with product data
         document.querySelector('.product-title').textContent = product.title;
@@ -2174,10 +2156,11 @@
 
   <!-- Wishlist Management -->
   <script>
-    const wishlistBtn = document.getElementById('headerWishlistBtn');
+    const headerWishlistBtn = document.getElementById('headerWishlistBtn');
     const wishlistCountEl = document.getElementById('wishlistCount');
+    const pageWishlistBtn = document.getElementById('wishlistBtn');
     
-    // Load wishlist from localStorage
+    // Wishlist stored in localStorage with Shopify customer sync
     function getWishlist() {
       const wishlist = localStorage.getItem('kycek_wishlist');
       return wishlist ? JSON.parse(wishlist) : [];
@@ -2186,6 +2169,81 @@
     function saveWishlist(wishlist) {
       localStorage.setItem('kycek_wishlist', JSON.stringify(wishlist));
       updateWishlistCount();
+      updateWishlistButton();
+      
+      // Sync to Shopify if logged in
+      if (isLoggedIn()) {
+        syncWishlistToShopify(wishlist);
+      }
+    }
+    
+    async function syncWishlistToShopify(wishlist) {
+      try {
+        const handles = wishlist.map(item => item.handle).join(',');
+        
+        const mutation = `
+          mutation {
+            customerUpdate(customer: {
+              metafields: [
+                {
+                  namespace: "custom"
+                  key: "wishlist"
+                  value: "${handles}"
+                  type: "single_line_text_field"
+                }
+              ]
+            }) {
+              customer {
+                id
+              }
+              customerUserErrors {
+                message
+              }
+            }
+          }
+        `;
+        
+        await customerFetch(mutation);
+      } catch (error) {
+        console.error('Failed to sync wishlist:', error);
+      }
+    }
+    
+    async function loadWishlistFromShopify() {
+      if (!isLoggedIn()) return;
+      
+      try {
+        const query = `{
+          customer {
+            metafield(namespace: "custom", key: "wishlist") {
+              value
+            }
+          }
+        }`;
+        
+        const data = await customerFetch(query);
+        if (data.customer?.metafield?.value) {
+          const handles = data.customer.metafield.value.split(',');
+          
+          // Fetch product details for each handle
+          const products = await Promise.all(
+            handles.map(handle => getProductByHandle(handle).catch(() => null))
+          );
+          
+          const wishlist = products.filter(p => p).map(product => ({
+            handle: product.handle,
+            title: product.title,
+            image: product.images.edges[0]?.node?.url || '',
+            price: parseFloat(product.priceRange.minVariantPrice.amount).toFixed(0)
+          }));
+          
+          localStorage.setItem('kycek_wishlist', JSON.stringify(wishlist));
+          updateWishlistCount();
+          updateWishlistButton();
+        }
+      } catch (error) {
+        console.error('Failed to load wishlist from Shopify:', error);
+      }
     }
     
     function updateWishlistCount() {
@@ -2193,34 +2251,54 @@
       wishlistCountEl.textContent = wishlist.length;
     }
     
-    function addToWishlist(productHandle, productTitle, productImage, productPrice) {
-      const wishlist = getWishlist();
+    function updateWishlistButton() {
+      if (!pageWishlistBtn || !currentProduct) return;
       
-      // Check if already in wishlist
-      if (wishlist.some(item => item.handle === productHandle)) {
-        alert('Already in wishlist!');
-        return;
+      const wishlist = getWishlist();
+      const isInWishlist = wishlist.some(item => item.handle === currentProduct.handle);
+      
+      const svg = pageWishlistBtn.querySelector('svg');
+      if (isInWishlist) {
+        svg.setAttribute('fill', 'currentColor');
+        svg.setAttribute('stroke', 'currentColor');
+      } else {
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
       }
-      
-      wishlist.push({
-        handle: productHandle,
-        title: productTitle,
-        image: productImage,
-        price: productPrice
-      });
-      
-      saveWishlist(wishlist);
-      alert('Added to wishlist!');
     }
     
-    function removeFromWishlist(productHandle) {
+    function toggleWishlist(productHandle, productTitle, productImage, productPrice) {
       const wishlist = getWishlist();
-      const filtered = wishlist.filter(item => item.handle !== productHandle);
-      saveWishlist(filtered);
+      const index = wishlist.findIndex(item => item.handle === productHandle);
+      
+      if (index > -1) {
+        wishlist.splice(index, 1);
+        saveWishlist(wishlist);
+      } else {
+        wishlist.push({
+          handle: productHandle,
+          title: productTitle,
+          image: productImage,
+          price: productPrice
+        });
+        saveWishlist(wishlist);
+      }
     }
     
-    // Show wishlist modal
-    wishlistBtn.addEventListener('click', () => {
+    // Page wishlist button click handler
+    if (pageWishlistBtn) {
+      pageWishlistBtn.addEventListener('click', () => {
+        if (!currentProduct) return;
+        
+        const price = parseFloat(currentProduct.priceRange.minVariantPrice.amount).toFixed(0);
+        const image = currentProduct.images.edges[0]?.node?.url || '';
+        
+        toggleWishlist(currentProduct.handle, currentProduct.title, image, price);
+      });
+    }
+    
+    // Header wishlist button - show modal
+    headerWishlistBtn.addEventListener('click', () => {
       const wishlist = getWishlist();
       
       if (wishlist.length === 0) {
@@ -2240,8 +2318,8 @@
               <div style="font-weight: 600; margin-bottom: 4px;">${item.title}</div>
               <div style="color: var(--gray);">$${item.price}</div>
             </div>
-            <a href="?handle=${item.handle}" style="padding: 8px 16px; background: var(--red); color: white; text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">View</a>
-            <button onclick="removeFromWishlist('${item.handle}'); this.closest('.wishlist-modal').remove();" style="padding: 8px 16px; background: none; border: 1px solid var(--dark-border); color: white; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;">Remove</button>
+            <a href="?handle=${item.handle}" onclick="window.location.reload();" style="padding: 8px 16px; background: var(--red); color: white; text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">View</a>
+            <button onclick="toggleWishlist('${item.handle}', '${item.title}', '${item.image}', '${item.price}'); this.closest('.wishlist-modal').remove();" style="padding: 8px 16px; background: none; border: 1px solid var(--dark-border); color: white; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;">Remove</button>
           </div>
         `;
       });
@@ -2254,8 +2332,9 @@
       document.body.appendChild(modal);
     });
     
-    // Update count on load
+    // Update count and button state on load
     updateWishlistCount();
+    loadWishlistFromShopify();
   </script>
 
   <!-- Customer Account Management -->
