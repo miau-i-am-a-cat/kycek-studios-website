@@ -1301,6 +1301,19 @@
             getProductByHandle(handles.shorts)
           ]);
           
+          console.log('Tee product loaded:', teeProduct.title);
+          console.log('Short product loaded:', shortProduct.title);
+          console.log('Selected tee size:', teeSize);
+          console.log('Selected short size:', shortSize);
+          console.log('Tee variants:', teeProduct.variants.edges.map(v => ({
+            size: v.node.selectedOptions.find(o => o.name.toLowerCase() === 'size')?.value,
+            id: v.node.id
+          })));
+          console.log('Short variants:', shortProduct.variants.edges.map(v => ({
+            size: v.node.selectedOptions.find(o => o.name.toLowerCase() === 'size')?.value,
+            id: v.node.id
+          })));
+          
           // Find variants for selected sizes
           const teeVariant = teeProduct.variants.edges.find(v => 
             v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === teeSize)
@@ -1316,6 +1329,9 @@
           if (!shortVariant) {
             throw new Error(`Size ${shortSize} not available`);
           }
+          
+          console.log('Tee variant:', {id: teeVariant.id, product: teeProduct.title, size: teeSize});
+          console.log('Short variant:', {id: shortVariant.id, product: shortProduct.title, size: shortSize});
           
           // Add both to cart
           let cartId = localStorage.getItem('shopify_cart_id');
