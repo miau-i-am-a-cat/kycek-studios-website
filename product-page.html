@@ -1201,19 +1201,6 @@
     const wishlistBtn = document.getElementById('wishlistBtn');
     wishlistBtn.addEventListener('click', () => wishlistBtn.classList.toggle('active'));
     
-    // Add to cart
-    const addToCart = document.getElementById('addToCart');
-    addToCart.addEventListener('click', () => {
-      addToCart.textContent = 'Added ✓';
-      addToCart.style.background = 'var(--red)';
-      addToCart.style.color = 'var(--white)';
-      setTimeout(() => {
-        addToCart.textContent = 'Add to Cart';
-        addToCart.style.background = '';
-        addToCart.style.color = '';
-      }, 2000);
-    });
-    
     // Bundle expansion
     const bundleOffer = document.getElementById('bundleOffer');
     const addBundle = document.getElementById('addBundle');
