@@ -1610,32 +1610,13 @@
       }
     };
     
-    // Touch/Mouse swipe
-    galleryContainer.addEventListener('mousedown', startDrag);
-    galleryContainer.addEventListener('touchstart', startDrag);
-    galleryContainer.addEventListener('mousemove', drag);
-    galleryContainer.addEventListener('touchmove', drag);
-    galleryContainer.addEventListener('mouseup', endDrag);
-    galleryContainer.addEventListener('touchend', endDrag);
-    galleryContainer.addEventListener('mouseleave', endDrag);
+    // Touch/Mouse swipe - SIMPLE
+    galleryContainer.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].pageX;
+    }, { passive: true });
     
-    function startDrag(e) {
-      isDragging = true;
-      startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
-      galleryContainer.style.cursor = 'grabbing';
-    }
-    
-    function drag(e) {
-      if (!isDragging) return;
-      e.preventDefault();
-    }
-    
-    function endDrag(e) {
-      if (!isDragging) return;
-      isDragging = false;
-      galleryContainer.style.cursor = 'grab';
-      
-      const endX = e.type.includes('mouse') ? e.pageX : e.changedTouches[0].pageX;
+    galleryContainer.addEventListener('touchend', (e) => {
+      const endX = e.changedTouches[0].pageX;
       const diff = startX - endX;
       
       if (Math.abs(diff) > 50) {
@@ -1646,7 +1627,41 @@
         }
         updateCarousel();
       }
-    }
+    }, { passive: true });
+    
+    // Mouse swipe (desktop)
+    galleryContainer.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.pageX;
+      galleryContainer.style.cursor = 'grabbing';
+    });
+    
+    galleryContainer.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+    });
+    
+    galleryContainer.addEventListener('mouseup', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      galleryContainer.style.cursor = 'grab';
+      
+      const diff = startX - e.pageX;
+      
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          currentSlideIndex++;
+        } else {
+          currentSlideIndex--;
+        }
+        updateCarousel();
+      }
+    });
+    
+    galleryContainer.addEventListener('mouseleave', () => {
+      isDragging = false;
+      galleryContainer.style.cursor = 'grab';
+    });
     
     // Color selector
     const colorSwatches = document.querySelectorAll('.color-swatch');
