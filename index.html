@@ -7,6 +7,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="/config.js"></script>
   
   <style>
     :root {
@@ -38,7 +39,21 @@
     
     a, button { color: inherit; text-decoration: none; cursor: none; }
     
-    /* ===== HEADER ===== */
+    /* Cursor */
+    .cursor {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.2s ease;
+    }
+    .cursor.click { transform: scale(0.8); }
+    
+    /* Header */
     .header {
       position: fixed;
       top: 0;
@@ -69,7 +84,7 @@
       text-transform: uppercase;
     }
     
-    /* ===== HERO ===== */
+    /* Hero */
     .hero {
       height: 100vh;
       position: relative;
@@ -99,250 +114,69 @@
       );
     }
     
-    .hero-title {
-      position: absolute;
-      font-size: 28vw;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.8;
-      text-transform: uppercase;
-      white-space: nowrap;
-      left: -5%;
-      color: var(--white);
-      mix-blend-mode: difference;
-      user-select: none;
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
     }
     
-    .hero-subtitle {
-      position: absolute;
-      bottom: 60px;
-      right: 60px;
-      text-align: right;
-    }
-    
-    .hero-subtitle .line1 {
+    .hero-tagline {
       font-size: 11px;
+      font-weight: 500;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--light-gray);
-      margin-bottom: 8px;
+      margin-bottom: 24px;
+      opacity: 0.6;
     }
     
-    .hero-subtitle .line2 {
+    .hero-title {
+      font-size: clamp(80px, 15vw, 180px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 0.85;
+      margin-bottom: 40px;
+    }
+    
+    .hero-title .line1 {
+      display: block;
+    }
+    
+    .hero-title .line2 {
+      display: block;
       font-size: 14px;
-      font-weight: 300;
-      color: var(--white);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      margin-top: 20px;
+      opacity: 0.5;
     }
     
     .hero-scroll {
       position: absolute;
       bottom: 60px;
-      left: 60px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--light-gray);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
     }
     
     .scroll-line {
-      width: 60px;
-      height: 1px;
-      background: var(--gray);
-      position: relative;
-      overflow: hidden;
+      width: 1px;
+      height: 40px;
+      background: white;
+      animation: scroll 2s ease-in-out infinite;
     }
     
-    .scroll-line::after {
-      content: '';
-      position: absolute;
-      left: -100%;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--white);
-      animation: scrollLine 2s ease-in-out infinite;
+    @keyframes scroll {
+      0%, 100% { opacity: 0; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(10px); }
     }
     
-    @keyframes scrollLine {
-      0% { left: -100%; }
-      50% { left: 100%; }
-      100% { left: 100%; }
-    }
-    
-    /* ===== MANIFESTO ===== */
-    .manifesto {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 100px 80px;
-      position: relative;
-    }
-    
-    .manifesto-bg {
-      position: absolute;
-      top: 10%;
-      right: -10%;
-      font-size: 45vw;
-      font-weight: 900;
-      color: var(--dark);
-      line-height: 0.8;
-      user-select: none;
-      pointer-events: none;
-    }
-    
-    .manifesto-content {
-      max-width: 800px;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .manifesto-label {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--red);
-      border: 1px solid var(--red);
-      padding: 8px 16px;
-      margin-bottom: 40px;
-    }
-    
-    .manifesto-text {
-      font-size: clamp(32px, 5vw, 56px);
-      font-weight: 600;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }
-    
-    .manifesto-text .highlight {
-      color: var(--red);
-    }
-    
-    .manifesto-text .jp {
-      font-weight: 400;
-      font-size: 0.7em;
-      color: var(--gray);
-      margin-left: 10px;
-    }
-    
-    .manifesto-signature {
-      margin-top: 60px;
-      font-size: 13px;
-      color: var(--gray);
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    
-    .manifesto-signature::before {
-      content: '';
-      width: 60px;
-      height: 1px;
-      background: var(--gray);
-    }
-    
-    /* ===== STAMP SECTION ===== */
-    .stamps {
-      padding: 150px 0;
-      overflow: hidden;
-    }
-    
-    .stamps-header {
-      padding: 0 80px;
-      margin-bottom: 60px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-    
-    .stamps-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-    
-    .stamps-subtitle {
-      font-size: 13px;
-      color: var(--light-gray);
-    }
-    
-    .stamps-track {
-      display: flex;
-      gap: 40px;
-      padding: 0 80px;
-      animation: stampScroll 20s linear infinite;
-    }
-    
-    @keyframes stampScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    
-    .stamp {
-      flex-shrink: 0;
-      width: 280px;
-      transition: transform 0.4s ease;
-    }
-    
-    .stamp:hover {
-      transform: scale(1.05) rotate(-2deg);
-    }
-    
-    .stamp img {
-      width: 100%;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
-    }
-    
-    /* ===== VIDEO INTERLUDE ===== */
-    .video-section {
-      height: 80vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--dark);
-      overflow: hidden;
-    }
-    
-    .video-section video {
-      width: 50%;
-      max-width: 600px;
-    }
-    
-    .video-text-left {
-      position: absolute;
-      left: 60px;
-      top: 50%;
-      transform: translateY(-50%);
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-size: 12px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-    
-    .video-text-right {
-      position: absolute;
-      right: 60px;
-      top: 50%;
-      transform: translateY(-50%);
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-size: 48px;
-      font-weight: 900;
-      color: var(--dark);
-      -webkit-text-stroke: 1px var(--gray);
-    }
-    
-    /* ===== PRODUCTS ===== */
+    /* Products Section */
     .products {
       padding: 150px 0;
     }
@@ -391,6 +225,17 @@
       background: var(--dark);
     }
     
+    .product-image .number {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      font-size: 80px;
+      font-weight: 900;
+      color: var(--dark);
+      -webkit-text-stroke: 1px var(--gray);
+      z-index: 1;
+    }
+    
     .product-image img {
       width: 100%;
       height: 100%;
@@ -402,53 +247,40 @@
       transform: scale(1.05);
     }
     
-    .product-image .number {
-      position: absolute;
-      top: 40px;
-      left: 40px;
-      font-size: 120px;
-      font-weight: 900;
-      color: var(--white);
-      opacity: 0.1;
-      line-height: 1;
-    }
-    
     .product-content {
+      padding: 80px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 80px;
-      position: relative;
     }
     
     .product-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--red);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     
     .product-name {
-      font-size: clamp(36px, 4vw, 52px);
+      font-size: clamp(32px, 5vw, 56px);
       font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      line-height: 1.1;
     }
     
     .product-desc {
       font-size: 15px;
       line-height: 1.8;
       color: var(--light-gray);
-      margin-bottom: 40px;
-      max-width: 400px;
+      margin-bottom: 32px;
     }
     
     .product-price {
-      font-size: 24px;
-      font-weight: 500;
-      margin-bottom: 30px;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 32px;
     }
     
     .product-link {
@@ -459,245 +291,75 @@
       font-weight: 600;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--white);
-      transition: all 0.3s ease;
-    }
-    
-    .product-link:hover {
-      gap: 20px;
-      border-color: var(--red);
-      color: var(--red);
+      padding: 16px 32px;
+      border: 1px solid var(--gray);
+      transition: all 0.3s;
     }
     
     .product-link svg {
       width: 20px;
       height: 20px;
+      transition: transform 0.3s;
     }
     
-    /* ===== PHILOSOPHY ===== */
-    .philosophy {
-      padding: 200px 80px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 120px;
-      align-items: center;
-      background: var(--dark);
+    .product-link:hover {
+      border-color: var(--white);
     }
     
-    .philosophy-visual {
-      position: relative;
+    .product-link:hover svg {
+      transform: translateX(4px);
     }
     
-    .philosophy-video {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-    }
-    
-    .philosophy-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.3);
-    }
-    
-    .philosophy-symbol {
-      font-size: 180px;
-      font-weight: 100;
-      color: var(--white);
-      opacity: 0.3;
-    }
-    
-    .philosophy-content h2 {
-      font-size: clamp(28px, 3vw, 40px);
-      font-weight: 600;
-      line-height: 1.3;
-      margin-bottom: 30px;
-    }
-    
-    .philosophy-content p {
-      font-size: 15px;
-      line-height: 1.9;
-      color: var(--light-gray);
-      margin-bottom: 20px;
-    }
-    
-    .philosophy-content .origin {
-      margin-top: 40px;
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-    
-    /* ===== MARQUEE ===== */
-    .marquee {
-      padding: 60px 0;
-      overflow: hidden;
-      border-top: 1px solid #222;
-      border-bottom: 1px solid #222;
-    }
-    
-    .marquee-track {
-      display: flex;
-      animation: marquee 30s linear infinite;
-    }
-    
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    
-    .marquee-item {
-      flex-shrink: 0;
-      padding: 0 60px;
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gray);
-      white-space: nowrap;
-    }
-    
-    .marquee-item .dot {
+    .sold-out-badge {
       display: inline-block;
-      width: 6px;
-      height: 6px;
-      background: var(--red);
-      border-radius: 50%;
-      margin: 0 30px;
-      vertical-align: middle;
-    }
-    
-    /* ===== FOOTER ===== */
-    .footer {
-      padding: 100px 80px;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 60px;
-    }
-    
-    .footer-brand {
-      max-width: 300px;
-    }
-    
-    .footer-logo {
-      height: 32px;
-      margin-bottom: 30px;
-      opacity: 0.8;
-    }
-    
-    .footer-tagline {
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--gray);
-    }
-    
-    .footer-column h4 {
+      padding: 8px 16px;
+      background: var(--gray);
+      color: var(--white);
       font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 24px;
-    }
-    
-    .footer-column a {
-      display: block;
-      font-size: 14px;
-      color: var(--light-gray);
-      margin-bottom: 14px;
-      transition: color 0.2s ease;
-    }
-    
-    .footer-column a:hover {
-      color: var(--white);
-    }
-    
-    .footer-bottom {
-      grid-column: span 4;
-      padding-top: 60px;
-      margin-top: 60px;
-      border-top: 1px solid #222;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: var(--gray);
-    }
-    
-    /* ===== CURSOR ===== */
-    .cursor {
-      width: 40px;
-      height: 40px;
-      background: var(--white);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      mix-blend-mode: difference;
-      transition: transform 0.2s ease;
-    }
-    
-    .cursor.click {
-      transform: scale(0.8);
-    }
-    
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1024px) {
-      .hero-title { font-size: 20vw; }
-      .product-feature { grid-template-columns: 1fr; }
-      .product-feature.reverse { direction: ltr; }
-      .philosophy { grid-template-columns: 1fr; padding: 100px 40px; }
-      .products-header { grid-template-columns: 1fr; }
-      .footer { grid-template-columns: 1fr 1fr; }
-      .footer-bottom { grid-column: span 2; }
+      margin-bottom: 16px;
     }
     
     @media (max-width: 768px) {
-      .header { padding: 20px; }
-      .nav { gap: 20px; }
-      .hero-subtitle, .hero-scroll { display: none; }
-      .manifesto { padding: 80px 20px; }
-      .stamps-header { padding: 0 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
-      .stamps-track { padding: 0 20px; gap: 20px; }
-      .stamp { width: 200px; }
-      .product-content { padding: 40px 20px; }
-      .footer { grid-template-columns: 1fr; padding: 60px 20px; }
-      .footer-bottom { grid-column: span 1; flex-direction: column; gap: 20px; }
+      .product-feature {
+        grid-template-columns: 1fr;
+      }
+      .product-content {
+        padding: 40px;
+      }
+      .products-header {
+        grid-template-columns: 1fr;
+        padding: 0 40px;
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- Custom Cursor -->
-  <div class="cursor" id="cursor"></div>
+  <div class="cursor"></div>
 
   <!-- Header -->
   <header class="header">
-    <a href="/">
-      <img src="logo_white_transparent.png" alt="Kýček" class="logo">
-    </a>
+    <img src="/assets/images/logo_transparent.png" alt="Kýček Studios" class="logo">
     <nav class="nav">
-      <a href="index.html">Shop</a>
-      <a href="#philosophy">Story</a>
-      <a href="#">Cart (0)</a>
+      <a href="#products">Collection</a>
+      <a href="#about">About</a>
     </nav>
   </header>
 
   <!-- Hero -->
   <section class="hero">
     <video class="hero-video" autoplay muted loop playsinline>
-      <source src="hero-video.mp4" type="video/mp4">
+      <source src="/assets/images/hero-video.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
-    <h1 class="hero-title">Kýček</h1>
-    <div class="hero-subtitle">
-      <div class="line1">Est. Dominican Republic</div>
-      <div class="line2">Performance wear for those who move with purpose</div>
+    <div class="hero-content">
+      <div class="hero-tagline">Est. Dominican Republic</div>
+      <h1 class="hero-title">
+        <div class="line1">KÝČEK STUDIOS</div>
+        <div class="line2">Performance wear for those who move with purpose</div>
+      </h1>
     </div>
     <div class="hero-scroll">
       <span class="scroll-line"></span>
@@ -705,52 +367,8 @@
     </div>
   </section>
 
-  <!-- Manifesto -->
-  <section class="manifesto">
-    <div class="manifesto-bg">カラス</div>
-    <div class="manifesto-content">
-      <span class="manifesto-label">The Philosophy</span>
-      <h2 class="manifesto-text">
-        In an age of algorithmic design, we chose a different path. Every piece carries the <span class="highlight">intention, imperfection, and soul</span> that only human hands can provide.
-        <span class="jp">人間による</span>
-      </h2>
-      <div class="manifesto-signature">
-        Made by Humans, on Earth
-      </div>
-    </div>
-  </section>
-
-  <!-- Stamps -->
-  <section class="stamps">
-    <div class="stamps-header">
-      <div>
-        <div class="stamps-title">Philatelic Identity</div>
-      </div>
-      <div class="stamps-subtitle">Collectible graphics series</div>
-    </div>
-    <div class="stamps-track">
-      <div class="stamp"><img src="stamp-crow.png" alt="Crow"></div>
-      <div class="stamp"><img src="stamp-horse.png" alt="Horse"></div>
-      <div class="stamp"><img src="stamp-crow.png" alt="Crow"></div>
-      <div class="stamp"><img src="stamp-horse.png" alt="Horse"></div>
-      <div class="stamp"><img src="stamp-crow.png" alt="Crow"></div>
-      <div class="stamp"><img src="stamp-horse.png" alt="Horse"></div>
-      <div class="stamp"><img src="stamp-crow.png" alt="Crow"></div>
-      <div class="stamp"><img src="stamp-horse.png" alt="Horse"></div>
-    </div>
-  </section>
-
-  <!-- Video Interlude -->
-  <section class="video-section">
-    <div class="video-text-left">The mark in motion</div>
-    <video autoplay muted loop playsinline>
-      <source src="logo-video.mp4" type="video/mp4">
-    </video>
-    <div class="video-text-right">K</div>
-  </section>
-
   <!-- Products -->
-  <section class="products">
+  <section class="products" id="products">
     <div class="products-header">
       <h2 class="products-title">The<br>Collection</h2>
       <p class="products-intro">
@@ -758,166 +376,84 @@
       </p>
     </div>
     
-    <div class="product-feature">
-      <div class="product-image">
-        <span class="number">01</span>
-        <img src="product-flatlay.png" alt="Essential Tee">
-      </div>
-      <div class="product-content">
-        <span class="product-label">Signature</span>
-        <h3 class="product-name">Essential Tee</h3>
-        <p class="product-desc">
-          Premium Pima cotton with 4-way stretch. The crow mark sits between the shoulder blades—visible only to those behind you.
-        </p>
-        <div class="product-price">$68</div>
-        <a href="index.html" class="product-link">
-          View Product
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
-    </div>
-    
-    <div class="product-feature reverse">
-      <div class="product-image">
-        <span class="number">02</span>
-        <img src="all pro pic clothes (3).png" alt="Training Short">
-      </div>
-      <div class="product-content">
-        <span class="product-label">Performance</span>
-        <h3 class="product-name">Training Short</h3>
-        <p class="product-desc">
-          Lightweight woven fabric with hidden zip pockets. Moves with you, never against. The mark on the left thigh—subtle, intentional.
-        </p>
-        <div class="product-price">$78</div>
-        <a href="#" class="product-link">
-          View Product
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
+    <div id="products-container">
+      <div style="text-align: center; padding: 100px 20px; color: #666;">
+        Loading products...
       </div>
     </div>
   </section>
-
-  <!-- Philosophy -->
-  <section class="philosophy" id="philosophy">
-    <div class="philosophy-visual">
-      <video class="philosophy-video" autoplay muted loop playsinline>
-        <source src="mantis-video.mp4" type="video/mp4">
-      </video>
-      <div class="philosophy-overlay">
-        <span class="philosophy-symbol">鴉</span>
-      </div>
-    </div>
-    <div class="philosophy-content">
-      <h2>The crow—karasu in Japanese—is one of nature's most intelligent creatures.</h2>
-      <p>
-        It adapts. It observes. It thrives in any environment. From Tokyo streets to Caribbean shores, the crow moves through the world with purpose.
-      </p>
-      <p>
-        Like you, it doesn't follow the flock. It leads.
-      </p>
-      <p>
-        Kýček Studios was born in the Dominican Republic, where Caribbean heat meets relentless hustle. The name carries Czech heritage, the design speaks Japanese precision, and the soul pulses with island fire.
-      </p>
-      <div class="origin">Santo Domingo → The World</div>
-    </div>
-  </section>
-
-  <!-- Marquee -->
-  <div class="marquee">
-    <div class="marquee-track">
-      <span class="marquee-item">Made by Humans <span class="dot"></span> on Earth</span>
-      <span class="marquee-item">カラス <span class="dot"></span> Crow</span>
-      <span class="marquee-item">Dominican Republic <span class="dot"></span> Est. 2024</span>
-      <span class="marquee-item">Performance Wear <span class="dot"></span> Human Made</span>
-      <span class="marquee-item">Made by Humans <span class="dot"></span> on Earth</span>
-      <span class="marquee-item">カラス <span class="dot"></span> Crow</span>
-      <span class="marquee-item">Dominican Republic <span class="dot"></span> Est. 2024</span>
-      <span class="marquee-item">Performance Wear <span class="dot"></span> Human Made</span>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-brand">
-      <img src="logo_white_transparent.png" alt="Kýček" class="footer-logo">
-      <p class="footer-tagline">
-        Performance wear for those who move with purpose. Not designed by algorithm. Made by Humans, on Earth.
-      </p>
-    </div>
-    
-    <div class="footer-column">
-      <h4>Shop</h4>
-      <a href="index.html">All Products</a>
-      <a href="index.html">Essential Tee</a>
-      <a href="#">Training Short</a>
-    </div>
-    
-    <div class="footer-column">
-      <h4>Company</h4>
-      <a href="#philosophy">Our Story</a>
-      <a href="#">Contact</a>
-      <a href="#">Stockists</a>
-    </div>
-    
-    <div class="footer-column">
-      <h4>Connect</h4>
-      <a href="#">Instagram</a>
-      <a href="#">Twitter</a>
-      <a href="#">Newsletter</a>
-    </div>
-    
-    <div class="footer-bottom">
-      <div>© 2026 Kýček Studios. All rights reserved.</div>
-      <div>Dominican Republic</div>
-    </div>
-  </footer>
 
   <script>
     // Custom cursor
-    const cursor = document.getElementById('cursor');
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
     });
-    
-    function animateCursor() {
-      cursorX += (mouseX - cursorX) * 0.1;
-      cursorY += (mouseY - cursorY) * 0.1;
-      cursor.style.left = cursorX - 20 + 'px';
-      cursor.style.top = cursorY - 20 + 'px';
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
-    
-    // Click effect
     document.addEventListener('mousedown', () => cursor.classList.add('click'));
     document.addEventListener('mouseup', () => cursor.classList.remove('click'));
     
-    // Parallax on hero title
-    const heroTitle = document.querySelector('.hero-title');
-    window.addEventListener('scroll', () => {
-      const scrolled = window.scrollY;
-      if (scrolled < window.innerHeight) {
-        heroTitle.style.transform = `translateX(${scrolled * 0.3}px)`;
+    // Load products from Shopify
+    async function loadProducts() {
+      try {
+        const products = await getProducts(10);
+        const container = document.getElementById('products-container');
+        container.innerHTML = '';
+        
+        // Filter out products we don't want to display prominently
+        const displayProducts = products.filter(p => 
+          p.title.toLowerCase().includes('tee') || 
+          p.title.toLowerCase().includes('short') ||
+          p.title.toLowerCase().includes('limited')
+        );
+        
+        displayProducts.forEach((product, index) => {
+          const price = parseFloat(product.priceRange.minVariantPrice.amount);
+          const image = product.images.edges[0]?.node.url || '';
+          const isAvailable = product.variants.edges.some(v => v.node.availableForSale);
+          const isReverse = index % 2 === 1;
+          
+          // Determine product label
+          let label = 'Essential';
+          if (product.title.toLowerCase().includes('limited')) label = 'Limited Edition';
+          else if (product.title.toLowerCase().includes('short')) label = 'Performance';
+          
+          const feature = document.createElement('div');
+          feature.className = `product-feature ${isReverse ? 'reverse' : ''}`;
+          
+          feature.innerHTML = `
+            <div class="product-image">
+              <span class="number">${String(index + 1).padStart(2, '0')}</span>
+              <img src="${image}" alt="${product.title}">
+            </div>
+            <div class="product-content">
+              ${!isAvailable ? '<div class="sold-out-badge">Sold Out</div>' : ''}
+              <span class="product-label">${label}</span>
+              <h3 class="product-name">${product.title}</h3>
+              <p class="product-desc">
+                ${product.description || 'Premium performance wear. Made by Humans, on Earth.'}
+              </p>
+              <div class="product-price">$${price.toFixed(0)}</div>
+              <a href="/product-page.html?handle=${product.handle}" class="product-link">
+                View Product
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          `;
+          
+          container.appendChild(feature);
+        });
+      } catch (error) {
+        console.error('Failed to load products:', error);
+        document.getElementById('products-container').innerHTML = 
+          '<div style="text-align: center; padding: 100px 20px; color: #666;">Failed to load products.</div>';
       }
-    });
+    }
     
-    // Pause stamp animation on hover
-    const stampsTrack = document.querySelector('.stamps-track');
-    stampsTrack.addEventListener('mouseenter', () => {
-      stampsTrack.style.animationPlayState = 'paused';
-    });
-    stampsTrack.addEventListener('mouseleave', () => {
-      stampsTrack.style.animationPlayState = 'running';
-    });
+    // Load on page load
+    document.addEventListener('DOMContentLoaded', loadProducts);
   </script>
-
 </body>
 </html>
