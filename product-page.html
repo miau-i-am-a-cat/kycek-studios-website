@@ -114,6 +114,9 @@
       display: flex;
       height: 100%;
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
     }
     
     .gallery-slide {
@@ -1753,18 +1756,35 @@
       }
     });
     
-    // Touch swipe support
+    // Touch swipe support - Safari compatible
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
+    let isHorizontalSwipe = false;
     
     slides.addEventListener('touchstart', e => {
-      touchStartX = e.changedTouches[0].clientX;
-      touchStartY = e.changedTouches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isHorizontalSwipe = false;
+    }, { passive: true });
+    
+    slides.addEventListener('touchmove', e => {
+      if (!isHorizontalSwipe) {
+        touchEndX = e.touches[0].clientX;
+        touchEndY = e.touches[0].clientY;
+        const diffX = Math.abs(touchStartX - touchEndX);
+        const diffY = Math.abs(touchStartY - touchEndY);
+        // Detect if it's horizontal
+        if (diffX > 10 && diffX > diffY) {
+          isHorizontalSwipe = true;
+        }
+      }
     }, { passive: true });
     
     slides.addEventListener('touchend', e => {
+      if (!isHorizontalSwipe) return;
+      
       touchEndX = e.changedTouches[0].clientX;
       touchEndY = e.changedTouches[0].clientY;
       handleSwipe();
@@ -1777,15 +1797,16 @@
       
       // Only swipe if horizontal movement is dominant
       if (Math.abs(diffX) < swipeThreshold) return;
-      if (Math.abs(diffY) > Math.abs(diffX)) return; // Vertical scroll takes priority
+      if (Math.abs(diffY) > Math.abs(diffX)) return;
       
       if (diffX > 0) {
-        // Swipe left - next
         goToSlide(currentIndex + 1);
       } else {
-        // Swipe right - previous
         goToSlide(currentIndex - 1);
       }
+      
+      // Reset
+      isHorizontalSwipe = false;
     }
     
     // Keyboard navigation
