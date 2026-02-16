@@ -1265,11 +1265,11 @@
       </p>
       
       <ul class="details-list">
-        <li><span>Material</span><span>High-density, performance-engineered polyester</span></li>
-        <li><span>Breathability</span><span>Advanced moisture-wicking technology</span></li>
-        <li><span>Mobility</span><span>4-way stretch for unrestricted movement</span></li>
-        <li><span>Construction</span><span>Lightweight yet durable design</span></li>
-        <li><span>Care</span><span>Machine wash cold, tumble dry low</span></li>
+        <li><span data-en="Material" data-es="Material">Material</span><span data-en="High-density, performance-engineered polyester" data-es="Poliéster de alta densidad diseñado para rendimiento">High-density, performance-engineered polyester</span></li>
+        <li><span data-en="Breathability" data-es="Transpirabilidad">Breathability</span><span data-en="Advanced moisture-wicking technology" data-es="Tecnología avanzada de absorción de humedad">Advanced moisture-wicking technology</span></li>
+        <li><span data-en="Mobility" data-es="Movilidad">Mobility</span><span data-en="4-way stretch for unrestricted movement" data-es="Elasticidad en 4 direcciones para movimiento sin restricciones">4-way stretch for unrestricted movement</span></li>
+        <li><span data-en="Construction" data-es="Construcción">Construction</span><span data-en="Lightweight yet durable design" data-es="Diseño ligero pero duradero">Lightweight yet durable design</span></li>
+        <li><span data-en="Care" data-es="Cuidado">Care</span><span data-en="Machine wash cold, tumble dry low" data-es="Lavar a máquina en frío, secar en secadora a baja temperatura">Machine wash cold, tumble dry low</span></li>
       </ul>
     </div>
     
@@ -1287,10 +1287,10 @@
         <div class="overlay"></div>
         <div class="caption">
           <div>
-            <div class="caption-title">In Context</div>
-            <div class="caption-text">The crow sees what others miss. So do you.</div>
+            <div class="caption-title" data-en="In Context" data-es="En Contexto">In Context</div>
+            <div class="caption-text" data-en="The crow sees what others miss. So do you." data-es="El cuervo ve lo que otros pierden. Tú también.">The crow sees what others miss. So do you.</div>
           </div>
-          <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray);">
+          <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray);" data-en="Urban Dawn" data-es="Amanecer Urbano">
             Urban Dawn
           </div>
         </div>
@@ -1300,10 +1300,10 @@
         <div class="overlay"></div>
         <div class="caption">
           <div>
-            <div class="caption-title">Built Different</div>
-            <div class="caption-text">Performance that moves with you, not against you.</div>
+            <div class="caption-title" data-en="Built Different" data-es="Construido Diferente">Built Different</div>
+            <div class="caption-text" data-en="Performance that moves with you, not against you." data-es="Rendimiento que se mueve contigo, no contra ti.">Performance that moves with you, not against you.</div>
           </div>
-          <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray);">
+          <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray);" data-en="Studio Movement" data-es="Movimiento de Estudio">
             Studio Movement
           </div>
         </div>
@@ -1776,6 +1776,11 @@
           } catch (error) {
             console.error('Failed to load color variants:', error);
           }
+        }
+        
+        // Apply initial language preference after product loads
+        if (typeof window.applyInitialLanguage === 'function') {
+          await window.applyInitialLanguage();
         }
         
       } catch (error) {
@@ -2682,36 +2687,26 @@
       currentLang = lang;
       localStorage.setItem('kycek_language', lang);
       
+      console.log('Translating page to:', lang);
+      
       // Update language button
       const langText = document.getElementById('langText');
       if (langText) {
         langText.textContent = lang === 'en' ? 'ES' : 'EN';
       }
       
-      // Translate elements with data-en and data-es attributes
+      // Translate ALL elements with data-en and data-es attributes
       document.querySelectorAll('[data-en][data-es]').forEach(el => {
-        el.textContent = el.dataset[lang];
-      });
-      
-      // Translate common UI text
-      document.querySelectorAll('.caption-title, .caption-text, .details-list span, .related-header h2, .nav a, .btn-cart, .shipping-item span').forEach(el => {
-        const text = el.textContent.trim();
-        if (translations[lang][text]) {
-          el.textContent = translations[lang][text];
+        if (el.dataset[lang]) {
+          el.textContent = el.dataset[lang];
         }
       });
       
-      // Update specific elements by ID
-      const addToCart = document.getElementById('addToCart');
-      if (addToCart && addToCart.textContent.includes('Add to Cart')) {
-        addToCart.textContent = translations[lang]['Add to Cart'];
-      }
-      
       // Translate dynamic Shopify content (product title and description)
+      const titleEl = document.querySelector('.product-title');
+      const subtitleEl = document.querySelector('.product-subtitle');
+      
       if (lang === 'es') {
-        const titleEl = document.querySelector('.product-title');
-        const subtitleEl = document.querySelector('.product-subtitle');
-        
         if (titleEl && titleEl.dataset.originalEn) {
           if (!titleEl.dataset.es) {
             titleEl.dataset.es = await translateText(titleEl.dataset.originalEn, 'es');
@@ -2727,9 +2722,6 @@
         }
       } else {
         // Restore English
-        const titleEl = document.querySelector('.product-title');
-        const subtitleEl = document.querySelector('.product-subtitle');
-        
         if (titleEl && titleEl.dataset.originalEn) {
           titleEl.textContent = titleEl.dataset.originalEn;
         }
@@ -2743,15 +2735,23 @@
     // Language toggle button
     const langToggle = document.getElementById('langToggle');
     if (langToggle) {
-      langToggle.addEventListener('click', () => {
+      langToggle.addEventListener('click', async () => {
         const newLang = currentLang === 'en' ? 'es' : 'en';
-        translatePage(newLang);
+        await translatePage(newLang);
       });
     }
     
-    // Apply saved language on page load
-    if (currentLang === 'es') {
-      translatePage('es');
+    // Apply saved language after product loads
+    window.applyInitialLanguage = async function() {
+      if (currentLang === 'es') {
+        await translatePage('es');
+      }
+    };
+    
+    // Set initial language button state
+    const langText = document.getElementById('langText');
+    if (langText) {
+      langText.textContent = currentLang === 'en' ? 'ES' : 'EN';
     }
   </script>
 
