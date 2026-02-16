@@ -40,7 +40,7 @@
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
-      z-index: 9999;
+      z-index: 10001;
       mix-blend-mode: difference;
       transition: transform 0.2s ease;
     }
@@ -938,6 +938,23 @@
       margin-top: 8px;
     }
     
+    .cart-item-remove {
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: none;
+      margin-top: 8px;
+      padding: 0;
+      transition: color 0.3s ease;
+    }
+    
+    .cart-item-remove:hover {
+      color: var(--red);
+    }
+    
     .cart-drawer-footer {
       padding: 30px;
       border-top: 1px solid var(--dark-border);
@@ -1694,6 +1711,41 @@
       await refreshCart();
     }
     
+    window.removeFromCart = async function(lineId) {
+      const cartId = localStorage.getItem('shopify_cart_id');
+      if (!cartId) return;
+      
+      try {
+        const query = `
+          mutation {
+            cartLinesRemove(
+              cartId: "${cartId}"
+              lineIds: ["${lineId}"]
+            ) {
+              cart {
+                id
+              }
+              userErrors {
+                field
+                message
+              }
+            }
+          }
+        `;
+        
+        const data = await shopifyFetch(query);
+        
+        if (data.cartLinesRemove.userErrors.length > 0) {
+          throw new Error(data.cartLinesRemove.userErrors[0].message);
+        }
+        
+        await refreshCart();
+      } catch (error) {
+        console.error('Remove from cart error:', error);
+        alert('Error removing item: ' + error.message);
+      }
+    }
+    
     async function refreshCart() {
       const cartId = localStorage.getItem('shopify_cart_id');
       console.log('Cart ID:', cartId);
@@ -1748,6 +1800,10 @@
                 amount
               }
             }
+            discountCodes {
+              code
+              applicable
+            }
           }
         }`;
         
@@ -1779,7 +1835,7 @@
           const image = node.merchandise.image?.url || '';
           
           itemsHTML += `
-            <div class="cart-item">
+            <div class="cart-item" data-line-id="${node.id}">
               <div class="cart-item-image">
                 ${image ? `<img src="${image}" alt="${product}">` : ''}
               </div>
@@ -1788,6 +1844,7 @@
                 ${variant ? `<div class="cart-item-variant">${variant}</div>` : ''}
                 <div class="cart-item-variant">Qty: ${node.quantity}</div>
                 <div class="cart-item-price">$${(price * node.quantity).toFixed(2)}</div>
+                <button class="cart-item-remove" onclick="removeFromCart('${node.id}')">Remove</button>
               </div>
             </div>
           `;
@@ -1804,7 +1861,9 @@
         document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
         
         if (discount > 0) {
+          const discountCode = cart.discountCodes?.find(d => d.applicable)?.code || 'Discount';
           document.getElementById('cartDiscount').style.display = 'flex';
+          document.getElementById('cartDiscountLabel').textContent = discountCode;
           document.getElementById('cartDiscountAmount').textContent = `-$${discount.toFixed(2)}`;
         } else {
           document.getElementById('cartDiscount').style.display = 'none';
