@@ -386,6 +386,60 @@
       color: var(--black);
       opacity: 1;
     }
+    
+    .bundle-sizes {
+      padding-top: 20px;
+      margin-top: 20px;
+      border-top: 1px solid rgba(230, 57, 70, 0.3);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .bundle-size-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .bundle-size-group label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+      margin-bottom: 8px;
+    }
+    
+    .bundle-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--black);
+      border: 1px solid var(--gray);
+      color: var(--white);
+      font-family: inherit;
+      font-size: 13px;
+      cursor: none;
+      transition: border-color 0.3s ease;
+    }
+    
+    .bundle-select:focus {
+      outline: none;
+      border-color: var(--red);
+    }
+    
+    .bundle-offer.expanded .btn-bundle {
+      width: 100%;
+      background: var(--white);
+      color: var(--black);
+      opacity: 1;
+    }
+    
+    @media (max-width: 768px) {
+      .bundle-sizes {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
 
     /* Add to Cart */
     .actions {
@@ -897,7 +951,29 @@
             <span class="bundle-original">$146</span>
             <span class="bundle-price">$116.80</span>
           </div>
-          <button class="btn-bundle" id="addBundle">Add</button>
+          <button class="btn-bundle" id="addBundle">SELECT SIZES</button>
+        </div>
+        <div class="bundle-sizes" id="bundleSizes" style="display: none;">
+          <div class="bundle-size-group">
+            <label>Tee Size</label>
+            <select id="bundleTeeSize" class="bundle-select">
+              <option value="">Select</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </select>
+          </div>
+          <div class="bundle-size-group">
+            <label>Short Size</label>
+            <select id="bundleShortSize" class="bundle-select">
+              <option value="">Select</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -1137,6 +1213,117 @@
       }, 2000);
     });
     
+    // Bundle expansion
+    const bundleOffer = document.getElementById('bundleOffer');
+    const addBundle = document.getElementById('addBundle');
+    const bundleSizes = document.getElementById('bundleSizes');
+    const bundleTeeSize = document.getElementById('bundleTeeSize');
+    const bundleShortSize = document.getElementById('bundleShortSize');
+    
+    let bundleExpanded = false;
+    
+    addBundle.addEventListener('click', async () => {
+      if (!bundleExpanded) {
+        // Expand and show size selectors
+        bundleExpanded = true;
+        bundleSizes.style.display = 'grid';
+        bundleOffer.classList.add('expanded');
+        addBundle.textContent = 'ADD';
+      } else {
+        // Add to cart
+        const teeSize = bundleTeeSize.value;
+        const shortSize = bundleShortSize.value;
+        
+        if (!teeSize || !shortSize) {
+          alert('Please select both sizes');
+          return;
+        }
+        
+        // Get current product to determine color
+        const currentColor = currentProduct?.productType || 'White';
+        
+        try {
+          addBundle.textContent = 'ADDING...';
+          addBundle.disabled = true;
+          
+          // Find tee variant
+          const teeProducts = await getProductsByTitle('Essential Tee');
+          const teeProduct = teeProducts.find(p => p.productType === currentColor);
+          const teeVariant = teeProduct?.variants?.edges.find(v => 
+            v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === teeSize)
+          )?.node;
+          
+          // Find short variant
+          const shortProducts = await getProductsByTitle('Training Short');
+          const shortProduct = shortProducts.find(p => p.productType === currentColor);
+          const shortVariant = shortProduct?.variants?.edges.find(v => 
+            v.node.selectedOptions.some(o => o.name.toLowerCase() === 'size' && o.value === shortSize)
+          )?.node;
+          
+          if (!teeVariant || !shortVariant) {
+            throw new Error('Could not find product variants');
+          }
+          
+          // Add both to cart
+          let cartId = localStorage.getItem('shopify_cart_id');
+          if (!cartId) {
+            const cart = await createCart();
+            cartId = cart.id;
+            localStorage.setItem('shopify_cart_id', cartId);
+          }
+          
+          // Add both items at once
+          const query = `
+            mutation {
+              cartLinesAdd(
+                cartId: "${cartId}"
+                lines: [
+                  { merchandiseId: "${teeVariant.id}", quantity: 1 }
+                  { merchandiseId: "${shortVariant.id}", quantity: 1 }
+                ]
+              ) {
+                cart {
+                  id
+                  checkoutUrl
+                }
+                userErrors {
+                  field
+                  message
+                }
+              }
+            }
+          `;
+          
+          const data = await shopifyFetch(query);
+          
+          if (data.cartLinesAdd.userErrors.length > 0) {
+            throw new Error(data.cartLinesAdd.userErrors[0].message);
+          }
+          
+          addBundle.textContent = 'ADDED ✓';
+          
+          setTimeout(() => {
+            if (confirm('Bundle added! Go to checkout?')) {
+              window.open(data.cartLinesAdd.cart.checkoutUrl, '_blank');
+            }
+            // Reset
+            bundleExpanded = false;
+            bundleSizes.style.display = 'none';
+            bundleOffer.classList.remove('expanded');
+            addBundle.textContent = 'SELECT SIZES';
+            addBundle.disabled = false;
+            bundleTeeSize.value = '';
+            bundleShortSize.value = '';
+          }, 1500);
+        } catch (error) {
+          console.error('Bundle add error:', error);
+          alert('Error adding bundle: ' + error.message);
+          addBundle.textContent = 'ADD';
+          addBundle.disabled = false;
+        }
+      }
+    });
+    
     // Keyboard navigation
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft') goToSlide(currentIndex - 1);
@@ -1155,6 +1342,96 @@
         addBundle.style.color = '';
       }, 2000);
     });
+  </script>
+
+  <!-- Shopify Product Loader -->
+  <script>
+    let currentProduct = null;
+    const productHandle = new URLSearchParams(window.location.search).get('handle');
+    
+    if (productHandle) {
+      loadProductFromShopify(productHandle);
+    }
+    
+    async function loadProductFromShopify(handle) {
+      try {
+        const product = await getProductByHandle(handle);
+        currentProduct = product;
+        
+        // Update page with product data
+        document.querySelector('.product-title').textContent = product.title;
+        document.title = `${product.title} | Kýček Studios`;
+        
+        const subtitle = product.description ? product.description.substring(0, 100) : 'Premium performance wear';
+        document.querySelector('.product-subtitle').textContent = subtitle;
+        
+        const price = parseFloat(product.priceRange.minVariantPrice.amount);
+        document.querySelector('.product-price').innerHTML = `<span class="currency">$</span>${price.toFixed(0)}`;
+        
+        // Update images
+        const images = product.images.edges.map(e => e.node.url);
+        const gallerySlides = document.getElementById('gallerySlides');
+        gallerySlides.innerHTML = '';
+        images.forEach(img => {
+          const slide = document.createElement('div');
+          slide.className = 'gallery-slide';
+          slide.innerHTML = `<img src="${img}" alt="${product.title}">`;
+          gallerySlides.appendChild(slide);
+        });
+        
+        // Update gallery nav
+        const galleryNav = document.querySelector('.gallery-nav');
+        galleryNav.innerHTML = '';
+        images.forEach((_, i) => {
+          const dot = document.createElement('div');
+          dot.className = `gallery-dot ${i === 0 ? 'active' : ''}`;
+          dot.dataset.index = i;
+          dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+          galleryNav.appendChild(dot);
+        });
+        
+        totalSlides = images.length;
+        currentIndex = 0;
+        document.getElementById('totalSlides').textContent = String(totalSlides).padStart(2, '0');
+        document.getElementById('currentSlide').textContent = '01';
+        
+        // Update sizes
+        const sizeOptions = document.querySelector('.size-options');
+        const sizes = new Set();
+        product.variants.edges.forEach(({ node }) => {
+          node.selectedOptions.forEach(opt => {
+            if (opt.name.toLowerCase() === 'size') sizes.add(opt.value);
+          });
+        });
+        
+        if (sizes.size > 0) {
+          sizeOptions.innerHTML = '';
+          Array.from(sizes).forEach((size, i) => {
+            const variant = product.variants.edges.find(v => 
+              v.node.selectedOptions.some(o => o.value === size)
+            )?.node;
+            const available = variant?.availableForSale;
+            
+            const btn = document.createElement('button');
+            btn.className = `size-btn ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}`;
+            btn.dataset.size = size;
+            btn.textContent = size;
+            if (!available) {
+              btn.disabled = true;
+            } else {
+              btn.addEventListener('click', function() {
+                document.querySelectorAll('.size-btn:not(.soldout)').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+              });
+            }
+            sizeOptions.appendChild(btn);
+          });
+        }
+        
+      } catch (error) {
+        console.error('Failed to load product:', error);
+      }
+    }
   </script>
 
 </body>
