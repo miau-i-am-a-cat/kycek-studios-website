@@ -1170,15 +1170,16 @@
 
   <!-- Shopify Integration -->
   <script>
-    let currentProductHandle = new URLSearchParams(window.location.search).get('handle');
+    const urlParams = new URLSearchParams(window.location.search);
+    const productHandle = urlParams.get('handle');
     
-    if (currentProductHandle) {
-      loadProductFromShopify(currentProductHandle);
+    if (productHandle) {
+      loadProductFromShopify();
     }
     
-    async function loadProductFromShopify(handle) {
+    async function loadProductFromShopify() {
       try {
-        const product = await getProductByHandle(handle);
+        const product = await getProductByHandle(productHandle);
         
         // Update product title
         document.querySelector('.product-title').textContent = product.title;
@@ -1220,10 +1221,7 @@
         document.getElementById('currentSlide').textContent = '01';
         
         // Reset gallery position
-        const gallerySlidesEl = document.getElementById('gallerySlides');
-        if (gallerySlidesEl) {
-          gallerySlidesEl.style.transform = 'translateX(0)';
-        }
+        document.getElementById('gallerySlides').style.transform = 'translateX(0)';
         
         // Update size options
         const sizeOptions = document.querySelector('.size-options');
@@ -1280,15 +1278,9 @@
               swatch.dataset.handle = relatedProduct.handle;
               
               if (!isCurrentColor) {
-                // Other color - load new product without page reload
-                swatch.addEventListener('click', async function() {
-                  // Update URL without reload
-                  const newUrl = `/product-page.html?handle=${relatedProduct.handle}`;
-                  window.history.pushState({handle: relatedProduct.handle}, '', newUrl);
-                  
-                  // Load new product data
-                  currentProductHandle = relatedProduct.handle;
-                  await loadProductFromShopify(relatedProduct.handle);
+                // Other color - always navigable (even if sold out)
+                swatch.addEventListener('click', function() {
+                  window.location.href = `/product-page.html?handle=${relatedProduct.handle}`;
                 });
               }
               
@@ -1323,16 +1315,3 @@
       }
     }
   </script>
-
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', async function(event) {
-      if (event.state && event.state.handle) {
-        currentProductHandle = event.state.handle;
-        await loadProductFromShopify(event.state.handle);
-      }
-    });
-    
-    // Set initial state
-    if (currentProductHandle) {
-      window.history.replaceState({handle: currentProductHandle}, '', window.location.href);
-    }
