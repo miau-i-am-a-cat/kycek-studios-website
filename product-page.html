@@ -1176,8 +1176,8 @@
       
       <div class="option-group">
         <div class="option-label">
-          Size
-          <a href="#" style="color: var(--light-gray); font-size: 11px; text-decoration: underline;">Size Guide</a>
+          <span data-en="Size" data-es="Talla">Size</span>
+          <a href="#" style="color: var(--light-gray); font-size: 11px; text-decoration: underline;" data-en="Size Guide" data-es="Guía de Tallas">Size Guide</a>
         </div>
         <div class="size-options">
           <button class="size-btn" data-size="S">S</button>
@@ -1190,17 +1190,17 @@
       
       <!-- Bundle Offer -->
       <div class="bundle-offer" id="bundleOffer">
-        <div class="bundle-tag">SAVE 25%</div>
+        <div class="bundle-tag" data-en="SAVE 25%" data-es="AHORRA 25%">SAVE 25%</div>
         <div class="bundle-content">
           <div class="bundle-text">
-            <strong>Complete the Set</strong>
+            <strong data-en="Complete the Set" data-es="Completa el Conjunto">Complete the Set</strong>
             <span id="bundleColorLabel">White</span>
           </div>
           <div class="bundle-pricing">
             <span class="bundle-original">$146</span>
             <span class="bundle-price">$109.50</span>
           </div>
-          <button class="btn-bundle" id="addBundle">SELECT SIZES</button>
+          <button class="btn-bundle" id="addBundle" data-en="SELECT SIZES" data-es="SELECCIONAR TALLAS">SELECT SIZES</button>
         </div>
         <div class="bundle-sizes" id="bundleSizes" style="display: none;">
           <div class="bundle-size-group">
@@ -1240,13 +1240,13 @@
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
-          Free shipping over $100
+          <span data-en="Free shipping over $100" data-es="Envío gratis en pedidos superiores a $100">Free shipping over $100</span>
         </div>
         <div class="shipping-item">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
             <path d="M4 4h16v16H4V4z"/><path d="M9 9h6v6H9V9z"/>
           </svg>
-          30-day returns
+          <span data-en="30-day returns" data-es="Devoluciones en 30 días">30-day returns</span>
         </div>
       </div>
     </div>
@@ -1255,12 +1255,12 @@
   <!-- ==================== DETAILS ==================== -->
   <section class="details">
     <div class="details-content">
-      <h2>About</h2>
-      <h3>Built for movement. Designed with intention.</h3>
-      <p>
+      <h2 data-en="About" data-es="Acerca de">About</h2>
+      <h3 data-en="Built for movement. Designed with intention." data-es="Construido para el movimiento. Diseñado con intención.">Built for movement. Designed with intention.</h3>
+      <p data-en="The Essential Tee is where performance meets philosophy. Premium Pima cotton with 4-way stretch moves with your body, not against it. The signature crow mark sits between the shoulder blades—visible only to those behind you." data-es="La Essential Tee es donde el rendimiento se encuentra con la filosofía. Algodón Pima premium con elasticidad en 4 direcciones que se mueve con tu cuerpo, no en su contra. La marca del cuervo se encuentra entre los omóplatos, visible solo para quienes están detrás de ti.">
         The Essential Tee is where performance meets philosophy. Premium Pima cotton with 4-way stretch moves with your body, not against it. The signature crow mark sits between the shoulder blades—visible only to those behind you.
       </p>
-      <p>
+      <p data-en="Minimal branding. Maximum quality. Made by Humans, on Earth." data-es="Marca minimalista. Máxima calidad. Hecho por Humanos, en la Tierra.">
         Minimal branding. Maximum quality. Made by Humans, on Earth.
       </p>
       
@@ -1673,7 +1673,12 @@
         }
         
         const subtitle = product.description ? product.description.substring(0, 100) : 'Premium performance wear';
-        document.querySelector('.product-subtitle').textContent = subtitle;
+        const subtitleEl = document.querySelector('.product-subtitle');
+        subtitleEl.textContent = subtitle;
+        subtitleEl.dataset.originalEn = subtitle; // Store for translation
+        
+        const titleEl = document.querySelector('.product-title');
+        titleEl.dataset.originalEn = product.title; // Store for translation
         
         const price = parseFloat(product.priceRange.minVariantPrice.amount);
         document.querySelector('.product-price').innerHTML = `<span class="currency">$</span>${price.toFixed(0)}`;
@@ -2659,7 +2664,21 @@
     
     let currentLang = localStorage.getItem('kycek_language') || 'en';
     
-    function translatePage(lang) {
+    async function translateText(text, targetLang) {
+      if (!text || targetLang === 'en') return text;
+      
+      try {
+        // Use MyMemory Translation API (free, no key required)
+        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${targetLang}`);
+        const data = await response.json();
+        return data.responseData.translatedText || text;
+      } catch (error) {
+        console.error('Translation error:', error);
+        return text;
+      }
+    }
+    
+    async function translatePage(lang) {
       currentLang = lang;
       localStorage.setItem('kycek_language', lang);
       
@@ -2686,6 +2705,38 @@
       const addToCart = document.getElementById('addToCart');
       if (addToCart && addToCart.textContent.includes('Add to Cart')) {
         addToCart.textContent = translations[lang]['Add to Cart'];
+      }
+      
+      // Translate dynamic Shopify content (product title and description)
+      if (lang === 'es') {
+        const titleEl = document.querySelector('.product-title');
+        const subtitleEl = document.querySelector('.product-subtitle');
+        
+        if (titleEl && titleEl.dataset.originalEn) {
+          if (!titleEl.dataset.es) {
+            titleEl.dataset.es = await translateText(titleEl.dataset.originalEn, 'es');
+          }
+          titleEl.textContent = titleEl.dataset.es;
+        }
+        
+        if (subtitleEl && subtitleEl.dataset.originalEn) {
+          if (!subtitleEl.dataset.es) {
+            subtitleEl.dataset.es = await translateText(subtitleEl.dataset.originalEn, 'es');
+          }
+          subtitleEl.textContent = subtitleEl.dataset.es;
+        }
+      } else {
+        // Restore English
+        const titleEl = document.querySelector('.product-title');
+        const subtitleEl = document.querySelector('.product-subtitle');
+        
+        if (titleEl && titleEl.dataset.originalEn) {
+          titleEl.textContent = titleEl.dataset.originalEn;
+        }
+        
+        if (subtitleEl && subtitleEl.dataset.originalEn) {
+          subtitleEl.textContent = subtitleEl.dataset.originalEn;
+        }
       }
     }
     
