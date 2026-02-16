@@ -2,6 +2,7 @@
 const SHOPIFY_CONFIG = {
   domain: 'kycek.myshopify.com',
   storefrontAccessToken: '400c51542e9a076aa2b13cee033ca4f9',
+  customerAccountAccessToken: '56cbb062-2b7a-4bee-b560-8c32f8608d3c',
   apiVersion: '2024-01'
 };
 
