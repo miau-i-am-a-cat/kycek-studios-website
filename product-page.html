@@ -120,6 +120,8 @@
       -webkit-user-select: none;
       user-select: none;
       -webkit-touch-callout: none;
+      touch-action: pan-y;
+      pointer-events: auto;
     }
     
     .gallery-slide {
@@ -1565,8 +1567,9 @@
     document.addEventListener('mousedown', () => cursor.classList.add('click'));
     document.addEventListener('mouseup', () => cursor.classList.remove('click'));
     
-    // ===== NEW CAROUSEL - FRESH START =====
+    // ===== CAROUSEL - SAFARI FIX =====
     const galleryContainer = document.getElementById('gallerySlides');
+    const galleryParent = document.querySelector('.gallery'); // Parent never moves
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     
@@ -1584,6 +1587,12 @@
       
       // Move slides
       galleryContainer.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+      
+      // Force Safari to re-recognize element
+      galleryContainer.style.pointerEvents = 'none';
+      setTimeout(() => {
+        galleryContainer.style.pointerEvents = 'auto';
+      }, 0);
       
       // Update dots
       document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
@@ -1610,13 +1619,13 @@
       }
     };
     
-    // Touch/Mouse swipe - SIMPLE
-    galleryContainer.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].pageX;
+    // Touch swipe - Listen on parent (Safari fix)
+    galleryParent.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
     }, { passive: true });
     
-    galleryContainer.addEventListener('touchend', (e) => {
-      const endX = e.changedTouches[0].pageX;
+    galleryParent.addEventListener('touchend', (e) => {
+      const endX = e.changedTouches[0].clientX;
       const diff = startX - endX;
       
       if (Math.abs(diff) > 50) {
