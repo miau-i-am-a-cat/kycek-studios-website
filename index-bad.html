@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kýček Studios — Made by Humans, on Earth</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="/config.js"></script>
+  
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --dark: #111;
+      --white: #fff;
+      --red: #E63946;
+      --gray: #666;
+      --light-gray: #999;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    
+    a, button { color: inherit; text-decoration: none; cursor: none; }
+    
+    /* Cursor */
+    .cursor {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.2s ease;
+    }
+    .cursor.click { transform: scale(0.8); }
+    
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      mix-blend-mode: difference;
+    }
+    
+    .logo {
+      height: 24px;
+      filter: invert(1);
+    }
+    
+    .nav {
+      display: flex;
+      gap: 40px;
+    }
+    
+    .nav a {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    
+    /* Hero */
+    .hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+    }
+    
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, 
+        rgba(10,10,10,0.3) 0%,
+        rgba(10,10,10,0) 30%,
+        rgba(10,10,10,0) 70%,
+        rgba(10,10,10,0.8) 100%
+      );
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    
+    .hero-tagline {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0.6;
+    }
+    
+    .hero-title {
+      font-size: clamp(80px, 15vw, 180px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 0.85;
+      margin-bottom: 40px;
+    }
+    
+    .hero-title .line1 {
+      display: block;
+    }
+    
+    .hero-title .line2 {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      margin-top: 20px;
+      opacity: 0.5;
+    }
+    
+    .hero-scroll {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: white;
+      animation: scroll 2s ease-in-out infinite;
+    }
+    
+    @keyframes scroll {
+      0%, 100% { opacity: 0; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(10px); }
+    }
+    
+    /* Products Section */
+    .products {
+      padding: 150px 0;
+    }
+    
+    .products-header {
+      padding: 0 80px;
+      margin-bottom: 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: end;
+    }
+    
+    .products-title {
+      font-size: clamp(48px, 8vw, 100px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.9;
+      text-transform: uppercase;
+    }
+    
+    .products-intro {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--light-gray);
+      max-width: 400px;
+    }
+    
+    .product-feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 90vh;
+    }
+    
+    .product-feature.reverse {
+      direction: rtl;
+    }
+    
+    .product-feature.reverse > * {
+      direction: ltr;
+    }
+    
+    .product-image {
+      position: relative;
+      overflow: hidden;
+      background: var(--dark);
+    }
+    
+    .product-image .number {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      font-size: 80px;
+      font-weight: 900;
+      color: var(--dark);
+      -webkit-text-stroke: 1px var(--gray);
+      z-index: 1;
+    }
+    
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .product-feature:hover .product-image img {
+      transform: scale(1.05);
+    }
+    
+    .product-content {
+      padding: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .product-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+    
+    .product-name {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      margin-bottom: 24px;
+      line-height: 1.1;
+    }
+    
+    .product-desc {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--light-gray);
+      margin-bottom: 32px;
+    }
+    
+    .product-price {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+    
+    .product-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border: 1px solid var(--gray);
+      transition: all 0.3s;
+    }
+    
+    .product-link svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .product-link:hover {
+      border-color: var(--white);
+    }
+    
+    .product-link:hover svg {
+      transform: translateX(4px);
+    }
+    
+    .sold-out-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      background: var(--gray);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    
+    @media (max-width: 768px) {
+      .product-feature {
+        grid-template-columns: 1fr;
+      }
+      .product-content {
+        padding: 40px;
+      }
+      .products-header {
+        grid-template-columns: 1fr;
+        padding: 0 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <img src="/assets/images/logo_transparent.png" alt="Kýček Studios" class="logo">
+    <nav class="nav">
+      <a href="#products">Collection</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="/assets/images/hero-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-tagline">Est. Dominican Republic</div>
+      <h1 class="hero-title">
+        <div class="line1">KÝČEK STUDIOS</div>
+        <div class="line2">Performance wear for those who move with purpose</div>
+      </h1>
+    </div>
+    <div class="hero-scroll">
+      <span class="scroll-line"></span>
+      Scroll
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="products" id="products">
+    <div class="products-header">
+      <h2 class="products-title">The<br>Collection</h2>
+      <p class="products-intro">
+        Minimal branding. Maximum performance. Each piece designed for those who move through the world with intention.
+      </p>
+    </div>
+    
+    <div id="products-container">
+      <div style="text-align: center; padding: 100px 20px; color: #666;">
+        Loading products...
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Custom cursor
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.addEventListener('mousedown', () => cursor.classList.add('click'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+    
+    // Load products from Shopify
+    async function loadProducts() {
+      try {
+        const products = await getProducts(10);
+        const container = document.getElementById('products-container');
+        container.innerHTML = '';
+        
+        // Filter out products we don't want to display prominently
+        const displayProducts = products.filter(p => 
+          p.title.toLowerCase().includes('tee') || 
+          p.title.toLowerCase().includes('short') ||
+          p.title.toLowerCase().includes('limited')
+        );
+        
+        displayProducts.forEach((product, index) => {
+          const price = parseFloat(product.priceRange.minVariantPrice.amount);
+          const image = product.images.edges[0]?.node.url || '';
+          const isAvailable = product.variants.edges.some(v => v.node.availableForSale);
+          const isReverse = index % 2 === 1;
+          
+          // Determine product label
+          let label = 'Essential';
+          if (product.title.toLowerCase().includes('limited')) label = 'Limited Edition';
+          else if (product.title.toLowerCase().includes('short')) label = 'Performance';
+          
+          const feature = document.createElement('div');
+          feature.className = `product-feature ${isReverse ? 'reverse' : ''}`;
+          
+          feature.innerHTML = `
+            <div class="product-image">
+              <span class="number">${String(index + 1).padStart(2, '0')}</span>
+              <img src="${image}" alt="${product.title}">
+            </div>
+            <div class="product-content">
+              ${!isAvailable ? '<div class="sold-out-badge">Sold Out</div>' : ''}
+              <span class="product-label">${label}</span>
+              <h3 class="product-name">${product.title}</h3>
+              <p class="product-desc">
+                ${product.description || 'Premium performance wear. Made by Humans, on Earth.'}
+              </p>
+              <div class="product-price">$${price.toFixed(0)}</div>
+              <a href="/product-page.html?handle=${product.handle}" class="product-link">
+                View Product
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          `;
+          
+          container.appendChild(feature);
+        });
+      } catch (error) {
+        console.error('Failed to load products:', error);
+        document.getElementById('products-container').innerHTML = 
+          '<div style="text-align: center; padding: 100px 20px; color: #666;">Failed to load products.</div>';
+      }
+    }
+    
+    // Load on page load
+    document.addEventListener('DOMContentLoaded', loadProducts);
+  </script>
+</body>
+</html>
