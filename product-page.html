@@ -386,68 +386,6 @@
       color: var(--black);
       opacity: 1;
     }
-    
-    .bundle-offer.expanded {
-      padding: 30px 20px;
-    }
-    
-    .bundle-offer.expanded .bundle-content {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    
-    .bundle-offer.expanded .btn-bundle {
-      display: none;
-    }
-    
-    .bundle-sizes {
-      margin-top: 20px;
-      width: 100%;
-    }
-    
-    .bundle-size-row {
-      margin-bottom: 12px;
-    }
-    
-    .bundle-size-row label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      color: var(--light-gray);
-    }
-    
-    .bundle-size-select {
-      width: 100%;
-      padding: 12px 16px;
-      background: var(--black);
-      border: 1px solid var(--gray);
-      color: var(--white);
-      font-family: inherit;
-      font-size: 14px;
-      cursor: none;
-    }
-    
-    .btn-bundle-confirm {
-      width: 100%;
-      padding: 14px;
-      background: var(--white);
-      border: none;
-      color: var(--black);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-top: 8px;
-      cursor: none;
-      transition: opacity 0.3s ease;
-    }
-    
-    .btn-bundle-confirm:hover {
-      opacity: 0.9;
-    }
 
     /* Add to Cart */
     .actions {
@@ -960,31 +898,30 @@
             <span class="bundle-price">$116.80</span>
           </div>
           <button class="btn-bundle" id="addBundle">Add</button>
-          
-          <!-- Size selectors (hidden by default) -->
-          <div class="bundle-sizes" id="bundleSizes" style="display: none;">
-            <div class="bundle-size-row">
-              <label>Tee Size</label>
-              <select class="bundle-size-select" id="bundleTeeSize">
-                <option value="">Select</option>
-                <option value="S">S</option>
-                <option value="M" selected>M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-              </select>
-            </div>
-            <div class="bundle-size-row">
-              <label>Short Size</label>
-              <select class="bundle-size-select" id="bundleShortSize">
-                <option value="">Select</option>
-                <option value="S">S</option>
-                <option value="M" selected>M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-              </select>
-            </div>
-            <button class="btn-bundle-confirm" id="confirmBundle">Add to Cart</button>
+        </div>
+        <!-- Size selectors (hidden by default) -->
+        <div class="bundle-sizes" id="bundleSizes" style="display: none; margin-top: 20px;">
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; color: #999;">Tee Size</label>
+            <select id="bundleTeeSize" style="width: 100%; padding: 12px 16px; background: #0a0a0a; border: 1px solid #666; color: #fff; font-family: inherit; font-size: 14px;">
+              <option value="">Select Size</option>
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </select>
           </div>
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; color: #999;">Short Size</label>
+            <select id="bundleShortSize" style="width: 100%; padding: 12px 16px; background: #0a0a0a; border: 1px solid #666; color: #fff; font-family: inherit; font-size: 14px;">
+              <option value="">Select Size</option>
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </select>
+          </div>
+          <button id="confirmBundle" style="width: 100%; padding: 14px; background: #fff; border: none; color: #0a0a0a; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 8px;">Add to Cart</button>
         </div>
       </div>
 
@@ -1225,14 +1162,13 @@
     });
     
     // Bundle expand/collapse
-    const bundleOffer = document.getElementById('bundleOffer');
     const addBundle = document.getElementById('addBundle');
     const bundleSizes = document.getElementById('bundleSizes');
     const confirmBundle = document.getElementById('confirmBundle');
     
     addBundle.addEventListener('click', () => {
-      bundleOffer.classList.add('expanded');
       bundleSizes.style.display = 'block';
+      addBundle.style.display = 'none';
     });
     
     confirmBundle.addEventListener('click', () => {
@@ -1245,13 +1181,10 @@
       }
       
       confirmBundle.textContent = 'Added ✓';
-      confirmBundle.style.opacity = '0.7';
-      
       setTimeout(() => {
-        bundleOffer.classList.remove('expanded');
         bundleSizes.style.display = 'none';
+        addBundle.style.display = '';
         confirmBundle.textContent = 'Add to Cart';
-        confirmBundle.style.opacity = '';
       }, 2000);
     });
     
