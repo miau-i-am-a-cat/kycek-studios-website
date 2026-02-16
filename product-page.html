@@ -113,7 +113,8 @@
     .gallery-slides {
       display: flex;
       height: 100%;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.4s ease-out;
+      will-change: transform;
     }
     
     .gallery-slide {
@@ -1575,44 +1576,27 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     
-    // Get current index by reading transform value from DOM
-    function getCurrentIndex() {
-      const transform = slides.style.transform;
-      if (!transform || transform === 'none') return 0;
-      const match = transform.match(/translateX\((-?\d+(?:\.\d+)?)%\)/);
-      if (!match) return 0;
-      return Math.abs(parseInt(match[1])) / 100;
-    }
-    
-    function getTotalSlides() {
-      return document.querySelectorAll('.gallery-slide').length;
-    }
+    let currentSlide = 0;
     
     function goToSlide(index) {
-      const totalSlides = getTotalSlides();
-      if (totalSlides === 0) return;
+      const total = document.querySelectorAll('.gallery-slide').length;
+      if (total === 0) return;
       
-      // Wrap around
-      if (index < 0) index = totalSlides - 1;
-      if (index >= totalSlides) index = 0;
+      // Wrap
+      if (index < 0) index = total - 1;
+      if (index >= total) index = 0;
       
-      // Update transform
+      currentSlide = index;
       slides.style.transform = `translateX(-${index * 100}%)`;
       
       // Update dots
-      const currentDots = document.querySelectorAll('.gallery-dot');
-      currentDots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+      document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
     }
     
-    prevBtn.addEventListener('click', () => {
-      const current = getCurrentIndex();
-      goToSlide(current - 1);
-    });
-    
-    nextBtn.addEventListener('click', () => {
-      const current = getCurrentIndex();
-      goToSlide(current + 1);
-    });
+    prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+    nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
     
     // Delegate dot clicks
     document.querySelector('.gallery-nav').addEventListener('click', (e) => {
@@ -1825,29 +1809,17 @@
       
       if (Math.abs(diffX) < swipeThreshold) return;
       
-      const current = getCurrentIndex();
-      
       if (diffX > 0) {
-        // Swipe left - next
-        goToSlide(current + 1);
+        goToSlide(currentSlide + 1);
       } else {
-        // Swipe right - previous
-        goToSlide(current - 1);
+        goToSlide(currentSlide - 1);
       }
-      
-      // Reset touch state
-      touchStartX = 0;
-      touchStartY = 0;
-      touchEndX = 0;
-      touchEndY = 0;
-      isSwiping = false;
     }
     
     // Keyboard navigation
     document.addEventListener('keydown', e => {
-      const current = getCurrentIndex();
-      if (e.key === 'ArrowLeft') goToSlide(current - 1);
-      if (e.key === 'ArrowRight') goToSlide(current + 1);
+      if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+      if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
     });
   </script>
 
