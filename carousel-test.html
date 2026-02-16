@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carousel Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #0a0a0a;
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    
+    .gallery {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin: 50px auto;
+      background: #111;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+    }
+    
+    .gallery-slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.3s ease-out;
+    }
+    
+    .gallery-slide {
+      min-width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: bold;
+    }
+    
+    .gallery-slide:nth-child(1) { background: #e63946; }
+    .gallery-slide:nth-child(2) { background: #f77f00; }
+    .gallery-slide:nth-child(3) { background: #06a77d; }
+    .gallery-slide:nth-child(4) { background: #118ab2; }
+    
+    .gallery-nav {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+    }
+    
+    .gallery-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+    }
+    
+    .gallery-dot.active {
+      background: white;
+    }
+    
+    .controls {
+      text-align: center;
+      margin: 20px;
+    }
+    
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background: #e63946;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    .info {
+      text-align: center;
+      margin: 20px;
+      padding: 20px;
+      background: #222;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <h1>Carousel Test</h1>
+    <p>Swipe left/right or use buttons</p>
+    <p id="status">Ready</p>
+  </div>
+
+  <div class="gallery">
+    <div class="gallery-slides" id="slides">
+      <div class="gallery-slide">1</div>
+      <div class="gallery-slide">2</div>
+      <div class="gallery-slide">3</div>
+      <div class="gallery-slide">4</div>
+    </div>
+    
+    <div class="gallery-nav" id="nav">
+      <div class="gallery-dot active" data-index="0"></div>
+      <div class="gallery-dot" data-index="1"></div>
+      <div class="gallery-dot" data-index="2"></div>
+      <div class="gallery-dot" data-index="3"></div>
+    </div>
+  </div>
+  
+  <div class="controls">
+    <button id="prev">← Previous</button>
+    <button id="next">Next →</button>
+  </div>
+
+  <script>
+    const slides = document.getElementById('slides');
+    const nav = document.getElementById('nav');
+    const status = document.getElementById('status');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    
+    let currentIndex = 0;
+    const totalSlides = 4;
+    let touchStartX = 0;
+    
+    function updateSlide() {
+      // Wrap around
+      if (currentIndex < 0) currentIndex = totalSlides - 1;
+      if (currentIndex >= totalSlides) currentIndex = 0;
+      
+      // Move
+      slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+      
+      // Update dots
+      document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+      });
+      
+      status.textContent = `Slide ${currentIndex + 1} of ${totalSlides}`;
+    }
+    
+    // Buttons
+    prevBtn.onclick = () => {
+      currentIndex--;
+      updateSlide();
+    };
+    
+    nextBtn.onclick = () => {
+      currentIndex++;
+      updateSlide();
+    };
+    
+    // Dots
+    nav.onclick = (e) => {
+      if (e.target.classList.contains('gallery-dot')) {
+        currentIndex = parseInt(e.target.dataset.index);
+        updateSlide();
+      }
+    };
+    
+    // Touch swipe
+    slides.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      status.textContent = 'Touch started...';
+    });
+    
+    slides.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartX - touchEndX;
+      
+      status.textContent = `Swipe distance: ${Math.round(diff)}px`;
+      
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          currentIndex++;
+          status.textContent = 'Swiped left →';
+        } else {
+          currentIndex--;
+          status.textContent = 'Swiped right ←';
+        }
+        updateSlide();
+      } else {
+        setTimeout(() => {
+          status.textContent = `Slide ${currentIndex + 1} of ${totalSlides}`;
+        }, 500);
+      }
+    });
+    
+    // Initial
+    updateSlide();
+  </script>
+</body>
+</html>
