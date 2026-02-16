@@ -900,29 +900,6 @@
           </div>
           <button class="btn-bundle" id="addBundle">Add</button>
         </div>
-        <div id="bundleSizes" style="display:none;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);margin-top:16px;">
-          <div style="margin-bottom:12px;">
-            <div style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:8px;color:#999;">Tee Size</div>
-            <select id="bundleTeeSize" style="width:100%;padding:10px;background:#111;border:1px solid #666;color:#fff;font-size:14px;">
-              <option value="">Select</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-            </select>
-          </div>
-          <div style="margin-bottom:12px;">
-            <div style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:8px;color:#999;">Short Size</div>
-            <select id="bundleShortSize" style="width:100%;padding:10px;background:#111;border:1px solid #666;color:#fff;font-size:14px;">
-              <option value="">Select</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-            </select>
-          </div>
-          <button id="confirmBundle" style="width:100%;padding:12px;background:#fff;color:#000;border:none;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;">Add to Cart</button>
-        </div>
       </div>
 
       <div class="actions">
@@ -1079,10 +1056,8 @@
   </footer>
 
   <script>
-    console.log('Script started');
     // Cursor
     const cursor = document.getElementById('cursor');
-    console.log('Cursor element:', cursor);
     let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
     
     document.addEventListener('mousemove', e => {
@@ -1170,34 +1145,23 @@
       }, 2000);
     });
     
-    // Bundle
-    const addBundle = document.getElementById('addBundle');
-    const bundleSizes = document.getElementById('bundleSizes');
-    const confirmBundle = document.getElementById('confirmBundle');
-    if(addBundle){
-      addBundle.addEventListener('click',()=>{
-        bundleSizes.style.display='block';
-        addBundle.style.display='none';
-      });
-    }
-    if(confirmBundle){
-      confirmBundle.addEventListener('click',()=>{
-        const t=document.getElementById('bundleTeeSize').value;
-        const s=document.getElementById('bundleShortSize').value;
-        if(!t||!s){alert('Please select both sizes');return;}
-        confirmBundle.textContent='Added ✓';
-        setTimeout(()=>{
-          bundleSizes.style.display='none';
-          addBundle.style.display='';
-          confirmBundle.textContent='Add to Cart';
-        },2000);
-      });
-    }
-    
     // Keyboard navigation
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft') goToSlide(currentIndex - 1);
       if (e.key === 'ArrowRight') goToSlide(currentIndex + 1);
+    });
+    
+    // Bundle add to cart
+    const addBundle = document.getElementById('addBundle');
+    addBundle.addEventListener('click', () => {
+      addBundle.textContent = 'Added ✓';
+      addBundle.style.background = 'var(--white)';
+      addBundle.style.color = 'var(--black)';
+      setTimeout(() => {
+        addBundle.textContent = 'Add';
+        addBundle.style.background = '';
+        addBundle.style.color = '';
+      }, 2000);
     });
   </script>
 
