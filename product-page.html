@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product | Kýček Studios</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="/config.js"></script>
+  
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --dark: #111;
+      --dark-border: #222;
+      --white: #fff;
+      --red: #E63946;
+      --gray: #666;
+      --light-gray: #999;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: none; border: none; background: none; }
+    
+    /* Cursor */
+    .cursor {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.2s ease;
+    }
+    .cursor.click { transform: scale(0.8); }
+    
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      mix-blend-mode: difference;
+    }
+    .logo { height: 24px; filter: invert(1); }
+    .nav { display: flex; gap: 40px; }
+    .nav a {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      padding-top: 80px;
+    }
+    
+    /* Gallery */
+    .gallery {
+      position: relative;
+      background: var(--dark);
+      overflow: hidden;
+    }
+    
+    .gallery-slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .gallery-slide {
+      min-width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+    
+    .gallery-slide img {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+    
+    .gallery-nav {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+    }
+    
+    .gallery-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gray);
+      cursor: none;
+      transition: all 0.3s ease;
+    }
+    
+    .gallery-dot.active {
+      background: var(--white);
+      transform: scale(1.3);
+    }
+    
+    /* Product Info */
+    .product-info {
+      padding: 120px 60px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    
+    .product-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border: 1px solid var(--dark-border);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+    
+    .product-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: -8px;
+    }
+    
+    .product-subtitle {
+      font-size: 15px;
+      color: var(--light-gray);
+    }
+    
+    .product-price {
+      font-size: 48px;
+      font-weight: 700;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    
+    .product-price .currency {
+      font-size: 32px;
+      font-weight: 400;
+    }
+    
+    .sold-out-notice {
+      padding: 16px;
+      background: var(--dark-border);
+      border-left: 3px solid var(--red);
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .option-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .option-value {
+      color: var(--light-gray);
+    }
+    
+    .color-options,
+    .size-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .color-swatch {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--dark-border);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .color-swatch.white { background: #f5f5f5; }
+    .color-swatch.black { background: #0a0a0a; border-color: var(--gray); }
+    
+    .color-swatch.active {
+      border-color: var(--white);
+      box-shadow: 0 0 0 2px var(--black), 0 0 0 4px var(--white);
+    }
+    
+    .color-swatch.soldout {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    
+    .size-btn {
+      min-width: 60px;
+      padding: 12px 20px;
+      border: 1px solid var(--dark-border);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      transition: all 0.3s ease;
+    }
+    
+    .size-btn:hover {
+      border-color: var(--gray);
+    }
+    
+    .size-btn.active {
+      border-color: var(--white);
+      background: var(--white);
+      color: var(--black);
+    }
+    
+    .size-btn.soldout {
+      opacity: 0.3;
+      text-decoration: line-through;
+      pointer-events: none;
+    }
+    
+    .btn-cart {
+      width: 100%;
+      padding: 20px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-cart:hover:not(:disabled) {
+      background: var(--red);
+      color: var(--white);
+    }
+    
+    .btn-cart:disabled {
+      opacity: 0.5;
+      background: var(--gray);
+      color: var(--black);
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 100px 20px;
+      color: var(--gray);
+    }
+    
+    @media (max-width: 968px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .product-info {
+        padding: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="/"><img src="/assets/images/logo_transparent.png" alt="Kýček Studios" class="logo"></a>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/">Collection</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="hero-section">
+    <div class="loading">Loading product...</div>
+  </section>
+
+  <script>
+    // Custom cursor
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.addEventListener('mousedown', () => cursor.classList.add('click'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+    
+    let currentProduct = null;
+    let selectedVariant = null;
+    let currentSlide = 0;
+    
+    // Get product handle from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productHandle = urlParams.get('handle');
+    
+    if (!productHandle) {
+      document.getElementById('hero-section').innerHTML = '<div class="loading">Product not found</div>';
+    } else {
+      loadProduct();
+    }
+    
+    async function loadProduct() {
+      try {
+        currentProduct = await getProductByHandle(productHandle);
+        renderProduct();
+      } catch (error) {
+        console.error('Failed to load product:', error);
+        document.getElementById('hero-section').innerHTML = 
+          '<div class="loading">Failed to load product</div>';
+      }
+    }
+    
+    function renderProduct() {
+      if (!currentProduct) return;
+      
+      const price = parseFloat(currentProduct.priceRange.minVariantPrice.amount);
+      const images = currentProduct.images.edges.map(e => e.node.url);
+      const isAvailable = currentProduct.variants.edges.some(v => v.node.availableForSale);
+      
+      // Build gallery
+      let galleryHTML = '<div class="gallery-slides">';
+      images.forEach(img => {
+        galleryHTML += `<div class="gallery-slide"><img src="${img}" alt="${currentProduct.title}"></div>`;
+      });
+      galleryHTML += '</div>';
+      
+      if (images.length > 1) {
+        galleryHTML += '<div class="gallery-nav">';
+        images.forEach((_, i) => {
+          galleryHTML += `<div class="gallery-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`;
+        });
+        galleryHTML += '</div>';
+      }
+      
+      // Get variants grouped by options
+      const sizeOptions = new Set();
+      const colorOptions = new Set();
+      currentProduct.variants.edges.forEach(({ node }) => {
+        node.selectedOptions.forEach(opt => {
+          if (opt.name.toLowerCase() === 'size') sizeOptions.add(opt.value);
+          if (opt.name.toLowerCase() === 'color') colorOptions.add(opt.value);
+        });
+      });
+      
+      // Build product info
+      let productInfoHTML = `
+        <div class="product-info">
+          <span class="product-badge">Signature</span>
+          <h1 class="product-title">${currentProduct.title}</h1>
+          <p class="product-subtitle">${currentProduct.description || 'Premium performance wear'}</p>
+          
+          <div class="product-price">
+            <span class="currency">$</span>${price.toFixed(0)}
+          </div>
+          
+          ${!isAvailable ? '<div class="sold-out-notice">⚠ This product is currently sold out</div>' : ''}
+      `;
+      
+      // Color options
+      if (colorOptions.size > 0) {
+        productInfoHTML += `
+          <div class="option-group">
+            <div class="option-label">
+              Color
+              <span class="option-value" id="colorValue">${Array.from(colorOptions)[0]}</span>
+            </div>
+            <div class="color-options">
+        `;
+        Array.from(colorOptions).forEach((color, i) => {
+          const colorClass = color.toLowerCase();
+          const variant = currentProduct.variants.edges.find(v => 
+            v.node.selectedOptions.some(o => o.value === color)
+          )?.node;
+          const available = variant?.availableForSale;
+          productInfoHTML += `<button class="color-swatch ${colorClass} ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}" 
+            data-color="${color}" onclick="selectColor('${color}')"></button>`;
+        });
+        productInfoHTML += '</div></div>';
+      }
+      
+      // Size options
+      if (sizeOptions.size > 0) {
+        productInfoHTML += `
+          <div class="option-group">
+            <div class="option-label">
+              Size
+            </div>
+            <div class="size-options">
+        `;
+        Array.from(sizeOptions).forEach((size, i) => {
+          const variant = currentProduct.variants.edges.find(v => 
+            v.node.selectedOptions.some(o => o.value === size)
+          )?.node;
+          const available = variant?.availableForSale;
+          productInfoHTML += `<button class="size-btn ${i === 0 ? 'active' : ''} ${!available ? 'soldout' : ''}" 
+            data-size="${size}" onclick="selectSize('${size}')">${size}</button>`;
+        });
+        productInfoHTML += '</div></div>';
+      }
+      
+      productInfoHTML += `
+          <button class="btn-cart" ${!isAvailable ? 'disabled' : ''} onclick="addToCart()">
+            ${isAvailable ? 'Add to Cart' : 'Sold Out'}
+          </button>
+        </div>
+      `;
+      
+      // Render
+      document.getElementById('hero-section').innerHTML = `
+        <div class="gallery">${galleryHTML}</div>
+        ${productInfoHTML}
+      `;
+      
+      // Setup gallery navigation
+      if (images.length > 1) {
+        document.querySelectorAll('.gallery-dot').forEach(dot => {
+          dot.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            goToSlide(index);
+          });
+        });
+      }
+    }
+    
+    function goToSlide(index) {
+      currentSlide = index;
+      const slides = document.querySelector('.gallery-slides');
+      slides.style.transform = `translateX(-${index * 100}%)`;
+      
+      document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+    
+    function selectColor(color) {
+      document.querySelectorAll('.color-swatch').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.color === color);
+      });
+      document.getElementById('colorValue').textContent = color;
+    }
+    
+    function selectSize(size) {
+      document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.size === size);
+      });
+    }
+    
+    function addToCart() {
+      alert('Added to cart! (Shopify cart integration coming soon)');
+    }
+  </script>
+</body>
+</html>
