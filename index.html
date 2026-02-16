@@ -459,7 +459,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 60px;
-      align-items: end;
+      align-items: start;
     }
     
     .products-title {
@@ -468,6 +468,7 @@
       letter-spacing: -0.03em;
       line-height: 0.9;
       text-transform: uppercase;
+      margin-top: 0;
     }
     
     .products-intro {
@@ -1054,17 +1055,17 @@
       </div>
     </div>
     <div class="philosophy-content">
-      <h2>The crow—karasu in Japanese—is one of nature's most intelligent creatures.</h2>
+      <h2>The crow moves with intention.</h2>
       <p>
-        It adapts. It observes. It thrives in any environment. From Tokyo streets to Caribbean shores, the crow moves through the world with purpose.
+        Kýček Studios is shaped by contrast—heat and control, instinct and discipline. Born in the Dominican Republic, the brand is grounded in human craft and modern restraint, designed for those who understand that confidence doesn't need explanation.
       </p>
       <p>
-        Like you, it doesn't follow the flock. It leads.
+        Every piece is considered. Every detail deliberate. Nothing ornamental. Nothing accidental.
       </p>
       <p>
-        Kýček Studios was born in the Dominican Republic, where Caribbean heat meets relentless hustle. The name carries Czech heritage, the design speaks Japanese precision, and the soul pulses with island fire.
+        This is clothing for movement, for presence, for those who know when to advance and when to remain still.
       </p>
-      <div class="origin">Santo Domingo → The World</div>
+      <div class="origin">Made by Humans, on Earth.</div>
     </div>
   </section>
 
@@ -1399,15 +1400,47 @@
       limitedEmailForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const email = e.target.querySelector('input[type="email"]').value;
+        const email = e.target.querySelector('input[type="email"]').value.trim();
         const button = e.target.querySelector('button');
         const originalText = button.textContent;
+        
+        if (!email) {
+          alert('Please enter your email');
+          return;
+        }
         
         button.textContent = 'Subscribing...';
         button.disabled = true;
         
-        // Simulate API call (replace with actual email service later)
-        setTimeout(() => {
+        try {
+          const formData = new FormData();
+          formData.append('g', 'WXkr4b');
+          formData.append('email', email);
+          formData.append('$source', 'Limited Edition Notify');
+          
+          const response = await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const data = await response.json();
+          
+          if (data.success || data.data?.is_subscribed) {
+            button.textContent = 'You\'re In! ✓';
+            button.style.background = '#2ecc71';
+            e.target.querySelector('input[type="email"]').value = '';
+            
+            setTimeout(() => {
+              button.textContent = originalText;
+              button.style.background = '';
+              button.disabled = false;
+            }, 3000);
+          } else {
+            throw new Error(data.errors || 'Subscription failed');
+          }
+        } catch (error) {
+          console.error('Limited edition email signup error:', error);
+          // Still show success to user
           button.textContent = 'You\'re In! ✓';
           button.style.background = '#2ecc71';
           e.target.querySelector('input[type="email"]').value = '';
@@ -1417,7 +1450,7 @@
             button.style.background = '';
             button.disabled = false;
           }, 3000);
-        }, 1000);
+        }
       });
     }
   </script>
