@@ -429,10 +429,10 @@
     }
     
     .bundle-offer.expanded .btn-bundle {
-      width: 100%;
       background: var(--white);
       color: var(--black);
       opacity: 1;
+      padding: 8px 16px;
     }
     
     @media (max-width: 768px) {
@@ -946,7 +946,7 @@
         <div class="bundle-content">
           <div class="bundle-text">
             <strong>Complete the Set</strong>
-            <span>Essential Tee + Training Short</span>
+            <span id="bundleColorLabel">White</span>
           </div>
           <div class="bundle-pricing">
             <span class="bundle-original">$146</span>
@@ -1409,6 +1409,12 @@
         // Update page with product data
         document.querySelector('.product-title').textContent = product.title;
         document.title = `${product.title} | Kýček Studios`;
+        
+        // Update bundle color label
+        const bundleColorLabel = document.getElementById('bundleColorLabel');
+        if (bundleColorLabel && product.productType) {
+          bundleColorLabel.textContent = product.productType;
+        }
         
         const subtitle = product.description ? product.description.substring(0, 100) : 'Premium performance wear';
         document.querySelector('.product-subtitle').textContent = subtitle;
