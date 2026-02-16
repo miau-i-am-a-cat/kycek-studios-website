@@ -1449,11 +1449,11 @@
       </p>
       
       <ul class="details-list">
-        <li><span data-en="Material" data-es="Material">Material</span><span data-en="High-density, performance-engineered polyester" data-es="Poliéster de alta densidad diseñado para rendimiento">High-density, performance-engineered polyester</span></li>
-        <li><span data-en="Breathability" data-es="Transpirabilidad">Breathability</span><span data-en="Advanced moisture-wicking technology" data-es="Tecnología avanzada de absorción de humedad">Advanced moisture-wicking technology</span></li>
-        <li><span data-en="Mobility" data-es="Movilidad">Mobility</span><span data-en="4-way stretch for unrestricted movement" data-es="Elasticidad en 4 direcciones para movimiento sin restricciones">4-way stretch for unrestricted movement</span></li>
-        <li><span data-en="Construction" data-es="Construcción">Construction</span><span data-en="Lightweight yet durable design" data-es="Diseño ligero pero duradero">Lightweight yet durable design</span></li>
-        <li><span data-en="Care" data-es="Cuidado">Care</span><span data-en="Machine wash cold, tumble dry low" data-es="Lavar a máquina en frío, secar en secadora a baja temperatura">Machine wash cold, tumble dry low</span></li>
+        <li><span data-en="Material" data-es="Material">Material</span><span data-en="High-density, performance-engineered polyester" data-es="Poliéster de rendimiento">High-density, performance-engineered polyester</span></li>
+        <li><span data-en="Breathability" data-es="Transpirabilidad">Breathability</span><span data-en="Advanced moisture-wicking technology" data-es="Absorción de humedad">Advanced moisture-wicking technology</span></li>
+        <li><span data-en="Mobility" data-es="Movilidad">Mobility</span><span data-en="4-way stretch for unrestricted movement" data-es="Elasticidad 4D">4-way stretch for unrestricted movement</span></li>
+        <li><span data-en="Construction" data-es="Construcción">Construction</span><span data-en="Lightweight yet durable design" data-es="Ligero y duradero">Lightweight yet durable design</span></li>
+        <li><span data-en="Care" data-es="Cuidado">Care</span><span data-en="Machine wash cold, tumble dry low" data-es="Lavar en frío, secar bajo">Machine wash cold, tumble dry low</span></li>
       </ul>
     </div>
     
@@ -1579,6 +1579,12 @@
     let totalSlides = 4;
     
     function goToSlide(index) {
+      // Always get the current count from DOM (handles Shopify async loading)
+      const actualSlideCount = document.querySelectorAll('.gallery-slide').length;
+      if (actualSlideCount === 0) return; // Safety check
+      
+      totalSlides = actualSlideCount; // Keep variable in sync
+      
       if (index < 0) index = totalSlides - 1;
       if (index >= totalSlides) index = 0;
       currentIndex = index;
@@ -2512,13 +2518,11 @@
       const wishlist = getWishlist();
       const isInWishlist = wishlist.some(item => item.handle === currentProduct.handle);
       
-      const svg = pageWishlistBtn.querySelector('svg');
+      // Update button class to trigger CSS styling
       if (isInWishlist) {
-        svg.setAttribute('fill', 'currentColor');
-        svg.setAttribute('stroke', 'currentColor');
+        pageWishlistBtn.classList.add('active');
       } else {
-        svg.setAttribute('fill', 'none');
-        svg.setAttribute('stroke', 'currentColor');
+        pageWishlistBtn.classList.remove('active');
       }
     }
     
