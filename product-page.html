@@ -1842,6 +1842,31 @@
         updateCarousel();
       }
     });
+    
+    // Mobile scroll zoom effect
+    if (window.innerWidth <= 768) {
+      let ticking = false;
+      
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const scrolled = window.scrollY;
+            const gallery = document.querySelector('.gallery');
+            
+            if (gallery && scrolled < 300) {
+              // Scale from 0.95 to 1.05 as you scroll down
+              const scale = 0.95 + (scrolled / 300) * 0.1;
+              gallery.style.transform = `scale(${scale})`;
+              gallery.style.transformOrigin = 'center top';
+            }
+            
+            ticking = false;
+          });
+          
+          ticking = true;
+        }
+      });
+    }
   </script>
 
   <!-- Shopify Product Loader -->
