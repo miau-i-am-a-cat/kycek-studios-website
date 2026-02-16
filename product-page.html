@@ -1079,27 +1079,34 @@
     
     // Gallery
     const slides = document.getElementById('gallerySlides');
-    const dots = document.querySelectorAll('.gallery-dot');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const currentSlideEl = document.getElementById('currentSlide');
     let currentIndex = 0;
-    const totalSlides = 4;
+    let totalSlides = 4; // Will be updated when product loads
     
     function goToSlide(index) {
       if (index < 0) index = totalSlides - 1;
       if (index >= totalSlides) index = 0;
       currentIndex = index;
       slides.style.transform = `translateX(-${index * 100}%)`;
+      
+      // Update dots
+      const dots = document.querySelectorAll('.gallery-dot');
       dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
       currentSlideEl.textContent = String(index + 1).padStart(2, '0');
     }
     
+    // Initial gallery setup (will be re-initialized after product loads)
+    function initGallery() {
+      const dots = document.querySelectorAll('.gallery-dot');
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+      });
+    }
+    
     prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
     nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
-    dots.forEach(dot => {
-      dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
-    });
     
     // Color selector
     const colorSwatches = document.querySelectorAll('.color-swatch');
@@ -1208,8 +1215,13 @@
         });
         
         // Update total slides counter
-        const totalSlides = images.length;
+        totalSlides = images.length; // Update the global variable
+        currentIndex = 0; // Reset to first slide
         document.getElementById('totalSlides').textContent = String(totalSlides).padStart(2, '0');
+        document.getElementById('currentSlide').textContent = '01';
+        
+        // Reset gallery position
+        document.getElementById('gallerySlides').style.transform = 'translateX(0)';
         
         // Update size options
         const sizeOptions = document.querySelector('.size-options');
@@ -1302,8 +1314,7 @@
           document.getElementById('addToCart').style.opacity = '0.5';
         }
         
-        // Re-initialize gallery with new slides
-        window.totalSlides = images.length;
+        // Gallery is already updated above
         
       } catch (error) {
         console.error('Failed to load product:', error);
