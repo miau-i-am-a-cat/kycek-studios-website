@@ -1526,9 +1526,6 @@
       loadProductFromShopify(productHandle);
     }
     
-    // Update cart count on page load
-    updateCartCount();
-    
     async function loadProductFromShopify(handle) {
       try {
         console.log('Fetching product:', handle);
@@ -1750,6 +1747,9 @@
         openCart();
       });
     }
+    
+    // Update cart count on page load
+    updateCartCount();
     
     async function openCart() {
       console.log('Opening cart...');
