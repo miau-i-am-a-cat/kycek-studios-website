@@ -1283,7 +1283,11 @@
           
           // Get all products with the same color
           const allProducts = await getProducts(50);
+          console.log('All products:', allProducts.map(p => ({title: p.title, type: p.productType})));
+          console.log('Current color:', currentColor);
+          
           const colorProducts = allProducts.filter(p => p.productType === currentColor);
+          console.log('Products matching color:', colorProducts.map(p => p.title));
           
           // Find t-shirt (look for shirt/tee/t-shirt in title)
           const teeProduct = colorProducts.find(p => 
@@ -1291,17 +1295,19 @@
             p.title.toLowerCase().includes('tee') ||
             p.title.toLowerCase().includes('t-shirt')
           );
+          console.log('Found tee product:', teeProduct?.title);
           
           // Find shorts (look for short in title)
           const shortProduct = colorProducts.find(p => 
             p.title.toLowerCase().includes('short')
           );
+          console.log('Found short product:', shortProduct?.title);
           
           if (!teeProduct) {
-            throw new Error(`Could not find ${currentColor} t-shirt`);
+            throw new Error(`Could not find ${currentColor} t-shirt. Found ${colorProducts.length} products with color ${currentColor}`);
           }
           if (!shortProduct) {
-            throw new Error(`Could not find ${currentColor} shorts`);
+            throw new Error(`Could not find ${currentColor} shorts. Found ${colorProducts.length} products with color ${currentColor}`);
           }
           
           const teeVariant = teeProduct.variants.edges.find(v => 
