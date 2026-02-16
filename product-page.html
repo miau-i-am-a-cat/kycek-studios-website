@@ -1277,17 +1277,11 @@
               swatch.dataset.color = color;
               swatch.dataset.handle = relatedProduct.handle;
               
-              if (isCurrentColor) {
-                // Current color - just show, don't navigate
-                swatch.disabled = false;
-              } else if (isAvailable) {
-                // Other color - navigate on click
+              if (!isCurrentColor) {
+                // Other color - always navigable (even if sold out)
                 swatch.addEventListener('click', function() {
                   window.location.href = `/product-page.html?handle=${relatedProduct.handle}`;
                 });
-              } else {
-                // Sold out - disable
-                swatch.disabled = true;
               }
               
               colorOptions.appendChild(swatch);
