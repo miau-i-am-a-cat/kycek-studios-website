@@ -216,9 +216,10 @@
     
     .manifesto-annotation {
       position: absolute;
-      bottom: 50px;
-      right: 50px;
-      text-align: right;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
       z-index: 2;
     }
     
@@ -885,7 +886,6 @@
       .hero-title { font-size: 20vw; }
       .product-feature { grid-template-columns: 1fr; }
       .product-feature.reverse { direction: ltr; }
-      .manifesto-annotation { bottom: 35px; right: 35px; }
       .philosophy { padding: 60px 40px; }
       .philosophy-container { grid-template-columns: 1fr; }
       .products-header { grid-template-columns: 1fr; padding: 0 40px; }
@@ -901,7 +901,6 @@
       .header-actions { gap: 12px; }
       .nav { gap: 20px; }
       .hero-subtitle, .hero-scroll { display: none; }
-      .manifesto-annotation { bottom: 25px; right: 20px; }
       .manifesto-copy { font-size: 15px; }
       .limited-edition { padding: 60px 20px; }
       .limited-container { grid-template-columns: 1fr; gap: 40px; }
