@@ -4,7 +4,43 @@
 
 To enable cart, wishlist, and account functionality on any page:
 
-### 1. Include the required scripts
+### 1. Add Cart Drawer CSS
+
+Add the cart drawer styles from `product-page.html` (lines 1093-1272) or copy from `index.html` (search for "/* Cart Drawer */").
+
+### 2. Add Cart Drawer HTML
+
+Add after `</header>`:
+
+```html
+<!-- Cart Drawer -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-header">
+    <div class="cart-drawer-title">CART</div>
+    <button class="cart-drawer-close" id="closeCart">×</button>
+  </div>
+  <div class="cart-drawer-body" id="cartBody">
+    <div class="cart-empty">Your cart is empty</div>
+  </div>
+  <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span id="cartSubtotal">$0.00</span>
+    </div>
+    <div class="cart-discount" id="cartDiscount" style="display: none;">
+      <span id="cartDiscountLabel">Discount</span>
+      <span id="cartDiscountAmount">-$0.00</span>
+    </div>
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cartTotal">$0.00</span>
+    </div>
+    <button class="cart-checkout-btn" id="cartCheckoutBtn">Checkout</button>
+  </div>
+</div>
+```
+
+### 3. Include the required scripts
 
 Add these before your closing `</body>` tag:
 
@@ -12,8 +48,8 @@ Add these before your closing `</body>` tag:
 <!-- Shopify Config (API keys and endpoints) -->
 <script src="config.js"></script>
 
-<!-- Shared Cart/Wishlist/Account Functions -->
-<script src="assets/js/shopify-functions.js"></script>
+<!-- Full Cart/Wishlist/Account Functionality -->
+<script src="assets/js/cart-wishlist-account-full.js"></script>
 ```
 
 ### 2. Header Buttons Structure
@@ -64,13 +100,14 @@ The shared functions will automatically:
 ## Files
 
 - **config.js** - Shopify API credentials and `shopifyFetch()` function
-- **assets/js/shopify-functions.js** - Shared cart/wishlist/account logic
+- **assets/js/cart-wishlist-account-full.js** - Complete cart/wishlist/account functionality (529 lines)
+  - Cart drawer management with Shopify GraphQL API
+  - Wishlist popup with localStorage persistence
+  - Account management (login check, token storage)
 
 ## Pages Using This
 
-✅ Homepage (index.html)
-✅ Product Page (product-page.html)
-⏳ Collections (to be built)
-⏳ Cart (to be built)
-⏳ Wishlist (to be built)
-⏳ Account (to be built)
+✅ Homepage (index.html) - Full functionality
+✅ Product Page (product-page.html) - Full functionality
+⏳ Collections (to be built) - Add 3 components above
+⏳ Terms/About (to be built) - Add 3 components above
