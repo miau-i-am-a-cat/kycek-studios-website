@@ -1121,6 +1121,8 @@
       
       // Make cursor visible on first movement
       if (!cursorVisible) {
+        cursorX = mouseX;
+        cursorY = mouseY;
         cursor.style.opacity = '1';
         cursor.style.visibility = 'visible';
         cursorVisible = true;
