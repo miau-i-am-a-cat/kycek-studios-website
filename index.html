@@ -1250,15 +1250,6 @@
       }
     });
     
-    // Cart count update
-    function updateCartCount() {
-      const cartId = localStorage.getItem('shopify_cart_id');
-      if (!cartId) {
-        document.getElementById('cartCount').textContent = '0';
-        return;
-      }
-    }
-    updateCartCount();
   </script>
 
   <!-- Email Signup -->
@@ -1334,52 +1325,8 @@
     }
   </script>
 
-  <!-- Wishlist -->
-  <script>
-    const headerWishlistBtn = document.getElementById('headerWishlistBtn');
-    const wishlistCountEl = document.getElementById('wishlistCount');
-    
-    function getWishlist() {
-      const wishlist = localStorage.getItem('kycek_wishlist');
-      return wishlist ? JSON.parse(wishlist) : [];
-    }
-    
-    function updateWishlistCount() {
-      const wishlist = getWishlist();
-      wishlistCountEl.textContent = wishlist.length;
-    }
-    
-    headerWishlistBtn.addEventListener('click', () => {
-      const wishlist = getWishlist();
-      
-      if (wishlist.length === 0) {
-        alert('Your wishlist is empty');
-        return;
-      }
-      
-      alert(`You have ${wishlist.length} items in your wishlist`);
-    });
-    
-    updateWishlistCount();
-  </script>
-
-  <!-- Account -->
-  <script>
-    const accountBtn = document.getElementById('headerAccountBtn');
-    
-    accountBtn.addEventListener('click', () => {
-      alert('Account functionality - coming soon!');
-    });
-  </script>
-
-  <!-- Cart -->
-  <script>
-    const headerCartBtn = document.getElementById('headerCartBtn');
-    
-    headerCartBtn.addEventListener('click', () => {
-      alert('Cart functionality - coming soon!');
-    });
-  </script>
+  <!-- Shopify Cart, Wishlist, Account - Shared Functionality -->
+  <script src="assets/js/shopify-functions.js"></script>
 
   <!-- Language -->
   <script>
