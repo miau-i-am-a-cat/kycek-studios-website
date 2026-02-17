@@ -281,13 +281,14 @@
       display: grid;
       grid-template-columns: 1fr 1.2fr 1fr;
       gap: 60px;
-      align-items: center;
+      align-items: stretch;
     }
     
     .limited-image {
       position: relative;
       overflow: hidden;
-      aspect-ratio: 4 / 5;
+      height: 100%;
+      min-height: 600px;
     }
     
     .limited-image img {
@@ -301,13 +302,11 @@
       transform: scale(1.05);
     }
     
-    .limited-content {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    
-    .limited-content .product-label {
+    .limited-image .product-label {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2;
       display: inline-block;
       font-size: 10px;
       font-weight: 600;
@@ -316,19 +315,15 @@
       color: var(--red);
       border: 1px solid var(--red);
       padding: 6px 14px;
-      width: fit-content;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(4px);
     }
     
-    .limited-content .sold-out-badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--white);
-      background: var(--gray);
-      padding: 6px 14px;
-      margin-left: 10px;
+    .limited-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
     }
     
     .limited-content .product-name {
@@ -343,10 +338,27 @@
       color: var(--light-gray);
     }
     
+    .limited-content .price-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    
     .limited-content .product-price {
       font-size: 32px;
       font-weight: 700;
-      margin-top: 8px;
+    }
+    
+    .limited-content .sold-out-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--gray);
+      padding: 6px 14px;
     }
     
     .limited-cta-text {
@@ -408,7 +420,8 @@
     
     .limited-video {
       position: relative;
-      aspect-ratio: 4 / 5;
+      height: 100%;
+      min-height: 600px;
       overflow: hidden;
     }
     
@@ -901,11 +914,26 @@
       .hero-subtitle, .hero-scroll { display: none; }
       .manifesto { padding: 60px 20px; }
       .limited-edition { padding: 60px 20px; }
-      .limited-container { grid-template-columns: 1fr; gap: 40px; }
-      .limited-video { order: -1; }
+      .limited-container { grid-template-columns: 1fr; gap: 40px; align-items: center; }
+      .limited-image { min-height: 400px; aspect-ratio: 4 / 5; height: auto; }
+      .limited-video { order: -1; min-height: 400px; aspect-ratio: 4 / 5; height: auto; }
       .limited-content .product-name { font-size: 36px; }
       .limited-content .product-price { font-size: 28px; }
-      .limited-email-form { flex-direction: column; gap: 10px; }
+      .limited-email-form { 
+        flex-direction: row; 
+        gap: 8px; 
+      }
+      .limited-email-form input {
+        flex: 1;
+        height: 48px;
+        font-size: 13px;
+      }
+      .limited-email-form button {
+        height: 48px;
+        padding: 0 18px;
+        font-size: 10px;
+        white-space: nowrap;
+      }
       .products { padding: 60px 0 40px; }
       .products-header { padding: 0 20px; margin-bottom: 40px; grid-template-columns: 1fr; gap: 20px; }
       .product-feature { grid-template-columns: 1fr !important; gap: 30px; padding: 0 20px; margin-bottom: 60px; }
@@ -999,18 +1027,18 @@
   <section class="limited-edition" id="limitedEdition">
     <div class="limited-container">
       <div class="limited-image">
+        <span class="product-label">LIMITED EDITION</span>
         <img src="assets/images/product-flatlay.jpg" alt="Limited Edition">
       </div>
       <div class="limited-content">
-        <div>
-          <span class="product-label">LIMITED EDITION</span>
-          <span class="sold-out-badge">SOLD OUT</span>
-        </div>
         <h3 class="product-name" id="limited-name">Loading...</h3>
         <p class="product-desc" id="limited-desc">
           Loading product details...
         </p>
-        <div class="product-price" id="limited-price">$--</div>
+        <div class="price-row">
+          <div class="product-price" id="limited-price">$--</div>
+          <span class="sold-out-badge">SOLD OUT</span>
+        </div>
         <p class="limited-cta-text">This release sold out. Join 2,000+ who get first access to restocks and new drops.</p>
         <form class="limited-email-form" id="limitedEmailForm">
           <input type="email" placeholder="Your email" required>
