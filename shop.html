@@ -52,7 +52,7 @@
     /* Featured Grid - First section with 4 products + feature image */
     .featured-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 30px;
       margin-bottom: 60px;
     }
@@ -66,7 +66,7 @@
     .feature-image {
       position: relative;
       overflow: hidden;
-      height: 100%;
+      aspect-ratio: 4 / 5;
     }
     
     .feature-image img {
@@ -119,8 +119,9 @@
     }
     
     .product-card-price {
-      font-size: 14px;
-      color: var(--gray);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
       white-space: nowrap;
     }
     
