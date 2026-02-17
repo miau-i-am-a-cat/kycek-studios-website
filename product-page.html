@@ -116,7 +116,7 @@
       display: flex;
       height: 100%;
       transition: transform 0.3s ease-out;
-      cursor: grab;
+      cursor: none;
       -webkit-user-select: none;
       user-select: none;
       -webkit-touch-callout: none;
@@ -1648,7 +1648,7 @@
     galleryContainer.addEventListener('mousedown', (e) => {
       isDragging = true;
       startX = e.pageX;
-      galleryContainer.style.cursor = 'grabbing';
+      galleryContainer.style.cursor = 'none';
     });
     
     galleryContainer.addEventListener('mousemove', (e) => {
@@ -1659,7 +1659,7 @@
     galleryContainer.addEventListener('mouseup', (e) => {
       if (!isDragging) return;
       isDragging = false;
-      galleryContainer.style.cursor = 'grab';
+      galleryContainer.style.cursor = 'none';
       
       const diff = startX - e.pageX;
       
