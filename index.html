@@ -271,15 +271,15 @@
     /* ===== STAMP SECTION ===== */
     /* ===== LIMITED EDITION ===== */
     .limited-edition {
-      padding: 0 80px;
+      padding: 80px;
       background: var(--dark);
     }
     
     .limited-container {
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 1.2fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 60px;
       align-items: center;
     }
@@ -320,7 +320,7 @@
     .limited-content {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 0;
       justify-content: center;
     }
     
@@ -328,19 +328,21 @@
       font-size: clamp(40px, 5vw, 56px);
       font-weight: 800;
       line-height: 1.1;
+      margin-bottom: 20px;
     }
     
     .limited-content .product-desc {
       font-size: 15px;
       line-height: 1.7;
       color: var(--light-gray);
+      margin-bottom: 20px;
     }
     
     .limited-content .price-row {
       display: flex;
       align-items: baseline;
       gap: 12px;
-      margin-top: 8px;
+      margin-bottom: 30px;
     }
     
     .limited-content .product-price {
@@ -364,13 +366,13 @@
     .limited-cta-text {
       font-size: 14px;
       color: var(--light-gray);
-      margin-top: 10px;
+      margin-bottom: 20px;
     }
     
     .limited-email-form {
       display: flex;
       gap: 10px;
-      margin-top: 20px;
+      margin-bottom: 10px;
     }
     
     .limited-email-form input {
@@ -912,9 +914,11 @@
       .nav { gap: 20px; }
       .hero-subtitle, .hero-scroll { display: none; }
       .manifesto { padding: 60px 20px; }
-      .limited-edition { padding: 60px 20px 0; }
+      .limited-edition { padding: 60px 20px; }
       .limited-container { grid-template-columns: 1fr; gap: 40px; }
-      .limited-video { order: -1; }
+      .limited-image { order: 1; }
+      .limited-content { order: 2; }
+      .limited-video { order: 3; }
       .limited-content .product-name { font-size: 36px; }
       .limited-content .product-price { font-size: 28px; }
       .limited-email-form { 
@@ -1037,7 +1041,7 @@
           <div class="product-price" id="limited-price">$--</div>
           <span class="sold-out-badge">SOLD OUT</span>
         </div>
-        <p class="limited-cta-text">This release sold out. Join 2,000+ who get first access to restocks and new drops.</p>
+        <p class="limited-cta-text">This release sold out. Join 1,000+ who get first access to restocks and new drops.</p>
         <form class="limited-email-form" id="limitedEmailForm">
           <input type="email" placeholder="Your email" required>
           <button type="submit">Join Waitlist</button>
