@@ -271,7 +271,7 @@
     /* ===== STAMP SECTION ===== */
     /* ===== LIMITED EDITION ===== */
     .limited-edition {
-      padding: 80px;
+      padding: 0 80px;
       background: var(--dark);
     }
     
@@ -281,14 +281,13 @@
       display: grid;
       grid-template-columns: 1fr 1.2fr 1fr;
       gap: 60px;
-      align-items: stretch;
+      align-items: center;
     }
     
     .limited-image {
       position: relative;
       overflow: hidden;
-      height: 100%;
-      min-height: 600px;
+      aspect-ratio: 4 / 5;
     }
     
     .limited-image img {
@@ -315,8 +314,7 @@
       color: var(--red);
       border: 1px solid var(--red);
       padding: 6px 14px;
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(4px);
+      background: transparent;
     }
     
     .limited-content {
@@ -340,7 +338,7 @@
     
     .limited-content .price-row {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       gap: 12px;
       margin-top: 8px;
     }
@@ -348,6 +346,7 @@
     .limited-content .product-price {
       font-size: 32px;
       font-weight: 700;
+      line-height: 1;
     }
     
     .limited-content .sold-out-badge {
@@ -359,6 +358,7 @@
       color: var(--white);
       background: var(--gray);
       padding: 6px 14px;
+      line-height: 1;
     }
     
     .limited-cta-text {
@@ -420,8 +420,7 @@
     
     .limited-video {
       position: relative;
-      height: 100%;
-      min-height: 600px;
+      aspect-ratio: 4 / 5;
       overflow: hidden;
     }
     
@@ -913,10 +912,9 @@
       .nav { gap: 20px; }
       .hero-subtitle, .hero-scroll { display: none; }
       .manifesto { padding: 60px 20px; }
-      .limited-edition { padding: 60px 20px; }
-      .limited-container { grid-template-columns: 1fr; gap: 40px; align-items: center; }
-      .limited-image { min-height: 400px; aspect-ratio: 4 / 5; height: auto; }
-      .limited-video { order: -1; min-height: 400px; aspect-ratio: 4 / 5; height: auto; }
+      .limited-edition { padding: 60px 20px 0; }
+      .limited-container { grid-template-columns: 1fr; gap: 40px; }
+      .limited-video { order: -1; }
       .limited-content .product-name { font-size: 36px; }
       .limited-content .product-price { font-size: 28px; }
       .limited-email-form { 
