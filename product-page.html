@@ -43,6 +43,7 @@
       z-index: 10001;
       mix-blend-mode: difference;
       transition: transform 0.2s ease;
+      opacity: 0;
     }
     .cursor.click { transform: scale(0.8); }
     
@@ -1555,10 +1556,17 @@
     // Cursor
     const cursor = document.getElementById('cursor');
     let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+    let cursorVisible = false;
     
     document.addEventListener('mousemove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      
+      // Make cursor visible on first movement
+      if (!cursorVisible) {
+        cursor.style.opacity = '1';
+        cursorVisible = true;
+      }
     });
     
     function animateCursor() {
