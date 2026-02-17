@@ -1626,6 +1626,12 @@
         const colorOptions = document.querySelector('.color-options');
         const currentColor = product.productType;
         
+        // Update color value text
+        const colorValue = document.getElementById('colorValue');
+        if (colorValue && currentColor) {
+          colorValue.textContent = currentColor;
+        }
+        
         if (currentColor && colorOptions) {
           try {
             const relatedProducts = await getProductsByTitle(product.title);
