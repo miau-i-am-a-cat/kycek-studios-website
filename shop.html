@@ -52,13 +52,12 @@
     /* Featured Grid - First section with 4 products + feature image */
     .featured-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 2fr 1fr;
       gap: 30px;
       margin-bottom: 60px;
     }
     
     .products-left {
-      grid-column: span 2;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 30px;
@@ -67,7 +66,7 @@
     .feature-image {
       position: relative;
       overflow: hidden;
-      aspect-ratio: 4 / 5;
+      height: 100%;
     }
     
     .feature-image img {
@@ -142,15 +141,12 @@
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1024px) {
       .featured-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      
-      .products-left {
-        grid-column: span 2;
+        grid-template-columns: 1fr;
       }
       
       .feature-image {
-        grid-column: span 2;
+        aspect-ratio: 4 / 5;
+        height: auto;
       }
       
       .products-grid {
@@ -175,6 +171,10 @@
       
       .products-left {
         gap: 20px;
+      }
+      
+      .feature-image {
+        aspect-ratio: 4 / 5;
       }
       
       .products-grid {
