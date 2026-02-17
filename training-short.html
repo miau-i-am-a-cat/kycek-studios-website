@@ -1122,6 +1122,7 @@
       // Make cursor visible on first movement
       if (!cursorVisible) {
         cursor.style.opacity = '1';
+        cursor.style.visibility = 'visible';
         cursorVisible = true;
       }
     });
@@ -1675,10 +1676,9 @@
         console.log('Loading related products...');
         const products = await getProducts(50); // Fetch more products
         
-        // For shorts page: show only tees (complete the look)
-        const teeHandles = ['origins-performance-t-shirt-white', 'origins-performance-t-shirt-black'];
+        // Show all products except current product
         const relatedProducts = products.filter(product => {
-          return teeHandles.includes(product.handle); // Only show tees
+          return product.handle !== currentProduct?.handle; // Exclude current product
         });
         
         console.log('Related products found:', relatedProducts);
@@ -1691,8 +1691,12 @@
             const price = parseFloat(product.priceRange.minVariantPrice.amount);
             const imageUrl = product.images.edges[0]?.node?.url || '';
             
+            // Determine correct page based on product handle
+            const isShorts = product.handle.includes('shorts');
+            const targetPage = isShorts ? 'training-short.html' : 'essential-tee.html';
+            
             const card = document.createElement('a');
-            card.href = `essential-tee.html?handle=${product.handle}`;
+            card.href = `${targetPage}?handle=${product.handle}`;
             card.className = 'related-card';
             card.innerHTML = `
               <div class="related-card-image">
@@ -1703,7 +1707,7 @@
             `;
             
             card.addEventListener('click', (e) => {
-              // Let the link navigate normally to the product page
+              // Let the link navigate normally
             });
             
             relatedGrid.appendChild(card);
