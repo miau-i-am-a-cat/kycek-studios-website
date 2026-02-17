@@ -1249,8 +1249,8 @@
     
     // Map colors to product handles (tees)
     const colorToHandle = {
-      'White': 'activewear-example-product-3',
-      'Black': 'origins-performance-t-shirt'
+      'White': 'origins-performance-t-shirt-white',
+      'Black': 'origins-performance-t-shirt-black'
     };
     
     colorSwatches.forEach(swatch => {
@@ -1262,6 +1262,10 @@
           colorSwatches.forEach(s => s.classList.remove('active'));
           swatch.classList.add('active');
           colorValue.textContent = selectedColor;
+          
+          // Update URL
+          const newUrl = `?handle=${newHandle}`;
+          window.history.pushState({handle: newHandle}, '', newUrl);
           
           // Load new product via AJAX
           await loadProductFromShopify(newHandle);
@@ -1462,7 +1466,7 @@
     
     // Default to white tee if no handle provided
     if (!productHandle) {
-      productHandle = 'activewear-example-product-3'; // White tee
+      productHandle = 'origins-performance-t-shirt-white';
     }
     
     console.log('Product handle:', productHandle);
@@ -1496,8 +1500,8 @@
           
           // Load bundle products for this color
           const bundleMap = {
-            'White': { tshirt: 'activewear-example-product-3', shorts: 'activewear-example-product-4' },
-            'Black': { tshirt: 'origins-performance-t-shirt', shorts: 'origins-performance-shorts-copy' }
+            'White': { tshirt: 'origins-performance-t-shirt-white', shorts: 'origins-performance-shorts-white' },
+            'Black': { tshirt: 'origins-performance-t-shirt-black', shorts: 'origins-performance-shorts-black' }
           };
           
           const handles = bundleMap[product.productType];
@@ -1672,7 +1676,7 @@
         const products = await getProducts(50); // Fetch more products
         
         // For tee page: show only shorts (complete the look)
-        const shortsHandles = ['activewear-example-product-4', 'origins-performance-shorts-copy'];
+        const shortsHandles = ['origins-performance-shorts-white', 'origins-performance-shorts-black'];
         const relatedProducts = products.filter(product => {
           return shortsHandles.includes(product.handle); // Only show shorts
         });
