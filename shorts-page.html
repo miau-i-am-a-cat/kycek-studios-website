@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Essential Tee — White | Kýček Studios</title>
+  <title>Training Short — White | Kýček Studios</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -896,8 +896,8 @@
     
     <div class="product-info">
       <span class="product-badge">ORIGINS</span>
-      <h1 class="product-title">Essential Tee</h1>
-      <p class="product-subtitle">Performance cotton with signature crow mark</p>
+      <h1 class="product-title">Training Short</h1>
+      <p class="product-subtitle">Lightweight performance shorts with flexible fit</p>
       
       <div class="product-reviews">
         <div class="stars">★★★★★</div>
@@ -1002,25 +1002,25 @@
     <div class="details-content">
       <h2 data-en="About" data-es="Acerca de">About</h2>
       <h3 data-en="Built for movement. Designed with intention." data-es="Construido para el movimiento. Diseñado con intención.">Built for movement. Designed with intention.</h3>
-      <p data-en="The Essential Tee is where performance meets philosophy. Performance-engineered polyester with 4-way stretch moves with your body, not against it. The signature crow mark sits between the shoulder blades—visible only to those behind you." data-es="La Essential Tee es donde el rendimiento se encuentra con la filosofía. Poliéster de rendimiento con elasticidad en 4 direcciones que se mueve con tu cuerpo, no en su contra. La marca del cuervo se encuentra entre los omóplatos, visible solo para quienes están detrás de ti.">
-        The Essential Tee is where performance meets philosophy. Performance-engineered polyester with 4-way stretch moves with your body, not against it. The signature crow mark sits between the shoulder blades—visible only to those behind you.
+      <p data-en="Designed for performance and comfort, our shorts are made to keep up with your active lifestyle. Featuring breathable, moisture-wicking fabric and a flexible fit, they're perfect for workouts, running, or everyday wear." data-es="Diseñados para el rendimiento y la comodidad, nuestros shorts están hechos para mantenerse al día con tu estilo de vida activo. Con tela transpirable que absorbe la humedad y un ajuste flexible, son perfectos para entrenamientos, correr o uso diario.">
+        Designed for performance and comfort, our shorts are made to keep up with your active lifestyle. Featuring breathable, moisture-wicking fabric and a flexible fit, they're perfect for workouts, running, or everyday wear.
       </p>
-      <p data-en="Minimal branding. Maximum quality. Made by Humans, on Earth." data-es="Marca minimalista. Máxima calidad. Hecho por Humanos, en la Tierra.">
-        Minimal branding. Maximum quality. Made by Humans, on Earth.
+      <p data-en="Made with Sorona, a plant-based fiber. Minimal branding. Maximum quality. Made by Humans, on Earth." data-es="Hechos con Sorona, una fibra de origen vegetal. Marca minimalista. Máxima calidad. Hecho por Humanos, en la Tierra.">
+        Made with Sorona, a plant-based fiber. Minimal branding. Maximum quality. Made by Humans, on Earth.
       </p>
       
       <ul class="details-list">
-        <li><span data-en="Material" data-es="Material">Material</span><span data-en="Performance-engineered polyester" data-es="Poliéster de rendimiento">Performance-engineered polyester</span></li>
-        <li><span data-en="Breathability" data-es="Transpirabilidad">Breathability</span><span data-en="Advanced moisture-wicking technology" data-es="Absorción de humedad">Advanced moisture-wicking technology</span></li>
-        <li><span data-en="Mobility" data-es="Movilidad">Mobility</span><span data-en="4-way stretch for unrestricted movement" data-es="Elasticidad 4D">4-way stretch for unrestricted movement</span></li>
-        <li><span data-en="Construction" data-es="Construcción">Construction</span><span data-en="Lightweight yet durable design" data-es="Ligero y duradero">Lightweight yet durable design</span></li>
+        <li><span data-en="Material" data-es="Material">Material</span><span data-en="Sorona plant-based fiber" data-es="Fibra vegetal Sorona">Sorona plant-based fiber</span></li>
+        <li><span data-en="Breathability" data-es="Transpirabilidad">Breathability</span><span data-en="Breathable, sweat-friendly material" data-es="Material transpirable">Breathable, sweat-friendly material</span></li>
+        <li><span data-en="Mobility" data-es="Movilidad">Mobility</span><span data-en="Flexible fit for maximum movement" data-es="Ajuste flexible">Flexible fit for maximum movement</span></li>
+        <li><span data-en="Construction" data-es="Construcción">Construction</span><span data-en="Lightweight and durable" data-es="Ligero y duradero">Lightweight and durable</span></li>
         <li><span data-en="Care" data-es="Cuidado">Care</span><span data-en="Machine wash cold, tumble dry low" data-es="Lavar en frío, secar bajo">Machine wash cold, tumble dry low</span></li>
       </ul>
     </div>
     
     <div class="details-image">
       <img src="assets/images/model-back.jpg" alt="Detail shot">
-      <span class="overlay-text">Signature crow placement</span>
+      <span class="overlay-text">Flexible performance fit</span>
     </div>
   </section>
 
@@ -1247,10 +1247,10 @@
     const colorSwatches = document.querySelectorAll('.color-swatch');
     const colorValue = document.getElementById('colorValue');
     
-    // Map colors to product handles (tees)
+    // Map colors to product handles
     const colorToHandle = {
-      'White': 'activewear-example-product-3',
-      'Black': 'origins-performance-t-shirt'
+      'White': 'activewear-example-product-4',
+      'Black': 'origins-performance-shorts-copy'
     };
     
     colorSwatches.forEach(swatch => {
@@ -1460,9 +1460,9 @@
     let currentProduct = null;
     let productHandle = new URLSearchParams(window.location.search).get('handle');
     
-    // Default to white tee if no handle provided
+    // Default to white shorts if no handle provided
     if (!productHandle) {
-      productHandle = 'activewear-example-product-3'; // White tee
+      productHandle = 'activewear-example-product-4'; // White shorts
     }
     
     console.log('Product handle:', productHandle);
@@ -1671,10 +1671,10 @@
         console.log('Loading related products...');
         const products = await getProducts(50); // Fetch more products
         
-        // For tee page: show only shorts (complete the look)
-        const shortsHandles = ['activewear-example-product-4', 'origins-performance-shorts-copy'];
+        // For shorts page: show only tees (complete the look)
+        const teeHandles = ['activewear-example-product-3', 'origins-performance-t-shirt'];
         const relatedProducts = products.filter(product => {
-          return shortsHandles.includes(product.handle); // Only show shorts
+          return teeHandles.includes(product.handle); // Only show tees
         });
         
         console.log('Related products found:', relatedProducts);
@@ -1688,7 +1688,7 @@
             const imageUrl = product.images.edges[0]?.node?.url || '';
             
             const card = document.createElement('a');
-            card.href = `shorts-page.html?handle=${product.handle}`;
+            card.href = `product-page.html?handle=${product.handle}`;
             card.className = 'related-card';
             card.innerHTML = `
               <div class="related-card-image">
@@ -1699,7 +1699,7 @@
             `;
             
             card.addEventListener('click', (e) => {
-              // Let the link navigate normally to the shorts page
+              // Let the link navigate normally to the product page
             });
             
             relatedGrid.appendChild(card);
