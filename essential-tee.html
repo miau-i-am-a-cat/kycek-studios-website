@@ -1553,7 +1553,7 @@
           }
         }
         
-        const subtitle = product.description ? product.description.substring(0, 100) : 'Premium performance wear';
+        const subtitle = product.description ? product.description : 'Premium performance wear';
         const subtitleEl = document.querySelector('.product-subtitle');
         subtitleEl.textContent = subtitle;
         subtitleEl.dataset.originalEn = subtitle; // Store for translation
