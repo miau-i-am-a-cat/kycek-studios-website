@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Statement — Kýček Studios</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    .legal-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 140px 40px 80px;
+    }
+    
+    .legal-page h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .legal-page .last-updated {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    
+    .legal-page h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+    
+    .legal-page h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    
+    .legal-page p,
+    .legal-page li {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--light-gray);
+      margin-bottom: 16px;
+    }
+    
+    .legal-page ul,
+    .legal-page ol {
+      margin-left: 24px;
+      margin-bottom: 16px;
+    }
+    
+    .legal-page li {
+      margin-bottom: 8px;
+    }
+    
+    .legal-page a {
+      color: var(--white);
+      text-decoration: underline;
+    }
+    
+    .legal-page a:hover {
+      color: var(--red);
+    }
+    
+    .legal-page strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+      .legal-page {
+        padding: 100px 20px 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html">
+      <img src="assets/images/logo-inverted.png" alt="Kýček Studios" class="logo">
+    </a>
+    <nav class="nav">
+      <a href="shop.html" data-en="Shop" data-es="Tienda">Shop</a>
+    </nav>
+    <div class="header-actions">
+      <button class="header-icon" id="langToggle">
+        <span id="langText">ES</span>
+      </button>
+      <button class="header-icon" id="headerWishlistBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span id="wishlistCount">0</span>
+      </button>
+      <button class="header-icon" id="headerAccountBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </button>
+      <button class="header-icon" id="headerCartBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">CART</div>
+      <button class="cart-drawer-close" id="closeCart">×</button>
+    </div>
+    <div class="cart-drawer-body" id="cartBody">
+      <div class="cart-empty">Your cart is empty</div>
+    </div>
+    <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">$0.00</span>
+      </div>
+      <div class="cart-discount" id="cartDiscount" style="display: none;">
+        <span id="cartDiscountLabel">Discount</span>
+        <span id="cartDiscountAmount">-$0.00</span>
+      </div>
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="cart-checkout-btn" id="cartCheckoutBtn">Checkout</button>
+    </div>
+  </div>
+
+  <!-- Legal Content -->
+  <div class="legal-page">
+    <h1 data-en="Accessibility Statement" data-es="Declaración de Accesibilidad">Accessibility Statement</h1>
+    <p class="last-updated" data-en="Last Updated: February 16, 2026" data-es="Última actualización: 16 de febrero de 2026">Last Updated: February 16, 2026</p>
+
+    <div data-lang="en">
+      <h2>Our Commitment</h2>
+      <p>Kýček Studios is committed to ensuring digital accessibility for all people, including those with disabilities. We are continually improving the user experience for everyone and applying the relevant accessibility standards.</p>
+
+      <h2>Conformance Status</h2>
+      <p>We aim to conform to the <strong>Web Content Accessibility Guidelines (WCAG) 2.1 Level AA</strong> standards. These guidelines explain how to make web content accessible to people with a wide array of disabilities, including:</p>
+      <ul>
+        <li>Visual impairments</li>
+        <li>Hearing impairments</li>
+        <li>Motor impairments</li>
+        <li>Cognitive disabilities</li>
+      </ul>
+
+      <h2>Accessibility Features</h2>
+      <p>Our website includes the following accessibility features:</p>
+      <ul>
+        <li><strong>Semantic HTML:</strong> Proper heading hierarchy and landmarks for screen readers</li>
+        <li><strong>Keyboard Navigation:</strong> All interactive elements are accessible via keyboard</li>
+        <li><strong>Alt Text:</strong> Descriptive alternative text for all meaningful images</li>
+        <li><strong>Color Contrast:</strong> Sufficient contrast ratios for text readability</li>
+        <li><strong>Responsive Design:</strong> Optimized for various screen sizes and devices</li>
+        <li><strong>Focus Indicators:</strong> Clear visual indicators for keyboard focus</li>
+        <li><strong>Language Toggle:</strong> English and Spanish language support</li>
+      </ul>
+
+      <h2>Known Limitations</h2>
+      <p>Despite our best efforts, some areas may still have accessibility limitations:</p>
+      <ul>
+        <li>Custom cursor effects may not be visible to all assistive technologies</li>
+        <li>Some third-party integrations (payment processing, checkout) may have their own accessibility limitations</li>
+        <li>Video and animated content may not include full descriptions or transcripts</li>
+      </ul>
+      <p>We are actively working to address these issues and improve accessibility across all features.</p>
+
+      <h2>Assistive Technologies</h2>
+      <p>Our website is designed to be compatible with the following assistive technologies:</p>
+      <ul>
+        <li>Screen readers (JAWS, NVDA, VoiceOver)</li>
+        <li>Screen magnification software</li>
+        <li>Speech recognition software</li>
+        <li>Keyboard-only navigation</li>
+      </ul>
+
+      <h2>Feedback and Contact</h2>
+      <p>We welcome your feedback on the accessibility of the Kýček Studios website. If you encounter any accessibility barriers or have suggestions for improvement, please contact us:</p>
+      <p><strong>Email:</strong> hello@kycek.co</p>
+      <p><strong>Subject Line:</strong> Accessibility Feedback</p>
+      <p>We aim to respond to all accessibility inquiries within 5 business days.</p>
+
+      <h2>Third-Party Content</h2>
+      <p>Some content on our website is provided by third-party services (Shopify, payment processors, analytics). While we select vendors with accessibility in mind, we cannot guarantee the accessibility of all third-party content.</p>
+
+      <h2>Ongoing Efforts</h2>
+      <p>Accessibility is an ongoing effort. We regularly:</p>
+      <ul>
+        <li>Review and test our website with accessibility tools</li>
+        <li>Train our team on accessibility best practices</li>
+        <li>Incorporate user feedback into design improvements</li>
+        <li>Monitor new accessibility standards and guidelines</li>
+      </ul>
+
+      <h2>Legal Rights</h2>
+      <p>In the Dominican Republic, while specific digital accessibility laws are still developing, we align our practices with international standards and the rights of persons with disabilities as recognized by the Convention on the Rights of Persons with Disabilities (CRPD), which the Dominican Republic has ratified.</p>
+
+      <h2>Date of Assessment</h2>
+      <p>This accessibility statement was created on February 16, 2026, and reflects our current accessibility status. We review and update this statement regularly as we continue to improve our website.</p>
+    </div>
+
+    <div data-lang="es" style="display: none;">
+      <h2>Nuestro Compromiso</h2>
+      <p>Kýček Studios se compromete a garantizar la accesibilidad digital para todas las personas, incluidas aquellas con discapacidades. Estamos mejorando continuamente la experiencia del usuario para todos y aplicando los estándares de accesibilidad relevantes.</p>
+
+      <h2>Estado de Conformidad</h2>
+      <p>Nuestro objetivo es cumplir con los estándares de las <strong>Pautas de Accesibilidad para el Contenido Web (WCAG) 2.1 Nivel AA</strong>. Estas pautas explican cómo hacer que el contenido web sea accesible para personas con una amplia gama de discapacidades, que incluyen:</p>
+      <ul>
+        <li>Discapacidades visuales</li>
+        <li>Discapacidades auditivas</li>
+        <li>Discapacidades motoras</li>
+        <li>Discapacidades cognitivas</li>
+      </ul>
+
+      <h2>Características de Accesibilidad</h2>
+      <p>Nuestro sitio web incluye las siguientes características de accesibilidad:</p>
+      <ul>
+        <li><strong>HTML Semántico:</strong> Jerarquía de encabezados apropiada y puntos de referencia para lectores de pantalla</li>
+        <li><strong>Navegación con Teclado:</strong> Todos los elementos interactivos son accesibles por teclado</li>
+        <li><strong>Texto Alternativo:</strong> Texto alternativo descriptivo para todas las imágenes significativas</li>
+        <li><strong>Contraste de Color:</strong> Ratios de contraste suficientes para la legibilidad del texto</li>
+        <li><strong>Diseño Responsivo:</strong> Optimizado para varios tamaños de pantalla y dispositivos</li>
+        <li><strong>Indicadores de Enfoque:</strong> Indicadores visuales claros para el enfoque del teclado</li>
+        <li><strong>Cambio de Idioma:</strong> Soporte para idiomas inglés y español</li>
+      </ul>
+
+      <h2>Limitaciones Conocidas</h2>
+      <p>A pesar de nuestros mejores esfuerzos, algunas áreas aún pueden tener limitaciones de accesibilidad:</p>
+      <ul>
+        <li>Los efectos de cursor personalizados pueden no ser visibles para todas las tecnologías de asistencia</li>
+        <li>Algunas integraciones de terceros (procesamiento de pagos, checkout) pueden tener sus propias limitaciones de accesibilidad</li>
+        <li>El contenido de video y animado puede no incluir descripciones completas o transcripciones</li>
+      </ul>
+      <p>Estamos trabajando activamente para abordar estos problemas y mejorar la accesibilidad en todas las funciones.</p>
+
+      <h2>Tecnologías de Asistencia</h2>
+      <p>Nuestro sitio web está diseñado para ser compatible con las siguientes tecnologías de asistencia:</p>
+      <ul>
+        <li>Lectores de pantalla (JAWS, NVDA, VoiceOver)</li>
+        <li>Software de ampliación de pantalla</li>
+        <li>Software de reconocimiento de voz</li>
+        <li>Navegación solo con teclado</li>
+      </ul>
+
+      <h2>Comentarios y Contacto</h2>
+      <p>Agradecemos sus comentarios sobre la accesibilidad del sitio web de Kýček Studios. Si encuentra alguna barrera de accesibilidad o tiene sugerencias para mejorar, contáctenos:</p>
+      <p><strong>Correo electrónico:</strong> hello@kycek.co</p>
+      <p><strong>Línea de asunto:</strong> Comentarios sobre Accesibilidad</p>
+      <p>Nuestro objetivo es responder a todas las consultas de accesibilidad dentro de 5 días hábiles.</p>
+
+      <h2>Contenido de Terceros</h2>
+      <p>Algunos contenidos de nuestro sitio web son proporcionados por servicios de terceros (Shopify, procesadores de pago, análisis). Si bien seleccionamos proveedores con la accesibilidad en mente, no podemos garantizar la accesibilidad de todo el contenido de terceros.</p>
+
+      <h2>Esfuerzos Continuos</h2>
+      <p>La accesibilidad es un esfuerzo continuo. Regularmente:</p>
+      <ul>
+        <li>Revisamos y probamos nuestro sitio web con herramientas de accesibilidad</li>
+        <li>Capacitamos a nuestro equipo en las mejores prácticas de accesibilidad</li>
+        <li>Incorporamos los comentarios de los usuarios en las mejoras de diseño</li>
+        <li>Monitoreamos nuevos estándares y pautas de accesibilidad</li>
+      </ul>
+
+      <h2>Derechos Legales</h2>
+      <p>En la República Dominicana, aunque las leyes específicas de accesibilidad digital todavía se están desarrollando, alineamos nuestras prácticas con los estándares internacionales y los derechos de las personas con discapacidad como los reconoce la Convención sobre los Derechos de las Personas con Discapacidad (CDPD), que la República Dominicana ha ratificado.</p>
+
+      <h2>Fecha de Evaluación</h2>
+      <p>Esta declaración de accesibilidad se creó el 16 de febrero de 2026 y refleja nuestro estado de accesibilidad actual. Revisamos y actualizamos esta declaración regularmente a medida que continuamos mejorando nuestro sitio web.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <img src="assets/images/logo-inverted.png" alt="Kýček Studios" class="footer-logo">
+    <span class="footer-tagline" data-en="Made by Humans, on Earth" data-es="Hecho por Humanos, en la Tierra">Made by Humans, on Earth</span>
+    
+    <div class="footer-links">
+      <a href="index.html" data-en="Home" data-es="Inicio">Home</a>
+      <a href="shop.html" data-en="Shop" data-es="Tienda">Shop</a>
+      <a href="https://www.instagram.com/kycek.co/" target="_blank">Instagram</a>
+      <a href="terms.html" data-en="Terms" data-es="Términos">Terms</a>
+      <a href="accessibility.html" data-en="Accessibility" data-es="Accesibilidad">Accessibility</a>
+    </div>
+    
+    <div class="footer-bottom">
+      <span data-en="© 2026 Kýček Studios. All rights reserved." data-es="© 2026 Kýček Studios. Todos los derechos reservados.">© 2026 Kýček Studios. All rights reserved.</span>
+      <span data-en="Dominican Republic" data-es="República Dominicana">Dominican Republic</span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0, hasMovedMouse = false;
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!hasMovedMouse) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorX = mouseX;
+        cursorY = mouseY;
+        cursor.style.opacity = '1';
+        cursor.style.visibility = 'visible';
+        hasMovedMouse = true;
+      } else {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }
+    });
+    
+    function animateCursor() {
+      cursorX += (mouseX - cursorX) * 0.1;
+      cursorY += (mouseY - cursorY) * 0.1;
+      cursor.style.left = cursorX - 20 + 'px';
+      cursor.style.top = cursorY - 20 + 'px';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+    
+    document.addEventListener('mousedown', () => cursor.classList.add('click'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+  </script>
+
+  <!-- Language Toggle -->
+  <script>
+    const langToggle = document.getElementById('langToggle');
+    const langText = document.getElementById('langText');
+    let currentLang = localStorage.getItem('kycek_language') || 'en';
+    
+    langText.textContent = currentLang === 'en' ? 'ES' : 'EN';
+    
+    function translatePage(lang) {
+      currentLang = lang;
+      localStorage.setItem('kycek_language', lang);
+      langText.textContent = lang === 'en' ? 'ES' : 'EN';
+      
+      // Update all data-en/data-es elements
+      document.querySelectorAll('[data-en][data-es]').forEach(el => {
+        if (el.dataset[lang]) {
+          el.textContent = el.dataset[lang];
+        }
+      });
+      
+      // Show/hide language-specific content blocks
+      document.querySelectorAll('[data-lang="en"]').forEach(el => {
+        el.style.display = lang === 'en' ? 'block' : 'none';
+      });
+      document.querySelectorAll('[data-lang="es"]').forEach(el => {
+        el.style.display = lang === 'es' ? 'block' : 'none';
+      });
+    }
+    
+    langToggle.addEventListener('click', () => {
+      const newLang = currentLang === 'en' ? 'es' : 'en';
+      translatePage(newLang);
+    });
+    
+    // Apply saved language on load
+    if (currentLang === 'es') {
+      translatePage('es');
+    }
+  </script>
+
+  <!-- Shopify Cart, Wishlist, Account -->
+  <script src="assets/js/cart-wishlist-account-full.js"></script>
+
+</body>
+</html>

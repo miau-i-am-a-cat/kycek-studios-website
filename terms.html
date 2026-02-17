@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms & Conditions — Kýček Studios</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    .legal-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 140px 40px 80px;
+    }
+    
+    .legal-page h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .legal-page .last-updated {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    
+    .legal-page h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+    
+    .legal-page h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    
+    .legal-page p,
+    .legal-page li {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--light-gray);
+      margin-bottom: 16px;
+    }
+    
+    .legal-page ul,
+    .legal-page ol {
+      margin-left: 24px;
+      margin-bottom: 16px;
+    }
+    
+    .legal-page li {
+      margin-bottom: 8px;
+    }
+    
+    .legal-page a {
+      color: var(--white);
+      text-decoration: underline;
+    }
+    
+    .legal-page a:hover {
+      color: var(--red);
+    }
+    
+    .legal-page strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+      .legal-page {
+        padding: 100px 20px 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html">
+      <img src="assets/images/logo-inverted.png" alt="Kýček Studios" class="logo">
+    </a>
+    <nav class="nav">
+      <a href="shop.html" data-en="Shop" data-es="Tienda">Shop</a>
+    </nav>
+    <div class="header-actions">
+      <button class="header-icon" id="langToggle">
+        <span id="langText">ES</span>
+      </button>
+      <button class="header-icon" id="headerWishlistBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span id="wishlistCount">0</span>
+      </button>
+      <button class="header-icon" id="headerAccountBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </button>
+      <button class="header-icon" id="headerCartBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">CART</div>
+      <button class="cart-drawer-close" id="closeCart">×</button>
+    </div>
+    <div class="cart-drawer-body" id="cartBody">
+      <div class="cart-empty">Your cart is empty</div>
+    </div>
+    <div class="cart-drawer-footer" id="cartFooter" style="display: none;">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">$0.00</span>
+      </div>
+      <div class="cart-discount" id="cartDiscount" style="display: none;">
+        <span id="cartDiscountLabel">Discount</span>
+        <span id="cartDiscountAmount">-$0.00</span>
+      </div>
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="cart-checkout-btn" id="cartCheckoutBtn">Checkout</button>
+    </div>
+  </div>
+
+  <!-- Legal Content -->
+  <div class="legal-page">
+    <h1 data-en="Terms & Conditions" data-es="Términos y Condiciones">Terms & Conditions</h1>
+    <p class="last-updated" data-en="Last Updated: February 16, 2026" data-es="Última actualización: 16 de febrero de 2026">Last Updated: February 16, 2026</p>
+
+    <div data-lang="en">
+      <h2>1. Acceptance of Terms</h2>
+      <p>By accessing and using the Kýček Studios website and services, you accept and agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our services.</p>
+
+      <h2>2. Company Information</h2>
+      <p>Kýček Studios is a performance wear brand based in the Dominican Republic. All transactions are governed by the laws of the Dominican Republic and applicable international e-commerce regulations.</p>
+
+      <h2>3. Products and Pricing</h2>
+      <p>All products are subject to availability. Prices are displayed in USD and include applicable taxes where required by law. We reserve the right to modify prices at any time without prior notice.</p>
+      <p>Product descriptions and images are provided for informational purposes. While we strive for accuracy, slight variations may occur.</p>
+
+      <h2>4. Orders and Payment</h2>
+      <p>By placing an order, you confirm that:</p>
+      <ul>
+        <li>You are at least 18 years old or have parental/guardian consent</li>
+        <li>The payment information provided is accurate and authorized</li>
+        <li>You agree to pay the total amount including shipping and applicable fees</li>
+      </ul>
+      <p>We accept major credit cards and other payment methods as displayed at checkout. All payments are processed securely through Shopify's payment gateway.</p>
+
+      <h2>5. Shipping and Delivery</h2>
+      <p>Shipping times vary by destination. International orders may be subject to customs duties and import taxes, which are the responsibility of the customer.</p>
+      <p>We are not responsible for delays caused by customs clearance or force majeure events.</p>
+
+      <h2>6. Returns and Exchanges</h2>
+      <p>In accordance with Dominican Republic consumer protection laws (Ley 358-05), customers have the right to return products within 30 days of delivery for a refund or exchange, provided:</p>
+      <ul>
+        <li>Products are unworn, unwashed, and in original condition with tags attached</li>
+        <li>Original packaging is intact</li>
+        <li>Proof of purchase is provided</li>
+      </ul>
+      <p>Return shipping costs are the responsibility of the customer unless the product is defective or incorrect.</p>
+
+      <h2>7. Intellectual Property</h2>
+      <p>All content on this website, including logos, designs, text, graphics, and the "crow" mark, is the intellectual property of Kýček Studios and is protected by copyright and trademark laws.</p>
+      <p>Unauthorized use, reproduction, or distribution is prohibited.</p>
+
+      <h2>8. Limitation of Liability</h2>
+      <p>Kýček Studios is not liable for:</p>
+      <ul>
+        <li>Indirect, incidental, or consequential damages</li>
+        <li>Loss of profits or data</li>
+        <li>Damages resulting from improper use of products</li>
+      </ul>
+      <p>Our total liability shall not exceed the amount paid for the product in question.</p>
+
+      <h2>9. Privacy and Data Protection</h2>
+      <p>We collect and process personal data in accordance with our Privacy Policy. By using our services, you consent to such processing.</p>
+
+      <h2>10. Dispute Resolution</h2>
+      <p>Any disputes arising from these terms shall be resolved under the laws of the Dominican Republic. Customers may also access the consumer protection authority (Pro Consumidor) for assistance with complaints.</p>
+
+      <h2>11. Modification of Terms</h2>
+      <p>We reserve the right to modify these Terms & Conditions at any time. Changes will be effective immediately upon posting. Continued use of our services constitutes acceptance of modified terms.</p>
+
+      <h2>12. Contact Information</h2>
+      <p>For questions regarding these Terms & Conditions, please contact us at:</p>
+      <p><strong>Email:</strong> hello@kycek.co</p>
+      <p><strong>Location:</strong> Dominican Republic</p>
+    </div>
+
+    <div data-lang="es" style="display: none;">
+      <h2>1. Aceptación de Términos</h2>
+      <p>Al acceder y utilizar el sitio web y servicios de Kýček Studios, acepta y acepta estar sujeto a estos Términos y Condiciones. Si no está de acuerdo con estos términos, por favor no utilice nuestros servicios.</p>
+
+      <h2>2. Información de la Empresa</h2>
+      <p>Kýček Studios es una marca de ropa deportiva con sede en la República Dominicana. Todas las transacciones se rigen por las leyes de la República Dominicana y las regulaciones internacionales de comercio electrónico aplicables.</p>
+
+      <h2>3. Productos y Precios</h2>
+      <p>Todos los productos están sujetos a disponibilidad. Los precios se muestran en USD e incluyen los impuestos aplicables cuando lo requiere la ley. Nos reservamos el derecho de modificar los precios en cualquier momento sin previo aviso.</p>
+      <p>Las descripciones e imágenes de los productos se proporcionan con fines informativos. Si bien nos esforzamos por la precisión, pueden ocurrir ligeras variaciones.</p>
+
+      <h2>4. Pedidos y Pago</h2>
+      <p>Al realizar un pedido, confirma que:</p>
+      <ul>
+        <li>Tiene al menos 18 años o tiene el consentimiento de sus padres/tutor</li>
+        <li>La información de pago proporcionada es precisa y autorizada</li>
+        <li>Acepta pagar el monto total incluyendo envío y tarifas aplicables</li>
+      </ul>
+      <p>Aceptamos las principales tarjetas de crédito y otros métodos de pago como se muestra en el proceso de pago. Todos los pagos se procesan de forma segura a través de la pasarela de pago de Shopify.</p>
+
+      <h2>5. Envío y Entrega</h2>
+      <p>Los tiempos de envío varían según el destino. Los pedidos internacionales pueden estar sujetos a derechos de aduana e impuestos de importación, que son responsabilidad del cliente.</p>
+      <p>No somos responsables de los retrasos causados por el despacho de aduanas o eventos de fuerza mayor.</p>
+
+      <h2>6. Devoluciones e Intercambios</h2>
+      <p>De acuerdo con las leyes de protección al consumidor de la República Dominicana (Ley 358-05), los clientes tienen derecho a devolver productos dentro de los 30 días posteriores a la entrega para obtener un reembolso o cambio, siempre que:</p>
+      <ul>
+        <li>Los productos no estén usados, lavados y en condición original con etiquetas adjuntas</li>
+        <li>El empaque original esté intacto</li>
+        <li>Se proporcione comprobante de compra</li>
+      </ul>
+      <p>Los costos de envío de devolución son responsabilidad del cliente a menos que el producto sea defectuoso o incorrecto.</p>
+
+      <h2>7. Propiedad Intelectual</h2>
+      <p>Todo el contenido de este sitio web, incluidos logotipos, diseños, texto, gráficos y la marca del "cuervo", es propiedad intelectual de Kýček Studios y está protegido por leyes de derechos de autor y marcas registradas.</p>
+      <p>El uso, reproducción o distribución no autorizados están prohibidos.</p>
+
+      <h2>8. Limitación de Responsabilidad</h2>
+      <p>Kýček Studios no es responsable de:</p>
+      <ul>
+        <li>Daños indirectos, incidentales o consecuentes</li>
+        <li>Pérdida de ganancias o datos</li>
+        <li>Daños resultantes del uso inadecuado de los productos</li>
+      </ul>
+      <p>Nuestra responsabilidad total no excederá el monto pagado por el producto en cuestión.</p>
+
+      <h2>9. Privacidad y Protección de Datos</h2>
+      <p>Recopilamos y procesamos datos personales de acuerdo con nuestra Política de Privacidad. Al utilizar nuestros servicios, acepta dicho procesamiento.</p>
+
+      <h2>10. Resolución de Disputas</h2>
+      <p>Cualquier disputa que surja de estos términos se resolverá bajo las leyes de la República Dominicana. Los clientes también pueden acceder a la autoridad de protección al consumidor (Pro Consumidor) para obtener asistencia con quejas.</p>
+
+      <h2>11. Modificación de Términos</h2>
+      <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier momento. Los cambios entrarán en vigencia inmediatamente después de su publicación. El uso continuo de nuestros servicios constituye la aceptación de los términos modificados.</p>
+
+      <h2>12. Información de Contacto</h2>
+      <p>Para preguntas sobre estos Términos y Condiciones, contáctenos en:</p>
+      <p><strong>Correo electrónico:</strong> hello@kycek.co</p>
+      <p><strong>Ubicación:</strong> República Dominicana</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <img src="assets/images/logo-inverted.png" alt="Kýček Studios" class="footer-logo">
+    <span class="footer-tagline" data-en="Made by Humans, on Earth" data-es="Hecho por Humanos, en la Tierra">Made by Humans, on Earth</span>
+    
+    <div class="footer-links">
+      <a href="index.html" data-en="Home" data-es="Inicio">Home</a>
+      <a href="shop.html" data-en="Shop" data-es="Tienda">Shop</a>
+      <a href="https://www.instagram.com/kycek.co/" target="_blank">Instagram</a>
+      <a href="terms.html" data-en="Terms" data-es="Términos">Terms</a>
+      <a href="accessibility.html" data-en="Accessibility" data-es="Accesibilidad">Accessibility</a>
+    </div>
+    
+    <div class="footer-bottom">
+      <span data-en="© 2026 Kýček Studios. All rights reserved." data-es="© 2026 Kýček Studios. Todos los derechos reservados.">© 2026 Kýček Studios. All rights reserved.</span>
+      <span data-en="Dominican Republic" data-es="República Dominicana">Dominican Republic</span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0, hasMovedMouse = false;
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!hasMovedMouse) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorX = mouseX;
+        cursorY = mouseY;
+        cursor.style.opacity = '1';
+        cursor.style.visibility = 'visible';
+        hasMovedMouse = true;
+      } else {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }
+    });
+    
+    function animateCursor() {
+      cursorX += (mouseX - cursorX) * 0.1;
+      cursorY += (mouseY - cursorY) * 0.1;
+      cursor.style.left = cursorX - 20 + 'px';
+      cursor.style.top = cursorY - 20 + 'px';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+    
+    document.addEventListener('mousedown', () => cursor.classList.add('click'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+  </script>
+
+  <!-- Language Toggle -->
+  <script>
+    const langToggle = document.getElementById('langToggle');
+    const langText = document.getElementById('langText');
+    let currentLang = localStorage.getItem('kycek_language') || 'en';
+    
+    langText.textContent = currentLang === 'en' ? 'ES' : 'EN';
+    
+    function translatePage(lang) {
+      currentLang = lang;
+      localStorage.setItem('kycek_language', lang);
+      langText.textContent = lang === 'en' ? 'ES' : 'EN';
+      
+      // Update all data-en/data-es elements
+      document.querySelectorAll('[data-en][data-es]').forEach(el => {
+        if (el.dataset[lang]) {
+          el.textContent = el.dataset[lang];
+        }
+      });
+      
+      // Show/hide language-specific content blocks
+      document.querySelectorAll('[data-lang="en"]').forEach(el => {
+        el.style.display = lang === 'en' ? 'block' : 'none';
+      });
+      document.querySelectorAll('[data-lang="es"]').forEach(el => {
+        el.style.display = lang === 'es' ? 'block' : 'none';
+      });
+    }
+    
+    langToggle.addEventListener('click', () => {
+      const newLang = currentLang === 'en' ? 'es' : 'en';
+      translatePage(newLang);
+    });
+    
+    // Apply saved language on load
+    if (currentLang === 'es') {
+      translatePage('es');
+    }
+  </script>
+
+  <!-- Shopify Cart, Wishlist, Account -->
+  <script src="assets/js/cart-wishlist-account-full.js"></script>
+
+</body>
+</html>
