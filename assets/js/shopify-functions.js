@@ -33,8 +33,21 @@ async function updateCartCount() {
 }
 
 function openCartPage() {
-  // Navigate to cart page when it's built
-  window.location.href = 'cart.html';
+  // For now, show message. Will build cart drawer/page later
+  const cartId = localStorage.getItem('shopify_cart_id');
+  
+  if (!cartId) {
+    alert('Your cart is empty');
+    return;
+  }
+  
+  // If on product page, try to open the cart drawer
+  if (typeof openCart === 'function') {
+    openCart();
+  } else {
+    // Homepage or other pages - show temporary message
+    alert('Cart functionality coming soon! Add items from product pages.');
+  }
 }
 
 // ===== WISHLIST FUNCTIONS =====
@@ -58,8 +71,15 @@ function updateWishlistCount() {
 }
 
 function openWishlistPage() {
-  // Navigate to wishlist page when it's built
-  window.location.href = 'wishlist.html';
+  const wishlist = getWishlist();
+  
+  if (wishlist.length === 0) {
+    alert('Your wishlist is empty');
+    return;
+  }
+  
+  // Show count for now - wishlist page to be built
+  alert(`You have ${wishlist.length} item${wishlist.length > 1 ? 's' : ''} in your wishlist`);
 }
 
 // ===== ACCOUNT FUNCTIONS =====
@@ -69,9 +89,9 @@ function openAccountPage() {
   const isLoggedIn = document.cookie.includes('customer_token');
   
   if (isLoggedIn) {
-    window.location.href = 'account.html';
+    alert('Account page coming soon!');
   } else {
-    window.location.href = 'login.html';
+    alert('Login page coming soon!');
   }
 }
 
