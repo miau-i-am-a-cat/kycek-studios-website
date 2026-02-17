@@ -235,12 +235,16 @@
     }
     
     .manifesto-copy {
-      font-size: 17px;
+      font-size: 20px;
       font-weight: 300;
       line-height: 1.4;
       letter-spacing: 0.02em;
       color: var(--white);
       text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+    }
+    
+    .manifesto-copy .highlight {
+      color: var(--red);
     }
     
     .manifesto-copy .jp {
@@ -901,7 +905,7 @@
       .header-actions { gap: 12px; }
       .nav { gap: 20px; }
       .hero-subtitle, .hero-scroll { display: none; }
-      .manifesto-copy { font-size: 15px; }
+      .manifesto-copy { font-size: 17px; }
       .limited-edition { padding: 60px 20px; }
       .limited-container { grid-template-columns: 1fr; gap: 40px; }
       .limited-image { order: 1; }
@@ -1011,7 +1015,7 @@
     <div class="manifesto-image">
       <img src="assets/images/lifestyle-2.jpg" alt="Kýček Lifestyle">
       <div class="manifesto-annotation">
-        <p class="manifesto-copy">Purpose is earned,<br>not given.</p>
+        <p class="manifesto-copy">Purpose is <span class="highlight">earned,</span><br>not given.</p>
       </div>
     </div>
     <div class="manifesto-image">
