@@ -912,9 +912,21 @@
       .header { padding: 20px; }
       .header-actions { gap: 12px; }
       .nav { gap: 20px; }
-      .hero-title { top: auto; bottom: calc(10vh + 90px); margin-top: 0; }
+      .hero-title { top: auto; bottom: calc(10vh + 100px); margin-top: 0; }
       .hero-subtitle { display: none; }
-      .hero-scroll { bottom: 60px; }
+      .hero-scroll { 
+        bottom: 8vh;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .hero-overlay {
+        background: linear-gradient(to bottom, 
+          rgba(10,10,10,0.2) 0%,
+          rgba(10,10,10,0) 30%,
+          rgba(10,10,10,0) 70%,
+          rgba(10,10,10,0.6) 100%
+        );
+      }
       .manifesto-copy { font-size: 17px; }
       .limited-edition { padding: 60px 20px; }
       .limited-container { grid-template-columns: 1fr; gap: 40px; }
