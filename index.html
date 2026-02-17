@@ -888,6 +888,7 @@
       z-index: 9999;
       mix-blend-mode: difference;
       transition: transform 0.2s ease;
+      opacity: 0;
     }
     
     .cursor.click {
@@ -1200,10 +1201,21 @@
     const cursor = document.getElementById('cursor');
     let mouseX = 0, mouseY = 0;
     let cursorX = 0, cursorY = 0;
+    let hasMovedMouse = false;
     
     document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      if (!hasMovedMouse) {
+        // On first mouse move, set cursor position immediately
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorX = mouseX;
+        cursorY = mouseY;
+        cursor.style.opacity = '1';
+        hasMovedMouse = true;
+      } else {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }
     });
     
     function animateCursor() {
