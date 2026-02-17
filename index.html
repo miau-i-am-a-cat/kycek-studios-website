@@ -216,40 +216,37 @@
     
     .manifesto-annotation {
       position: absolute;
-      bottom: 60px;
-      left: 60px;
-      max-width: 600px;
+      bottom: 40px;
+      left: 40px;
+      max-width: 480px;
       z-index: 2;
     }
     
-    .manifesto-badge {
-      display: inline-block;
+    .manifesto-label {
+      display: block;
       font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--red);
-      border: 1px solid var(--red);
-      padding: 8px 16px;
-      margin-bottom: 20px;
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(4px);
+      margin-bottom: 12px;
     }
     
-    .manifesto-text {
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      color: var(--white);
-      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
-    }
-    
-    .manifesto-text .jp {
+    .manifesto-copy {
+      font-size: 14px;
       font-weight: 400;
-      font-size: 0.7em;
-      color: var(--light-gray);
-      margin-left: 10px;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      color: var(--white);
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
+    }
+    
+    .manifesto-copy .jp {
+      font-weight: 300;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      display: block;
+      margin-top: 8px;
     }
     
     /* ===== STAMP SECTION ===== */
@@ -886,7 +883,7 @@
       .hero-title { font-size: 20vw; }
       .product-feature { grid-template-columns: 1fr; }
       .product-feature.reverse { direction: ltr; }
-      .manifesto-annotation { bottom: 40px; left: 40px; max-width: calc(100% - 80px); }
+      .manifesto-annotation { bottom: 30px; left: 30px; max-width: calc(100% - 60px); }
       .philosophy { padding: 60px 40px; }
       .philosophy-container { grid-template-columns: 1fr; }
       .products-header { grid-template-columns: 1fr; padding: 0 40px; }
@@ -902,8 +899,8 @@
       .header-actions { gap: 12px; }
       .nav { gap: 20px; }
       .hero-subtitle, .hero-scroll { display: none; }
-      .manifesto-annotation { bottom: 30px; left: 20px; max-width: calc(100% - 40px); }
-      .manifesto-text { font-size: 24px; }
+      .manifesto-annotation { bottom: 20px; left: 20px; max-width: calc(100% - 40px); }
+      .manifesto-copy { font-size: 13px; line-height: 1.5; }
       .limited-edition { padding: 60px 20px; }
       .limited-container { grid-template-columns: 1fr; gap: 40px; }
       .limited-image { order: 1; }
@@ -1006,20 +1003,20 @@
     <div class="manifesto-image">
       <img src="assets/images/lifestyle-1.jpg" alt="Kýček Lifestyle">
       <div class="manifesto-annotation">
-        <span class="manifesto-badge">THE MANIFESTO</span>
-        <h2 class="manifesto-text">Born in the Caribbean.<br>Shaped by contrast.</h2>
+        <span class="manifesto-label">THE MANIFESTO</span>
+        <p class="manifesto-copy">Born in Santo Domingo, where Caribbean heat meets discipline. Performance wear for those who understand that movement is meditation, and every rep is a choice.</p>
       </div>
     </div>
     <div class="manifesto-image">
       <img src="assets/images/lifestyle-2.jpg" alt="Kýček Lifestyle">
       <div class="manifesto-annotation">
-        <h2 class="manifesto-text">Discipline and instinct.<br>Heat and control.</h2>
+        <p class="manifesto-copy">This is where purpose is forged. Not in comfort, but in the work. Sweat is the signature. Progress is the proof.</p>
       </div>
     </div>
     <div class="manifesto-image">
       <img src="assets/images/lifestyle-3.jpg" alt="Kýček Lifestyle">
       <div class="manifesto-annotation">
-        <h2 class="manifesto-text">Made by Humans, on Earth. <span class="jp">人間による</span></h2>
+        <p class="manifesto-copy">Made by Humans, on Earth.<span class="jp">人間による</span></p>
       </div>
     </div>
   </section>
