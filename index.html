@@ -129,8 +129,8 @@
       line-height: 0.8;
       text-transform: uppercase;
       white-space: nowrap;
-      left: -7%;
-      margin-top: -1vh;
+      left: -10%;
+      margin-top: calc(-1vh - 1px);
       color: var(--white);
       mix-blend-mode: difference;
       user-select: none;
@@ -353,7 +353,8 @@
     }
     
     .limited-content .sold-out-badge {
-      display: inline-block;
+      display: flex;
+      align-items: center;
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.25em;
@@ -362,7 +363,6 @@
       background: var(--gray);
       padding: 8px 14px;
       line-height: 1;
-      transform: translateY(-3px);
     }
     
     .limited-cta-text {
