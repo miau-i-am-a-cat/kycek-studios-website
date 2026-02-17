@@ -2072,6 +2072,9 @@
           await window.applyInitialLanguage();
         }
         
+        // Load related products after current product is loaded
+        await loadRelatedProducts();
+        
       } catch (error) {
         console.error('Failed to load product:', error);
       }
@@ -2081,13 +2084,11 @@
     async function loadRelatedProducts() {
       try {
         console.log('Loading related products...');
-        const products = await getProducts(20);
+        const products = await getProducts(50); // Fetch more products
         
-        // Filter for shorts and limited edition
+        // Filter out current product, show everything else
         const relatedProducts = products.filter(product => {
-          const title = product.title.toLowerCase();
-          const productType = (product.productType || '').toLowerCase();
-          return title.includes('short') || productType.includes('limited') || title.includes('limited');
+          return product.handle !== currentProduct?.handle; // Exclude current product
         });
         
         console.log('Related products found:', relatedProducts);
@@ -2126,9 +2127,6 @@
         console.error('Failed to load related products:', error);
       }
     }
-    
-    // Load related products on page load
-    loadRelatedProducts();
   </script>
 
   <!-- Cart Drawer -->
