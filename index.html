@@ -197,30 +197,52 @@
     
     /* ===== MANIFESTO ===== */
     .manifesto {
-      min-height: 100vh;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 100px 80px;
-      position: relative;
+      padding: 0;
     }
     
-    .manifesto-bg {
+    .manifesto-images {
       position: absolute;
-      top: 10%;
-      right: -10%;
-      font-size: 45vw;
-      font-weight: 900;
-      color: var(--dark);
-      line-height: 0.8;
-      user-select: none;
-      pointer-events: none;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 0;
+    }
+    
+    .manifesto-image {
+      flex: 1;
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .manifesto-image:nth-child(1) {
+      background-image: url('assets/images/lifestyle-1.jpg');
+    }
+    
+    .manifesto-image:nth-child(2) {
+      background-image: url('assets/images/lifestyle-2.jpg');
+    }
+    
+    .manifesto-image:nth-child(3) {
+      background-image: url('assets/images/lifestyle-3.jpg');
+    }
+    
+    .manifesto-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.6);
+      z-index: 1;
     }
     
     .manifesto-content {
       max-width: 800px;
       position: relative;
-      z-index: 1;
+      z-index: 2;
+      padding: 120px 80px;
     }
     
     .manifesto-label {
@@ -918,7 +940,7 @@
       .header-actions { gap: 12px; }
       .nav { gap: 20px; }
       .hero-subtitle, .hero-scroll { display: none; }
-      .manifesto { padding: 60px 20px; }
+      .manifesto-content { padding: 80px 20px; }
       .limited-edition { padding: 60px 20px; }
       .limited-container { grid-template-columns: 1fr; gap: 40px; }
       .limited-image { order: 1; }
@@ -1018,6 +1040,12 @@
 
   <!-- Manifesto -->
   <section class="manifesto">
+    <div class="manifesto-images">
+      <div class="manifesto-image"></div>
+      <div class="manifesto-image"></div>
+      <div class="manifesto-image"></div>
+    </div>
+    <div class="manifesto-overlay"></div>
     <div class="manifesto-content">
       <span class="manifesto-label">The Philosophy</span>
       <h2 class="manifesto-text">
