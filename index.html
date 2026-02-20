@@ -728,7 +728,7 @@
     </nav>
     <div class="header-actions">
       <button class="header-icon" id="langToggle">
-        <span id="langText">ES</span>
+        <span id="langText">🇩🇴</span>
       </button>
       <button class="header-icon" id="headerWishlistBtn">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -986,6 +986,7 @@
       <a href="https://www.instagram.com/kycek.co/" target="_blank">Instagram</a>
       <a href="#" data-en="Terms" data-es="Términos">Terms</a>
       <a href="#" data-en="Accessibility" data-es="Accesibilidad">Accessibility</a>
+      <a href="mailto:contact@kycek.com">contact@kycek.com</a>
     </div>
     
     <div class="footer-bottom">
@@ -1125,12 +1126,12 @@
     const langText = document.getElementById('langText');
     let currentLang = localStorage.getItem('kycek_language') || 'en';
     
-    langText.textContent = currentLang === 'en' ? 'ES' : 'EN';
+    langText.textContent = currentLang === 'en' ? '🇩🇴' : '🇺🇸';
     
     function translatePage(lang) {
       currentLang = lang;
       localStorage.setItem('kycek_language', lang);
-      langText.textContent = lang === 'en' ? 'ES' : 'EN';
+      langText.textContent = lang === 'en' ? '🇩🇴' : '🇺🇸';
       
       document.querySelectorAll('[data-en][data-es]').forEach(el => {
         if (el.dataset[lang]) {
