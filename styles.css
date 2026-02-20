@@ -496,7 +496,7 @@ button {
   
   #langToggle {
     top: 20px;
-    right: calc(20px + 18px + 12px + 18px + 12px + 18px + 12px);
+    right: 130px;
   }
   
   .nav {
