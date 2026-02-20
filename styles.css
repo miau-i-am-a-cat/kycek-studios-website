@@ -117,7 +117,7 @@ button {
 #langToggle {
   position: fixed;
   top: 24px;
-  right: 190px;
+  right: 195px;
   z-index: 101;
   font-size: 20px;
   background: none;
@@ -491,12 +491,12 @@ button {
   }
   
   .header-actions {
-    gap: 12px;
+    gap: 10px;
   }
   
   #langToggle {
     top: 20px;
-    right: 130px;
+    right: 135px;
   }
   
   .nav {
