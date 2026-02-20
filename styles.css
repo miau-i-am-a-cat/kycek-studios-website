@@ -74,17 +74,11 @@ button {
   align-items: center;
 }
 
-.header > *:not(#langToggle):not(.header-actions) {
-  mix-blend-mode: difference;
-}
-
+.header > a,
 .header .logo,
 .header .nav,
-.header .nav a {
-  mix-blend-mode: difference;
-}
-
-.header-actions > *:not(#langToggle) {
+.header .nav a,
+.header-icon:not(#langToggle) {
   mix-blend-mode: difference;
 }
 
