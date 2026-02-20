@@ -477,6 +477,21 @@ button {
   }
 }
 
+@media (min-width: 769px) and (max-width: 1024px) {
+  .header {
+    padding: 30px;
+  }
+  
+  .header-actions {
+    gap: 20px;
+  }
+  
+  #langToggle {
+    top: 30px;
+    right: 175px;
+  }
+}
+
 @media (max-width: 768px) {
   body {
     cursor: auto !important;
