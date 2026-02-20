@@ -115,11 +115,17 @@ button {
 }
 
 #langToggle {
+  position: fixed;
+  top: 27px;
+  right: 166px;
+  z-index: 101;
   font-size: 20px;
-  background: black;
-  padding: 4px 8px;
-  border-radius: 4px;
-  isolation: isolate;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: none;
+  display: flex;
+  align-items: center;
 }
 
 /* ==================== CART DRAWER ==================== */
@@ -486,6 +492,11 @@ button {
   
   .header-actions {
     gap: 12px;
+  }
+  
+  #langToggle {
+    top: 22px;
+    right: 110px;
   }
   
   .nav {
