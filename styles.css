@@ -122,12 +122,16 @@ button {
 }
 
 #langToggle {
-  mix-blend-mode: normal;
+  mix-blend-mode: normal !important;
   font-size: 20px;
   filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
   isolation: isolate;
   position: relative;
   z-index: 1;
+}
+
+#langToggle * {
+  mix-blend-mode: normal !important;
 }
 
 /* ==================== CART DRAWER ==================== */
