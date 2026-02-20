@@ -114,6 +114,12 @@ button {
   gap: 6px;
 }
 
+#langToggle {
+  mix-blend-mode: normal;
+  font-size: 20px;
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+}
+
 /* ==================== CART DRAWER ==================== */
 .cart-drawer {
   position: fixed;
