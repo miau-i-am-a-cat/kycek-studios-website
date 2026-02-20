@@ -72,6 +72,19 @@ button {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
+}
+
+.header > *:not(#langToggle):not(.header-actions) {
+  mix-blend-mode: difference;
+}
+
+.header .logo,
+.header .nav,
+.header .nav a {
+  mix-blend-mode: difference;
+}
+
+.header-actions > *:not(#langToggle) {
   mix-blend-mode: difference;
 }
 
@@ -118,6 +131,9 @@ button {
   mix-blend-mode: normal;
   font-size: 20px;
   filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+  isolation: isolate;
+  position: relative;
+  z-index: 1;
 }
 
 /* ==================== CART DRAWER ==================== */
