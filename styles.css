@@ -72,6 +72,10 @@ button {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
+}
+
+.header > a,
+.header > .nav {
   mix-blend-mode: difference;
 }
 
@@ -98,7 +102,6 @@ button {
   gap: 24px;
   justify-content: flex-end;
   align-items: center;
-  isolation: isolate;
 }
 
 .header-icon {
