@@ -116,8 +116,8 @@ button {
 
 #langToggle {
   position: fixed;
-  top: 28px;
-  right: 190px;
+  top: 24px;
+  right: calc(40px + 18px + 24px + 18px + 24px + 18px + 24px);
   z-index: 101;
   font-size: 20px;
   background: none;
@@ -495,8 +495,8 @@ button {
   }
   
   #langToggle {
-    top: 24px;
-    right: 120px;
+    top: 20px;
+    right: calc(20px + 18px + 12px + 18px + 12px + 18px + 12px);
   }
   
   .nav {
