@@ -72,11 +72,11 @@ button {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  mix-blend-mode: difference;
 }
 
 .logo {
   height: 24px;
-  mix-blend-mode: difference;
 }
 
 .nav {
@@ -84,7 +84,6 @@ button {
   gap: 24px;
   justify-content: center;
   align-items: center;
-  mix-blend-mode: difference;
 }
 
 .nav a {
@@ -113,10 +112,13 @@ button {
   display: flex;
   align-items: center;
   gap: 6px;
-  mix-blend-mode: difference;
 }
 
 #langToggle {
+  position: fixed;
+  top: 24px;
+  right: 166px;
+  z-index: 101;
   mix-blend-mode: normal;
   font-size: 20px;
   filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
@@ -486,6 +488,10 @@ button {
   
   .header-actions {
     gap: 12px;
+  }
+  
+  #langToggle {
+    right: 110px;
   }
   
   .nav {
