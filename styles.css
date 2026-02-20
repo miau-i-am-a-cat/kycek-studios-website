@@ -120,7 +120,10 @@ button {
 #langToggle {
   mix-blend-mode: normal;
   font-size: 20px;
-  filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+}
+
+#langToggle span {
+  text-shadow: 0 0 3px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.5);
 }
 
 /* ==================== CART DRAWER ==================== */
