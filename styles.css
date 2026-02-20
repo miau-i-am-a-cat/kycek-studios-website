@@ -117,7 +117,7 @@ button {
 #langToggle {
   position: fixed;
   top: 24px;
-  right: calc(40px + 18px + 24px + 18px + 24px + 18px + 24px);
+  right: 190px;
   z-index: 101;
   font-size: 20px;
   background: none;
